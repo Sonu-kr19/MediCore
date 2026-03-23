@@ -7,3 +7,5 @@ The system supports workflows for patient registration, appointment scheduling, 
 medical records (EMR), billing and insurance, pharmacy management, laboratory results, 
 compliance monitoring, and reporting. It ensures transparency and accountability by 
 maintaining audit trails, dashboards, and performance metrics across hospital operations. 
+
+Ruleset added to this repo
