@@ -1,7 +1,14 @@
+using MediCore.Api.Repositories;
+using MediCore.Api.Repositories.UserRepo;
+using MediCore.Api.Services;
+using MediCore.Api.Services.AuthServices;
 using MediCore.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IUserRepository,UserRepository>();
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
