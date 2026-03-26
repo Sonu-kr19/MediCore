@@ -24,12 +24,13 @@ public class MediCoreDbContext : DbContext
     public virtual DbSet<Patient> Patients { get; set; }
     public virtual DbSet<PatientDocument> PatientDocuments { get; set; }
     public virtual DbSet<Payment> Payments { get; set; }
-    public virtual DbSet<Pharmacist> Pharmacists {get; set;}
+    public virtual DbSet<Pharmacist> Pharmacists { get; set; }
     public virtual DbSet<Prescription> Prescriptions { get; set; }
-    public virtual DbSet<PrescriptionItem> PrescriptionItems {get; set; }
+    public virtual DbSet<PrescriptionItem> PrescriptionItems { get; set; }
+    public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
     public virtual DbSet<Schedule> Schedules { get; set; }
-    public virtual DbSet<Technician> Technicians {get; set;}
-    public virtual DbSet<TreatmentLog> TreatmentLogs {get; set;}
+    public virtual DbSet<Technician> Technicians { get; set; }
+    public virtual DbSet<TreatmentLog> TreatmentLogs { get; set; }
     
     // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder){
     //     optionsBuilder.UseSqlServer(@"data source=LTIN718640\SQLEXPRESS; database=MediCoreDB1; integrated security=true; trust server certificate=true");
@@ -40,6 +41,7 @@ public class MediCoreDbContext : DbContext
             .WithMany()
             .HasForeignKey(b=>b.PatientID)
             .OnDelete(DeleteBehavior.Restrict);
+            
         modelBuilder.Entity<LabTest>()
             .HasOne(l => l.DoctorIDNavigator)
             .WithMany(d => d.LabTests)

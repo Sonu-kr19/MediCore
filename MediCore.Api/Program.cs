@@ -1,5 +1,6 @@
 using System.Text;
 using MediCore.Api.Repositories;
+using MediCore.Api.Repositories.TokenRepo;
 using MediCore.Api.Repositories.UserRepo;
 using MediCore.Api.Services;
 using MediCore.Api.Services.AuthServices;
@@ -12,7 +13,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserRepository,UserRepository>();
-
+builder.Services.AddScoped<ITokenRepository, TokenRepository>();
+builder.Services.AddControllers();
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
@@ -57,7 +59,7 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
-
+app.MapControllers();
 //Middleware Pipeline
 app.UseSwagger();
 app.UseSwaggerUI();

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MediCore.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+04922fd57bd256c85b336990d2482fa73454e88d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e0d26e476c0800d3469ad92158c21db05ed3019e")]
 [assembly: System.Reflection.AssemblyProductAttribute("MediCore.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MediCore.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
