@@ -64,3 +64,5 @@ coverage/
 Thumbs.db
 Desktop.ini
 MediCore.Api/appsetting.json
+./obj/
+MediCore.Api/Migrations/

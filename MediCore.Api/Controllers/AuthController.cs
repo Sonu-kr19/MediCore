@@ -27,14 +27,17 @@ namespace MediCore.Api.Controllers
         [ProducesResponseType(typeof(string),StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(TokenResponseDto),StatusCodes.Status200OK)]
         public async Task<IActionResult> Login(UserLoginDto dto)
-        {   
+        {
             // Validating User details and Generating the token for Valid user.
-            var token = await _authService.ValidateUserAsync(dto);
-            if (token==null)
+            try
             {
-                return Unauthorized("Invalid credentials");
+                var token = await _authService.ValidateUserAsync(dto);
+                return Ok(token);
             }
-            return Ok(token);
+            catch(Exception ex)
+            {
+                return Unauthorized(ex.Message);
+            }
         }
 
         /// <summary>
@@ -43,10 +46,19 @@ namespace MediCore.Api.Controllers
         /// <param name="dto"></param>
         /// <returns>Returns new Access token as a response</returns>
         [HttpPost("refresh-token")]
+        [ProducesResponseType(typeof(string),StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(TokenResponseDto),StatusCodes.Status200OK)]
         public async Task<IActionResult> RefreshToken(TokenResponseDto dto)
         {
-            var result = await _authService.RefreshTokenAsync(dto.RefreshToken);
-            return Ok(result);
+            try
+            {
+                var result = await _authService.RefreshTokenAsync(dto.RefreshToken);
+                return Ok(result);  
+            }
+            catch (Exception ex)
+            {
+                return Unauthorized(ex.Message);
+            }
         }
     }
 }

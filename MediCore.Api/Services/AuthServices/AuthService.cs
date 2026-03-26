@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using MediCore.Api.DTOs.TokenDtos;
 using MediCore.Api.Repositories.TokenRepo;
+using MediCore.Api.Utilities;
 
 namespace MediCore.Api.Services.AuthServices;
 
@@ -81,17 +82,17 @@ public class AuthService : IAuthService
     /// </summary>
     /// <param name="dto">Contains Email and Password.</param>
     /// <returns>TokenResponseDto (Access + Refresh Tokens) or Null.</returns>
-    public async Task<TokenResponseDto?> ValidateUserAsync(UserLoginDto dto)
+    public async Task<TokenResponseDto> ValidateUserAsync(UserLoginDto dto)
     {
         var user = await _userRepository.GetUserByEmailAsync(dto.Email);
         if (user==null)
         {
-            return null;
+            throw new Exception(ErrorMessages.UserNotFound);
         }
         bool passwordValid = BCrypt.Net.BCrypt.Verify(dto.Password, user.Password);
         if (!passwordValid)
         {
-            return null;
+            throw new Exception(ErrorMessages.InvalidCredentials);
         }
         var accessToken = GenerateToken(user);
         var refreshToken = GenerateRefreshToken();
@@ -124,7 +125,7 @@ public class AuthService : IAuthService
         var storedToken = await _tokenRepository.GetRefreshTokenAsync(refreshToken);
         if(storedToken==null || storedToken.IsRevoked || storedToken.ExpiryDate < DateTime.UtcNow)
         {
-            throw new UnauthorizedAccessException("Invalid refresh token");
+            throw new Exception(ErrorMessages.InvalidRefreshToken);
         }
         var newAccessToken = GenerateToken(storedToken.User);
         storedToken.IsRevoked=true;
