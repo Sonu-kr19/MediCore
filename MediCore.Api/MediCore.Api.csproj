@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <Folder Include="Controllers\" />
+    <Folder Include="Services\AuthServices\" />
     <Folder Include="Utilities\TokenUtility\" />
   </ItemGroup>
 
