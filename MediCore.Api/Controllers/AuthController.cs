@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MediCore.Api.Controllers
 {
+    /// <summary>
+    /// AuthController for authentication
+    /// </summary>
     [Route("api/v1/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
@@ -15,11 +18,17 @@ namespace MediCore.Api.Controllers
             _authService=authService;
         }        
 
+        /// <summary>
+        /// Api endpoint to login user for existing user
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns>Returns AccessToken and Refresh Token as response for current loggedin user</returns>
         [HttpPost("login")]
-        // [ProducesResponseType(401)]
-        // [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(string),StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(TokenResponseDto),StatusCodes.Status200OK)]
         public async Task<IActionResult> Login(UserLoginDto dto)
-        {
+        {   
+            // Validating User details and Generating the token for Valid user.
             var token = await _authService.ValidateUserAsync(dto);
             if (token==null)
             {
@@ -28,17 +37,16 @@ namespace MediCore.Api.Controllers
             return Ok(token);
         }
 
+        /// <summary>
+        /// Api Endpoint for Refresh token
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns>Returns new Access token as a response</returns>
         [HttpPost("refresh-token")]
         public async Task<IActionResult> RefreshToken(TokenResponseDto dto)
         {
             var result = await _authService.RefreshTokenAsync(dto.RefreshToken);
             return Ok(result);
-        }
-
-        [HttpGet("/")]
-        public IActionResult HealthCheck()
-        {
-            return Ok("Api Working");
         }
     }
 }
