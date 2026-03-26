@@ -5,9 +5,13 @@ namespace MediCore.Api.Repositories.UserRepo;
 
 public class UserRepository : IUserRepository
 {
-    MediCoreDbContext context = new MediCoreDbContext();
-    public Task<List<User>> GetAllUsersAsync()
+    private readonly MediCoreDbContext _context;
+    public UserRepository(MediCoreDbContext context)
     {
-        return context.Users.ToListAsync();
+        _context=context;
+    }
+    public async Task<List<User>> GetAllUsersAsync()
+    {
+        return await _context.Users.ToListAsync();
     }
 }

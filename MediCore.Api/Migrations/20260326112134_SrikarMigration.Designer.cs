@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MediCore.Api.Migrations
 {
     [DbContext(typeof(MediCoreDbContext))]
-    [Migration("20260319113601_first")]
-    partial class first
+    [Migration("20260326112134_SrikarMigration")]
+    partial class SrikarMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -16,7 +16,8 @@ builder.Services.AddOpenApi();
 builder.Services.AddDbContext<MediCoreDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
         b => b.MigrationsAssembly("MediCore.Api")));
-        
+
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -27,6 +28,7 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
+app.MapControllers();
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHttpsRedirection();

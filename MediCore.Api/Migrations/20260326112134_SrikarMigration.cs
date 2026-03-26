@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MediCore.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class first : Migration
+    public partial class SrikarMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
