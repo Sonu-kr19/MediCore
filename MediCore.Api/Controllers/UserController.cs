@@ -17,11 +17,12 @@ namespace MediCore.Api.Controllers
         }
  
         [HttpPost("forgotpassword")]
-        public async Task<IActionResult> ForgotPassword(ForgotPasswordDto model)
-        {
-            try
-            {
-                var message = await _authService.ForgotPasswordAsync(model);
+        [ProduceResponseType(typeof(string), StatusCodes.Status200OK)];
+        [ProduceResponseType(typeof(string), StatusCodes.Status400BadRequest)];
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordDto dto)
+        {    
+            try{
+                var message = await _authService.ForgotPasswordAsync(dto);
                 return Ok(new{message});
             }
             catch (Exception ex)

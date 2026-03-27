@@ -106,49 +106,49 @@ public class AuthService : IAuthService
         };
     }
     
-    public async Task<IActionResult> ForgotPasswordAsync(ForgotPasswordDto model)
+    public async Task<IActionResult> ForgotPasswordAsync(ForgotPasswordDto dto)
+    {
+        try
         {
-            try
-            {
-                // Validate Password Match
-                if (model.NewPassword != model.ConfirmPassword)
-                    throw new Exception(ErrorMessages.PasswordsDoNotMatch);
+            // Validate Password Match
+            if (model.NewPassword != model.ConfirmPassword)
+                throw new Exception(ErrorMessages.PasswordsDoNotMatch);
 
-                // Validate Password Strength
-                if (!IsValidPassword(model.NewPassword))
-                    throw new Exception(ErrorMessages.InvalidPassword);
+            // Validate Password Strength
+            if (!IsValidPassword(model.NewPassword))
+                throw new Exception(ErrorMessages.InvalidPassword);
 
-                // Check User
-                var user = await _userRepository.GetByEmailAsync(model.Email);
+            // Check User
+            var user = await _userRepository.GetUserByEmailAsync(model.Email);
 
-                if (user == null)
-                    throw new Exception(ErrorMessages.UserNotFound);
+            if (user == null)
+                throw new Exception(ErrorMessages.UserNotFound);
 
-                // Hash Password using BCrypt
-                user.Password = BCrypt.Net.BCrypt.HashPassword(model.NewPassword);
+            // Hash Password using BCrypt
+            user.Password = BCrypt.Net.BCrypt.HashPassword(model.NewPassword);
 
-                // Update DB
-                await _userRepository.UpdateAsync(user);
+            // Update DB
+            await _userRepository.UpdatePasswordAsync(user);
 
-                throw new Exception(ErrorMessages.PasswordUpdatedSuccess);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            throw new Exception(ErrorMessages.PasswordUpdatedSuccess);
         }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+    }
         
-        // Password Validation Method
-        private bool IsValidPassword(string password)
-        {
-            if (string.IsNullOrEmpty(password) || password.Length < 8)
-                return false;
+    // Password Validation Method
+    private bool IsValidPassword(string password)
+    {
+        if (string.IsNullOrEmpty(password) || password.Length < 8)
+            return false;
 
-            var hasUpper = Regex.IsMatch(password, "[A-Z]");
-            var hasNumber = Regex.IsMatch(password, "[0-9]");
+        var hasUpper = Regex.IsMatch(password, "[A-Z]");
+        var hasNumber = Regex.IsMatch(password, "[0-9]");
 
-            return hasUpper && hasNumber;
-        }
+        return hasUpper && hasNumber;
+    }
 
     /// <summary>
     /// INTERNAL LOGIC: Generates a cryptographically strong 64-byte random string.
