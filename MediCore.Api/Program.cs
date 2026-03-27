@@ -15,11 +15,16 @@ builder.Services.AddDbContext<MediCoreDbContext>(options =>
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>(); 
-builder.Services.AddControllers();       
+     
         
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+        
+    });
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
