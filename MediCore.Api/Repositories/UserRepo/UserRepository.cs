@@ -12,6 +12,11 @@ public class UserRepository : IUserRepository
     }
     public async Task<List<User>> GetAllUsersAsync()
     {
-        return await _context.Users.ToListAsync();
+        List<User> users =  await _context.Users.ToListAsync();
+            if (users.Count == 0)
+            {
+                throw new Exception(Utilities.ErrorMessages.User.UsersNotFound);
+            }
+        return users;
     }
 }

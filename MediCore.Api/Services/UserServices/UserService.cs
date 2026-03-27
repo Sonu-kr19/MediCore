@@ -13,13 +13,20 @@ public class UserService : IUserService
     }
     public async Task<List<UserResponseDto>> GetAllUsersAsync()
     {
-       List<User> users = await userRepository.GetAllUsersAsync();
+        List<User> users = new List<User>();
+        try
+        {
+        users = await userRepository.GetAllUsersAsync();
+        }
+        catch(Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
        List<UserResponseDto> userResponseDtos = new List<UserResponseDto>();
        foreach(User user in users)
         {
             UserResponseDto responseDto = new UserResponseDto
             {
-                
             UserID = user.UserID,
             UserName = user.Name,
             Email = user.Email,
@@ -28,10 +35,7 @@ public class UserService : IUserService
             Status = user.Status
             };
             userResponseDtos.Add(responseDto);
-
         }
         return userResponseDtos;
     }
-
-    
 }

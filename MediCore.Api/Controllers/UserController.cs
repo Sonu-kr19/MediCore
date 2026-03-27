@@ -18,8 +18,15 @@ namespace MediCore.Api.Controllers
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAllUsers()
         {
+            try
+            {   
             List<UserResponseDto> users = await serviceRepository.GetAllUsersAsync();
             return Ok(users);
+            }
+            catch(Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
     }
 }
