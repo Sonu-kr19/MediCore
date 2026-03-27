@@ -45,6 +45,10 @@ public class AuthService : IAuthService
         {
             throw new Exception(ErrorMessages.UserNotFound);
         }
+        if (!user.Status)
+        {
+            throw new Exception(ErrorMessages.InactiveUser);
+        }
         bool passwordValid = BCrypt.Net.BCrypt.Verify(dto.Password, user.Password);
         if (!passwordValid)
         {
