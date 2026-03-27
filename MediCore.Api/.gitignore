@@ -64,6 +64,6 @@ coverage/
 Thumbs.db
 Desktop.ini
 
-**/Migrations/
+/Migrations/
 appsettings.json
 appsettings.Development.json
