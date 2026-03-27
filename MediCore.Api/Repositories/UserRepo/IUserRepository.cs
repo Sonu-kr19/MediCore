@@ -4,5 +4,6 @@ namespace MediCore.Api.Repositories;
 
 public interface IUserRepository
 {
+    Task<List<User>> GetAllUsersAsync();
     Task<User?> GetUserByEmailAsync(string email);
 }

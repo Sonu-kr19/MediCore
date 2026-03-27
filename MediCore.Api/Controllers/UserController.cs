@@ -1,3 +1,5 @@
+using MediCore.Api.DTOs.UserDtos;
+using MediCore.Api.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
