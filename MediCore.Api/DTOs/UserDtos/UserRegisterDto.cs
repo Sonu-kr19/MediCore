@@ -1,0 +1,26 @@
+
+using System;
+using System.ComponentModel.DataAnnotations;
+using MediCore.Domain.Enum;
+
+namespace MediCore.Api.DTOs.UserDtos
+
+//user need to give this details in frontend and this details maps from frontend and passes data to controller
+{
+    public class UserRegisterDto
+    {
+        [Required]
+        public string Name { get; set; }
+
+        [Required, EmailAddress]
+        public string Email { get; set; }
+
+        [Required]
+        public string Password { get; set; }
+
+        [Required]
+        public RoleOption RoleName { get; set; }
+
+        public string? Phone { get; set; }
+    }
+}

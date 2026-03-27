@@ -35,6 +35,12 @@ public class MediCoreDbContext : DbContext
     //     optionsBuilder.UseSqlServer(@"data source=LTIN718640\SQLEXPRESS; database=MediCoreDB1; integrated security=true; trust server certificate=true");
     // }
     protected override void OnModelCreating(ModelBuilder modelBuilder){
+        //add for maping names for roles in user table instead of numbers
+        //by default in user table it saves like number not like role name 
+        //by using hasconvertion it typecast it into string
+        modelBuilder.Entity<User>()
+            .Property(u => u.RoleName)
+            .HasConversion<string>();
         modelBuilder.Entity<Bill>()
             .HasOne(b=>b.Patient)
             .WithMany()

@@ -1,11 +1,83 @@
-using Microsoft.AspNetCore.Http;
+
+using MediCore.Api.DTOs.UserDtos;
+using MediCore.Api.Services.UserServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MediCore.Api.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/v1/[controller]")]
     public class UserController : ControllerBase
     {
+        private readonly IUserService _userService;
+
+        // Injects IUserService via constructor injection so the controller
+        // can delegate all user-related business logic to the service layer,
+        // keeping the controller thin and testable.
+        public UserController(IUserService userService)
+        {
+            _userService = userService;
+        }
+
+        // Handles patient self-registration requests (POST api/v1/users/register/patient).
+        // Separated from staff registration because patients and staff may have
+        // different validation rules, roles, and onboarding workflows in the service layer.
+        // Returns 200 on success, 400 for invalid input, 409 if the user already exists.
+        [HttpPost("register/patient")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
+        public async Task<IActionResult> RegisterPatient(UserRegisterDto dto)
+        {
+            try
+            {
+                await _userService.RegisterPatientAsync(dto);
+                return Ok(new { message = "Patient registered successfully." });
+            }
+            catch (ArgumentException ex)
+            {
+                // Catches validation failures (e.g. missing required fields, invalid email format)
+                // thrown by the service and returns a 400 Bad Request with the error detail.
+                return BadRequest(new { error = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                // Catches duplicate-user scenarios (e.g. email already registered)
+                // thrown by the service and returns a 409 Conflict to signal the client
+                // that the resource already exists rather than a generic error.
+                return Conflict(new { error = ex.Message });
+            }
+        }
+
+        // Handles staff registration requests (POST api/v1/users/register/staff).
+        // Uses a dedicated endpoint so staff-specific logic (role assignment, permissions,
+        // department linking) can evolve independently from patient registration
+        // without breaking the patient flow.
+        // Returns 200 on success, 400 for invalid input, 409 if the user already exists.
+        [HttpPost("register/staff")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
+        public async Task<IActionResult> RegisterStaff(UserRegisterDto dto)
+        {
+            try
+            {
+                await _userService.RegisterStaffAsync(dto);
+                return Ok(new { message = "Staff registered successfully." });
+            }
+            catch (ArgumentException ex)
+            {
+                // Catches validation failures specific to staff input
+                // and returns a descriptive 400 Bad Request to guide the caller.
+                return BadRequest(new { error = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                // Catches duplicate staff registration attempts
+                // and returns a 409 Conflict so the client knows to handle
+                // the existing record rather than retrying the same request.
+                return Conflict(new { error = ex.Message });
+            }
+        }
     }
 }

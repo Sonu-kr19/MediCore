@@ -3659,23 +3659,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\2478502\\.nuget\\packages\\": {},
+    "C:\\Users\\2478820\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\2478502\\Desktop\\MediCore\\MediCore.Domain\\MediCore.Domain.csproj",
+      "projectUniqueName": "C:\\Users\\2478820\\Desktop\\MediCore\\MediCore.Domain\\MediCore.Domain.csproj",
       "projectName": "MediCore.Domain",
-      "projectPath": "C:\\Users\\2478502\\Desktop\\MediCore\\MediCore.Domain\\MediCore.Domain.csproj",
-      "packagesPath": "C:\\Users\\2478502\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\2478502\\Desktop\\MediCore\\MediCore.Domain\\obj\\",
+      "projectPath": "C:\\Users\\2478820\\Desktop\\MediCore\\MediCore.Domain\\MediCore.Domain.csproj",
+      "packagesPath": "C:\\Users\\2478820\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\2478820\\Desktop\\MediCore\\MediCore.Domain\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\2478502\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\2478820\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -3684,7 +3684,6 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -3742,7 +3741,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.200/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.201/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.CSharp": "(,4.7.32767]",
           "Microsoft.VisualBasic": "(,10.4.32767]",
