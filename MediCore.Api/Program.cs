@@ -4,6 +4,7 @@ using MediCore.Api.Repositories.TokenRepo;
 using MediCore.Api.Repositories.UserRepo;
 using MediCore.Api.Services;
 using MediCore.Api.Services.AuthServices;
+using MediCore.Api.Services.UserServices;
 using MediCore.Domain.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserRepository,UserRepository>();
+builder.Services.AddScoped<IUserService,UserService>();
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 builder.Services.AddControllers();
 // Add services to the container.
