@@ -12,6 +12,7 @@ public class UserRepository:IUserRepository
     public async Task<User?> GetUserByIdAsync(int userId) // Implement the method to retrieve a user by their ID
     {
         var user= await _context.Users.FirstOrDefaultAsync(u => u.UserID == userId);
+
         if (user == null)
         {
             return null;
