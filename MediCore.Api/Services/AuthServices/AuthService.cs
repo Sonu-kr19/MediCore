@@ -30,50 +30,6 @@ public class AuthService : IAuthService
     }
 
     /// <summary>
-    /// INTERNAL LOGIC: Generates a cryptographically strong 64-byte random string.
-    /// Used for long-lived sessions (7 days) stored in the database.
-    /// </summary>
-    /// <returns>Base64 encoded string.</returns>
-    private string GenerateRefreshToken()
-    {
-        var randomBytes = new byte[64];
-        using var rng = RandomNumberGenerator.Create();
-        rng.GetBytes(randomBytes);
-        return Convert.ToBase64String(randomBytes);
-    }
-
-    /// <summary>
-    /// INTERNAL LOGIC: Creates a JWT Access Token.
-    /// Claims: NameIdentifier (UserID), Email, and Role.
-    /// Expiration: 2 Hours.
-    /// </summary>
-    /// <param name="user">The authenticated user entity.</param>
-    /// <returns>Encoded JWT string.</returns>
-    private string GenerateToken(User user)
-    {
-        var claims = new[]
-        {
-            new Claim(ClaimTypes.NameIdentifier, user.UserID.ToString()),
-            new Claim(ClaimTypes.Email, user.Email),
-            new Claim(ClaimTypes.Role,user.RoleName.ToString())
-        };
-
-        var key = new SymmetricSecurityKey(
-            System.Text.Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-        var token = new JwtSecurityToken(
-            issuer: _configuration["Jwt:Issuer"],
-            audience: _configuration["Jwt:Audience"],
-            claims: claims,
-            expires: DateTime.Now.AddHours(2),
-            signingCredentials: creds
-        );
-
-        return new JwtSecurityTokenHandler().WriteToken(token);
-    }
-    /// <summary>
     /// API ENDPOINT LOGIC: LOGIN
     /// 1. Validates user existence by Email.
     /// 2. Verifies Password using BCrypt.
@@ -141,5 +97,50 @@ public class AuthService : IAuthService
             AccessToken=newAccessToken,
             RefreshToken=newRefreshToken
         };
+    }
+
+    /// <summary>
+    /// INTERNAL LOGIC: Generates a cryptographically strong 64-byte random string.
+    /// Used for long-lived sessions (7 days) stored in the database.
+    /// </summary>
+    /// <returns>Base64 encoded string.</returns>
+    private string GenerateRefreshToken()
+    {
+        var randomBytes = new byte[64];
+        using var rng = RandomNumberGenerator.Create();
+        rng.GetBytes(randomBytes);
+        return Convert.ToBase64String(randomBytes);
+    }
+
+    /// <summary>
+    /// INTERNAL LOGIC: Creates a JWT Access Token.
+    /// Claims: NameIdentifier (UserID), Email, and Role.
+    /// Expiration: 2 Hours.
+    /// </summary>
+    /// <param name="user">The authenticated user entity.</param>
+    /// <returns>Encoded JWT string.</returns>
+    private string GenerateToken(User user)
+    {
+        var claims = new[]
+        {
+            new Claim(ClaimTypes.NameIdentifier, user.UserID.ToString()),
+            new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.Role,user.RoleName.ToString())
+        };
+
+        var key = new SymmetricSecurityKey(
+            System.Text.Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+        var token = new JwtSecurityToken(
+            issuer: _configuration["Jwt:Issuer"],
+            audience: _configuration["Jwt:Audience"],
+            claims: claims,
+            expires: DateTime.Now.AddHours(2),
+            signingCredentials: creds
+        );
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
     }
 }
