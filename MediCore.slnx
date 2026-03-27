@@ -1,4 +1,0 @@
-<Solution>
-  <Project Path="MediCore.Api/MediCore.Api.csproj" />
-  <Project Path="MediCore.Domain/MediCore.Domain.csproj" />
-</Solution>
