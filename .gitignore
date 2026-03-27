@@ -63,4 +63,5 @@ coverage/
 # Others
 Thumbs.db
 Desktop.ini
-MediCore.Api/Migrations
+./obj/
+MediCore.Api/Migrations/
