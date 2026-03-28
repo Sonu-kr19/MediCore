@@ -9,6 +9,7 @@ using System.Security.Cryptography;
 using MediCore.Api.DTOs.TokenDtos;
 using MediCore.Api.Repositories.TokenRepo;
 using MediCore.Api.Utilities;
+using MediCore.Api.Repositories.UserRepo;
 
 namespace MediCore.Api.Services.AuthServices;
 

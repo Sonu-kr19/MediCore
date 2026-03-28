@@ -9,11 +9,16 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
+using MediCore.Api.Services.UserServices;
+using Microsoft.AspNetCore.Diagnostics;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserRepository,UserRepository>();
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
+// Service
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddControllers();
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -53,6 +58,33 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+
+// Must be FIRST — before all other middleware
+app.UseExceptionHandler(appError =>
+{
+    appError.Run(async context =>
+    {
+        var ex = context.Features.Get<IExceptionHandlerFeature>()?.Error;
+
+        //  Log real error to terminal
+        Console.WriteLine($"EXCEPTION TYPE: {ex?.GetType().Name}");
+        Console.WriteLine($"EXCEPTION MESSAGE: {ex?.Message}");
+        Console.WriteLine($"STACK TRACE: {ex?.StackTrace}");
+
+        (int status, object body) = ex switch
+        {
+            ArgumentException ae      => (400, (object)new { error = ae.Message }),
+            InvalidOperationException => (409, (object)new { error = ex.Message }),
+            _                         => (500, (object)new { error = ex?.Message ?? "An unexpected error occurred." })
+        };
+
+        context.Response.StatusCode = status;
+        context.Response.ContentType = "application/json";
+        await context.Response.WriteAsJsonAsync(body);
+    });
+});
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -36,6 +36,10 @@ public class MediCoreDbContext : DbContext
     //     optionsBuilder.UseSqlServer(@"data source=LTIN718640\SQLEXPRESS; database=MediCoreDB1; integrated security=true; trust server certificate=true");
     // }
     protected override void OnModelCreating(ModelBuilder modelBuilder){
+        modelBuilder.Entity<User>()
+            .Property(u => u.RoleName)
+            .HasConversion<string>();
+            
         modelBuilder.Entity<Bill>()
             .HasOne(b=>b.Patient)
             .WithMany()
