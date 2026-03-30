@@ -13,4 +13,6 @@ public class ErrorMessages
     public const string InvalidCredentials="Invalid username or password";
     public const string InvalidRefreshToken="Invalid refresh token";
     public const string InactiveUser = "User is deactivated.";
+    public const string UsersNotFound = "There are no users in the database";
+
 }

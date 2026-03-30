@@ -5,30 +5,60 @@ using MediCore.Domain.Entities;
 using MediCore.Domain.Enum;
 
 namespace MediCore.Api.Services.UserServices;
-public class UserService:IUserService
+public class UserService: IUserService
 {
-    private readonly IUserRepository _userRepository;
-     public UserService(IUserRepository userRepository) // Constructor injection of the user repository
+    IUserRepository _userRepository;
+    public UserService(IUserRepository repository)
     {
-        _userRepository = userRepository;
+        _userRepository = repository;
     }
-     public async Task<UserResponseDto?> GetUserByIdAsync(int userId) // Method to get user details by user ID
+    public async Task<List<UserResponseDto>> GetAllUsersAsync()
     {
-        var user = await _userRepository.GetUserByIdAsync(userId);
-        if (user == null)
+        List<User> users = new List<User>();
+        try
         {
-            throw new Exception(ErrorMessage.UserNotFound);
+        users = await _userRepository.GetAllUsersAsync();
         }
-        return new UserResponseDto
+        catch(Exception ex)
         {
+            throw new Exception(ex.Message);
+        }
+       List<UserResponseDto> userResponseDtos = new List<UserResponseDto>();
+       foreach(User user in users)
+        {
+            UserResponseDto responseDto = new UserResponseDto
+            {
             UserID = user.UserID,
             UserName = user.Name,
             Email = user.Email,
             Phone = user.Phone,
             RoleName = user.RoleName.ToString(),
             Status = user.Status
-        };
-    }
+            };
+            userResponseDtos.Add(responseDto);
+        }
+        return userResponseDtos;
+        }
+
+    public async Task<UserResponseDto?> GetUserByIdAsync(int userId)
+    {
+        User user = await _userRepository.GetUserByIdAsync(userId);
+        if (user == null)
+        {
+            return null;
+        }
+        UserResponseDto responseDto = new UserResponseDto
+            {
+            UserID = userId,
+            UserName = user.Name,
+            Email = user.Email,
+            Phone = user.Phone,
+            RoleName = user.RoleName.ToString(),
+            Status = user.Status
+            };
+        return responseDto;
+    }    
+
     public async Task UpdateUserAsync(int id, UpdateUserDto updateUserDto) // Method to update user details
     {
         
@@ -77,3 +107,4 @@ public class UserService:IUserService
         }
     }
 }
+
