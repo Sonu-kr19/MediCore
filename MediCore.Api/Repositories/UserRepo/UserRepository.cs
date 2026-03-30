@@ -1,5 +1,7 @@
 using MediCore.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using MediCore.Api.Repositories;
+using MediCore.Api.Utilities;
 
 namespace MediCore.Api.Repositories.UserRepo;
 
@@ -28,4 +30,9 @@ public class UserRepository : IUserRepository
             }
         return users;
     }
+    public async Task UpdatePasswordAsync(User user)
+    {
+        _context.Users.Update(user);
+        await _context.SaveChangesAsync();
+     }
 }

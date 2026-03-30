@@ -32,9 +32,6 @@ public class MediCoreDbContext : DbContext
     public virtual DbSet<Technician> Technicians { get; set; }
     public virtual DbSet<TreatmentLog> TreatmentLogs { get; set; }
     
-    // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder){
-    //     optionsBuilder.UseSqlServer(@"data source=LTIN718640\SQLEXPRESS; database=MediCoreDB1; integrated security=true; trust server certificate=true");
-    // }
     protected override void OnModelCreating(ModelBuilder modelBuilder){
         modelBuilder.Entity<Bill>()
             .HasOne(b=>b.Patient)
