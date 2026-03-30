@@ -48,5 +48,24 @@ namespace MediCore.Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUserDto updateUserDto) // Endpoint to update user details
+        {
+            
+        //  Validate request body & required fields
+         if (!ModelState.IsValid)
+         {
+            return BadRequest(ModelState);
+         }
+        try
+        {
+            await _userService.UpdateUserAsync(id, updateUserDto);
+            return Ok(new { Message = ErrorMessage.Success });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { Message = ex.Message });
+        }
     }
 }
