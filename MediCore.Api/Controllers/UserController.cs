@@ -68,4 +68,5 @@ namespace MediCore.Api.Controllers
             return BadRequest(new { Message = ex.Message });
         }
     }
+    }
 }

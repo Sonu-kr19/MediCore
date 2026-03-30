@@ -29,6 +29,7 @@ public class UserRepository:IUserRepository
                 throw new Exception(Utilities.ErrorMessages.UsersNotFound);
             }
         return users;
+    }
     public async Task UpdateUserAsync(int id,User user) // Implement the method to update an existing user's information
     {
         var existingUser = await GetUserByIdAsync(id);
@@ -46,4 +47,9 @@ public class UserRepository:IUserRepository
         _context.Users.Update(user);
         await _context.SaveChangesAsync();
      }
+
+    public Task<User?> GetUserByEmailAsync(string email)
+    {
+        throw new NotImplementedException();
+    }
 }

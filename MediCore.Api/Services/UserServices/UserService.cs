@@ -1,6 +1,8 @@
 using MediCore.Api.DTOs.UserDtos;
 using MediCore.Api.Repositories;
+using MediCore.Api.Utilities;
 using MediCore.Domain.Entities;
+using MediCore.Domain.Enum;
 
 namespace MediCore.Api.Services.UserServices;
 public class UserService: IUserService
@@ -36,8 +38,27 @@ public class UserService: IUserService
             userResponseDtos.Add(responseDto);
         }
         return userResponseDtos;
-        };
-    }
+        }
+
+    public async Task<UserResponseDto?> GetUserByIdAsync(int userId)
+    {
+        User user = await _userRepository.GetUserByIdAsync(userId);
+        if (user == null)
+        {
+            return null;
+        }
+        UserResponseDto responseDto = new UserResponseDto
+            {
+            UserID = userId,
+            UserName = user.Name,
+            Email = user.Email,
+            Phone = user.Phone,
+            RoleName = user.RoleName.ToString(),
+            Status = user.Status
+            };
+        return responseDto;
+    }    
+
     public async Task UpdateUserAsync(int id, UpdateUserDto updateUserDto) // Method to update user details
     {
         
@@ -86,3 +107,4 @@ public class UserService: IUserService
         }
     }
 }
+
