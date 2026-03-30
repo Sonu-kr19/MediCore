@@ -5,17 +5,17 @@ using MediCore.Domain.Entities;
 namespace MediCore.Api.Services.UserServices;
 public class UserService: IUserService
 {
-    IUserRepository userRepository;
+    IUserRepository _userRepository;
     public UserService(IUserRepository repository)
     {
-        userRepository = repository;
+        _userRepository = repository;
     }
     public async Task<List<UserResponseDto>> GetAllUsersAsync()
     {
         List<User> users = new List<User>();
         try
         {
-        users = await userRepository.GetAllUsersAsync();
+        users = await _userRepository.GetAllUsersAsync();
         }
         catch(Exception ex)
         {

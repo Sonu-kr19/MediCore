@@ -5,21 +5,21 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MediCore.Api.Controllers
 {
-     [Route("api/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
-        IUserService serviceRepository;
-        public UserController(IUserService repository)
+        IUserService _userService;
+         public UserController(IUserService userService)
         {
-            serviceRepository = repository;
+            _userService = userService;
         }
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAllUsers()
         {
             try
             {   
-            List<UserResponseDto> users = await serviceRepository.GetAllUsersAsync();
+            List<UserResponseDto> users = await _userService.GetAllUsersAsync();
             return Ok(users);
             }
             catch(Exception ex)
