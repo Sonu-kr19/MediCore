@@ -1,4 +1,6 @@
 using MediCore.Api.DTOs.UserDtos;
+using MediCore.Api.Services;
+using Microsoft.AspNetCore.Http;
 using MediCore.Api.Services.AuthServices;
 using Microsoft.AspNetCore.Mvc;
 using MediCore.Api.Services.UserServices;
@@ -10,13 +12,14 @@ namespace MediCore.Api.Controllers
     [Route("api/v1/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
-    {    
-        private readonly IAuthService _authService;
-        private readonly IUserService _userService;
-        
+    {
+    
         // Injects IUserService via constructor injection so the controller
         // can delegate all user-related business logic to the service layer,
         // keeping the controller thin and testable.
+        private readonly IAuthService _authService;
+        private readonly IUserService _userService;
+ 
         public UserController(IAuthService authService,IUserService userService)
         {
             _authService = authService;
@@ -91,6 +94,25 @@ namespace MediCore.Api.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+        
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUserDto updateUserDto) // Endpoint to update user details
+        {
+            
+        //  Validate request body & required fields
+         if (!ModelState.IsValid)
+         {
+            return BadRequest(ModelState);
+         }
+        try
+        {
+            await _userService.UpdateUserAsync(id, updateUserDto);
+            return Ok(new { Message = ErrorMessage.Success });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { Message = ex.Message });
         }
     }
 }
