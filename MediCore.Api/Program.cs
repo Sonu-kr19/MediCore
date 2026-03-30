@@ -4,6 +4,8 @@ using MediCore.Api.Repositories.TokenRepo;
 using MediCore.Api.Repositories.UserRepo;
 using MediCore.Api.Services;
 using MediCore.Api.Services.AuthServices;
+using System.Text.Json.Serialization;
+using MediCore.Api.Services.UserServices;
 using MediCore.Domain.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserRepository,UserRepository>();
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
+builder.Services.AddScoped<IUserService,UserService>();
 builder.Services.AddControllers();
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -49,11 +52,14 @@ builder.Services.AddAuthentication(options =>
 // Added Authorization
 builder.Services.AddAuthorization();
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
-        options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+       options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+       options.JsonSerializerOptions.Converters.Add(
+            new JsonStringEnumConverter());
         
     });
 var app = builder.Build();
