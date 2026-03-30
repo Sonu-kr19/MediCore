@@ -14,7 +14,10 @@ namespace MediCore.Api.Controllers
         {
             _userService = userService;
         }
-        [HttpGet("GetAll")]
+        
+        [HttpGet("GetAll")]       
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<UserResponseDto>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetAllUsers()
         {
             try
