@@ -1,25 +1,28 @@
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using MediCore.Api.DTOs.UserDtos;
+using MediCore.Api.Services.AuthServices;
+using Microsoft.AspNetCore.Mvc;
 using MediCore.Api.Services.UserServices;
 using MediCore.Api.Services;
-
+using MediCore.Api.Utilities;
+ 
 namespace MediCore.Api.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
-    {
+    {    
+        private readonly IAuthService _authService;
         private readonly IUserService _userService;
-
+        
         // Injects IUserService via constructor injection so the controller
         // can delegate all user-related business logic to the service layer,
         // keeping the controller thin and testable.
-        public UserController(IUserService userService)
+        public UserController(IAuthService authService,IUserService userService)
         {
+            _authService = authService;
             _userService = userService;
         }
-
+        
         // Handles patient self-registration requests (POST api/v1/users/register/patient).
         // Separated from staff registration because patients and staff may have
         // different validation rules, roles, and onboarding workflows in the service layer.
@@ -75,5 +78,19 @@ namespace MediCore.Api.Controllers
             }
         }
  
+        [HttpPost("forgotpassword")]
+        [ProduceResponseType(typeof(string), StatusCodes.Status200OK)];
+        [ProduceResponseType(typeof(string), StatusCodes.Status400BadRequest)];
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordDto dto)
+        {    
+            try{
+                var message = await _authService.ForgotPasswordAsync(dto);
+                return Ok(new{message});
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

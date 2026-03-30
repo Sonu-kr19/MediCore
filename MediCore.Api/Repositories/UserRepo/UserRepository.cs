@@ -1,5 +1,7 @@
 using MediCore.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using MediCore.Api.Repositories;
+using MediCore.Api.Utilities;
 
 namespace MediCore.Api.Repositories.UserRepo;
 
@@ -36,7 +38,7 @@ public class UserRepository : IUserRepository
         }
         return user;
     }
-
+    
     // Persists a new User entity to the database.
     // Add() only stages the entity in the EF change tracker — nothing hits
     // the DB until SaveChangesAsync() is called, which wraps the INSERT
@@ -47,4 +49,9 @@ public class UserRepository : IUserRepository
          _context.Users.Add(user);
         await _context.SaveChangesAsync();
     }
+    public async Task UpdatePasswordAsync(User user)
+    {
+        _context.Users.Update(user);
+        await _context.SaveChangesAsync();
+     }
 }

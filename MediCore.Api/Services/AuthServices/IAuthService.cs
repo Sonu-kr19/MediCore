@@ -8,6 +8,7 @@ namespace MediCore.Api.Services.AuthServices;
 
 public interface IAuthService
 {
+    Task <IActionResult> ForgotPasswordAsync(ForgotPasswordDto model);
     Task<TokenResponseDto> ValidateUserAsync(UserLoginDto dto);
     Task<TokenResponseDto> RefreshTokenAsync(string refreshToken);
 }
