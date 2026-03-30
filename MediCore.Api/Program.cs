@@ -20,12 +20,11 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddDbContext<MediCoreDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
-        b => b.MigrationsAssembly("MediCore.Api")));
-
+        b => b.MigrationsAssembly("MediCore.Api")));     
+        
 //Read JWT Configuration
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]);
-
 // Add Authentication
 builder.Services.AddAuthentication(options =>
 {
@@ -46,12 +45,17 @@ builder.Services.AddAuthentication(options =>
         ClockSkew=TimeSpan.Zero
     };
 });
+
 // Added Authorization
 builder.Services.AddAuthorization();
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+        
+    });
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -59,8 +63,8 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
-app.MapControllers();
 //Middleware Pipeline
+app.MapControllers();
 app.UseSwagger();
 app.UseSwaggerUI();
 
