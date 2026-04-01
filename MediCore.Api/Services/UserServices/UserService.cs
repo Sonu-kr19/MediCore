@@ -1,6 +1,7 @@
 using MediCore.Api.DTOs.UserDtos;
 using MediCore.Api.Repositories;
 using MediCore.Api.Utilities;
+using MediCore.Api.Utilities.Helpers;
 using MediCore.Domain.Entities;
 using MediCore.Domain.Enum;
 
@@ -105,6 +106,46 @@ public class UserService: IUserService
         {
             throw new Exception(ErrorMessage.UpdateFailedUser);
         }
+    }
+
+    //user register
+
+    public async Task UserRegisterAsync(UserRegisterDto dto)
+    {
+        // Validate format of password, email, and phone before making any DB call.
+        // If any of these fail, they throw ArgumentException immediately — no wasted DB round-trip.
+        PasswordHelper.Validate(dto.Password);
+        EmailHelper.Validate(dto.Email);
+        PhoneHelper.Validate(dto.Phone);
+
+        // Check if a user with this email already exists in the DB.
+        // We do this manually instead of relying on the DB unique constraint,
+        // because a constraint violation throws a raw 500 — here we throw
+        // InvalidOperationException which the controller maps to a clean 409 Conflict.
+        var exists = await _userRepository.GetUserByEmailAsync(dto.Email);
+        if (exists != null)
+            throw new InvalidOperationException(ErrorMessages.EmailAlreadyExists);
+
+        var user = new User
+        {
+            Name     = dto.Name,
+            Email    = dto.Email,
+            Phone    = dto.Phone,
+            // Role is always forced to Patient — never taken from the DTO.
+            // This prevents privilege escalation where a client could send "Admin" in the request body.
+            RoleName = RoleOption.Patient,
+            // Account is active immediately upon registration.
+            Status   = true,
+
+            // BCrypt hashes the password with an automatic salt before storing.
+            // workFactor 12 = 4096 iterations — strong enough to resist brute-force,
+            // light enough not to slow down normal registration traffic.
+            Password = BCrypt.Net.BCrypt.HashPassword(dto.Password, workFactor: 12)
+        };
+
+        // Persist the new user. Any unexpected DB errors here will bubble up
+        // as exceptions and be handled by the global error handler as 500.
+        await _userRepository.RegisterUserAsync(user);
     }
 }
 

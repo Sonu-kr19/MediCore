@@ -111,21 +111,21 @@ public class AuthService : IAuthService
         try
         {
             // Validate Password Match
-            if (model.NewPassword != model.ConfirmPassword)
+            if (dto.NewPassword != dto.ConfirmPassword)
                 throw new Exception(ErrorMessages.PasswordsDoNotMatch);
 
             // Validate Password Strength
-            if (!IsValidPassword(model.NewPassword))
+            if (!IsValidPassword(dto.NewPassword))
                 throw new Exception(ErrorMessages.InvalidPassword);
 
             // Check User
-            var user = await _userRepository.GetUserByEmailAsync(model.Email);
+            var user = await _userRepository.GetUserByEmailAsync(dto.Email);
 
             if (user == null)
                 throw new Exception(ErrorMessages.UserNotFound);
 
             // Hash Password using BCrypt
-            user.Password = BCrypt.Net.BCrypt.HashPassword(model.NewPassword);
+            user.Password = BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
 
             // Update DB
             await _userRepository.UpdatePasswordAsync(user);
