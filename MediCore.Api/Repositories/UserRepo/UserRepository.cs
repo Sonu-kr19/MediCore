@@ -14,7 +14,6 @@ public class UserRepository:IUserRepository
     public async Task<User?> GetUserByIdAsync(int userId) // Implement the method to retrieve a user by their ID
     {
         var user= await _context.Users.FirstOrDefaultAsync(u => u.UserID == userId);
-
         if (user == null)
         {
             return null;
@@ -51,7 +50,7 @@ public class UserRepository:IUserRepository
     public async Task<User?> GetUserByEmailAsync(string email)
     {
         // throw new NotImplementedException();
-         var user = await _context.Users.FirstOrDefaultAsync(temp=>temp.Email==email);
+        var user = await _context.Users.FirstOrDefaultAsync(temp=>temp.Email==email);
 
         // Explicit null check kept for clarity even though returning the
         // variable directly would behave identically — makes the intent
