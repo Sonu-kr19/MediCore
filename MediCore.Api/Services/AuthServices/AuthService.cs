@@ -12,6 +12,7 @@ using MediCore.Api.Utilities;
 using System.Text.RegularExpressions;
 using BCrypt.Net;
 using Microsoft.AspNetCore.Mvc;
+using MediCore.Api.Repositories.AuditRepo;
 
 namespace MediCore.Api.Services.AuthServices;
 
@@ -25,11 +26,13 @@ public class AuthService : IAuthService
     private readonly IUserRepository _userRepository;
     private readonly IConfiguration _configuration;
     private readonly ITokenRepository _tokenRepository;
-    public AuthService(IUserRepository userRepository, IConfiguration configuration, ITokenRepository tokenRepository)
+    private readonly IAuditLogRepository _auditLogRepository;
+    public AuthService(IUserRepository userRepository, IConfiguration configuration, ITokenRepository tokenRepository, IAuditLogRepository auditLogRepository)
     {
         _userRepository=userRepository;
         _configuration=configuration;
         _tokenRepository=tokenRepository;
+        _auditLogRepository=auditLogRepository;
     }
 
     /// <summary>
@@ -46,15 +49,18 @@ public class AuthService : IAuthService
         var user = await _userRepository.GetUserByEmailAsync(dto.Email);
         if (user==null)
         {
+            await _auditLogRepository.LogAsync(null, "LOGIN_FAILED", $"Email: {dto.Email} — User not found");
             throw new Exception(ErrorMessages.UserNotFound);
         }
         if (!user.Status)
         {
+            await _auditLogRepository.LogAsync(user.UserID, "LOGIN_FAILED", $"Email: {dto.Email} — Account inactive");
             throw new Exception(ErrorMessages.InactiveUser);
         }
         bool passwordValid = BCrypt.Net.BCrypt.Verify(dto.Password, user.Password);
         if (!passwordValid)
-        {
+        {   
+            await _auditLogRepository.LogAsync(user.UserID, "LOGIN_FAILED", $"Email: {dto.Email} — Wrong password");
             throw new Exception(ErrorMessages.InvalidCredentials);
         }
         var accessToken = GenerateToken(user);
@@ -67,6 +73,7 @@ public class AuthService : IAuthService
             UserId=user.UserID
         };
         await _tokenRepository.AddRefreshTokenAsync(refreshTokenEntity);
+        await _auditLogRepository.LogAsync(user.UserID, "LOGIN_SUCCESS", $"Email: {dto.Email}");
         return new TokenResponseDto
         {
             AccessToken=accessToken,
@@ -88,6 +95,7 @@ public class AuthService : IAuthService
         var storedToken = await _tokenRepository.GetRefreshTokenAsync(refreshToken);
         if(storedToken==null || storedToken.IsRevoked || storedToken.ExpiryDate < DateTime.UtcNow)
         {
+            await _auditLogRepository.LogAsync(null, "TOKEN_REFRESH_FAILED", "Invalid or expired refresh token");
             throw new Exception(ErrorMessages.InvalidRefreshToken);
         }
         var newAccessToken = GenerateToken(storedToken.User);
@@ -95,10 +103,13 @@ public class AuthService : IAuthService
         var newRefreshToken=GenerateRefreshToken();
         await _tokenRepository.AddRefreshTokenAsync(new RefreshToken
         {
-            Token=refreshToken,
+            Token=newRefreshToken,
             ExpiryDate=DateTime.UtcNow.AddDays(7),
             UserId=storedToken.UserId
         });
+
+        await _auditLogRepository.LogAsync(storedToken.UserId, "TOKEN_REFRESHED", "Access token reissued");
+
         return new TokenResponseDto
         {
             AccessToken=newAccessToken,
@@ -111,21 +122,21 @@ public class AuthService : IAuthService
         try
         {
             // Validate Password Match
-            if (model.NewPassword != model.ConfirmPassword)
+            if (dto.NewPassword != dto.ConfirmPassword)
                 throw new Exception(ErrorMessages.PasswordsDoNotMatch);
 
             // Validate Password Strength
-            if (!IsValidPassword(model.NewPassword))
+            if (!IsValidPassword(dto.NewPassword))
                 throw new Exception(ErrorMessages.InvalidPassword);
 
             // Check User
-            var user = await _userRepository.GetUserByEmailAsync(model.Email);
+            var user = await _userRepository.GetUserByEmailAsync(dto.Email);
 
             if (user == null)
                 throw new Exception(ErrorMessages.UserNotFound);
 
             // Hash Password using BCrypt
-            user.Password = BCrypt.Net.BCrypt.HashPassword(model.NewPassword);
+            user.Password = BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
 
             // Update DB
             await _userRepository.UpdatePasswordAsync(user);

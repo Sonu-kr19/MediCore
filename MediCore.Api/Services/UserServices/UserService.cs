@@ -5,7 +5,7 @@ using MediCore.Domain.Entities;
 using MediCore.Domain.Enum;
 
 namespace MediCore.Api.Services.UserServices;
-public class UserService: IUserService
+public class UserService : IUserService
 {
     IUserRepository _userRepository;
     public UserService(IUserRepository repository)
@@ -17,7 +17,7 @@ public class UserService: IUserService
         List<User> users = new List<User>();
         try
         {
-        users = await _userRepository.GetAllUsersAsync();
+            users = await _userRepository.GetAllUsersAsync();
         }
         catch(Exception ex)
         {

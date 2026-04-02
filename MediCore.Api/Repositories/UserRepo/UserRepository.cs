@@ -14,7 +14,6 @@ public class UserRepository:IUserRepository
     public async Task<User?> GetUserByIdAsync(int userId) // Implement the method to retrieve a user by their ID
     {
         var user= await _context.Users.FirstOrDefaultAsync(u => u.UserID == userId);
-
         if (user == null)
         {
             return null;
@@ -48,8 +47,13 @@ public class UserRepository:IUserRepository
         await _context.SaveChangesAsync();
      }
 
-    public Task<User?> GetUserByEmailAsync(string email)
+    public async Task<User?> GetUserByEmailAsync(string email)
     {
-        throw new NotImplementedException();
+        var user = await _context.Users.FirstOrDefaultAsync(temp=>temp.Email==email);
+        if (user == null)
+        {
+            return null;
+        }
+        return user;
     }
 }
