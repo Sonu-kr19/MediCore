@@ -29,6 +29,7 @@
     <Folder Include="Repositories\AuditRepo\" />
     <Folder Include="Repositories\TokenRepo\" />
     <Folder Include="Services\AuthServices\" />
+    <Folder Include="Utilities\Helpers\" />
     <Folder Include="Utilities\TokenUtility\" />
   </ItemGroup>
 

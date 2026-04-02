@@ -64,3 +64,6 @@ coverage/
 Thumbs.db
 Desktop.ini
 MediCore.Api/Migrations/
+
+# connection string  name file made in .gitignore
+MediCore.Api/ConnectionString

@@ -49,11 +49,25 @@ public class UserRepository:IUserRepository
 
     public async Task<User?> GetUserByEmailAsync(string email)
     {
+        // throw new NotImplementedException();
         var user = await _context.Users.FirstOrDefaultAsync(temp=>temp.Email==email);
+
+        // Explicit null check kept for clarity even though returning the
+        // variable directly would behave identically — makes the intent
+        // (this method is allowed to return null) obvious to future readers.
         if (user == null)
         {
             return null;
         }
         return user;
     }
+
+    //user registration 
+    // using context in user table added user data into database
+    public async Task RegisterUserAsync(User user)
+    {
+         _context.Users.Add(user);
+        await _context.SaveChangesAsync();
+    }
+
 }

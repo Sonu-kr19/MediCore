@@ -53,20 +53,49 @@ namespace MediCore.Api.Controllers
         public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUserDto updateUserDto) // Endpoint to update user details
         {
             
-        //  Validate request body & required fields
-         if (!ModelState.IsValid)
-         {
-            return BadRequest(ModelState);
-         }
-        try
-        {
-            await _userService.UpdateUserAsync(id, updateUserDto);
-            return Ok(new { Message = ErrorMessage.Success });
+            //  Validate request body & required fields
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                await _userService.UpdateUserAsync(id, updateUserDto);
+                return Ok(new { Message = ErrorMessage.Success });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
         }
-        catch (Exception ex)
+
+        //Register User
+
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [HttpPost("register")]
+        public async Task<IActionResult> Register(UserRegisterDto dto)
         {
-            return BadRequest(new { Message = ex.Message });
+            try
+            {
+                await _userService.UserRegisterAsync(dto);
+
+                // 200 OK — registration succeeded, return a success message.
+                return Ok(new { message = "User registered successfully." });
+            }
+            catch (ArgumentException ex)
+            {
+                // Thrown by the service when input format is invalid (email, password, phone).
+                // Mapped to 400 Bad Request — the client sent bad data and should fix it.
+                return BadRequest(new { error = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                // Thrown by the service when the email is already registered.
+                // Mapped to 409 Conflict — the resource already exists.
+                return Conflict(new { error = ex.Message });
+            }
         }
-    }
     }
 }

@@ -33,6 +33,10 @@ public class MediCoreDbContext : DbContext
     public virtual DbSet<TreatmentLog> TreatmentLogs { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder){
+        modelBuilder.Entity<User>()
+            .Property(u => u.RoleName)
+            .HasConversion<string>();
+
         modelBuilder.Entity<Bill>()
             .HasOne(b=>b.Patient)
             .WithMany()
