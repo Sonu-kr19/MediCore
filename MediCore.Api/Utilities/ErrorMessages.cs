@@ -22,6 +22,7 @@ public class ErrorMessages
     public const string PasswordNoLowercase   = "Password must contain at least one lowercase letter.";
     public const string PasswordNoDigit       = "Password must contain at least one number.";
     public const string PasswordNoSpecial     = "Password must contain at least one special character.";
+    public const string ConformPasswordMatch = "Password and conform password should be match";
 
     //  Email
     public const string EmailEmpty            = "Email cannot be empty.";

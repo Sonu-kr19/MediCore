@@ -112,6 +112,10 @@ public class UserService: IUserService
 
     public async Task UserRegisterAsync(UserRegisterDto dto)
     {
+
+        // Reject early if passwords don't match — no point validating further.
+        if (dto.Password != dto.ConfirmPassword)
+            throw new ArgumentException(ErrorMessages.ConformPasswordMatch);
         // Validate format of password, email, and phone before making any DB call.
         // If any of these fail, they throw ArgumentException immediately — no wasted DB round-trip.
         PasswordHelper.Validate(dto.Password);

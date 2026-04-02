@@ -18,6 +18,9 @@ public class UserRegisterDto
     public string Password { get; set; }
 
     [Required]
+    public string ConfirmPassword { get; set; }
+    
+    [Required]
     public RoleOption RoleName { get; set; }
 
     public string? Phone { get; set; }
