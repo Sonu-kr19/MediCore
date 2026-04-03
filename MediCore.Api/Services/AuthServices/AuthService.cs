@@ -116,32 +116,49 @@ public class AuthService : IAuthService
             RefreshToken=newRefreshToken
         };
     }
-    
+
+
+     /*
+     * API ENDPOINT LOGIC: FORGOT PASSWORD
+     * 1. Validates that NewPassword and ConfirmPassword match.
+     * 2. Validates password strength (min 8 chars, uppercase, lowercase, digit, special char).
+     * 3. Checks if user exists by Email.
+     * 4. Hashes the new password using BCrypt and updates the database.
+     * 5. Returns success message or throws exceptions for any validation failures.
+     */
     public async Task<IActionResult> ForgotPasswordAsync(ForgotPasswordDto dto)
     {
         try
         {
+            //Validate Password if email is Empty
+            if (string.IsNullOrEmpty(dto.Email))
+                throw new Exception(ErrorMessages.EmailRequired);
+
             // Validate Password Match
             if (dto.NewPassword != dto.ConfirmPassword)
                 throw new Exception(ErrorMessages.PasswordsDoNotMatch);
 
             // Validate Password Strength
             if (!IsValidPassword(dto.NewPassword))
+            {
+                await _auditLogRepository.LogAsync(null, "PASSWORD_RESET_FAILED", $"Email: {dto.Email} — Invalid password format");
                 throw new Exception(ErrorMessages.InvalidPassword);
-
+            }
             // Check User
             var user = await _userRepository.GetUserByEmailAsync(dto.Email);
 
-            if (user == null)
+            if (user == null){
+                await _auditLogRepository.LogAsync(null, "PASSWORD_RESET_FAILED", $"Email: {dto.Email} — User not found");
                 throw new Exception(ErrorMessages.UserNotFound);
-
+            }
+    
             // Hash Password using BCrypt
             user.Password = BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
 
             // Update DB
             await _userRepository.UpdatePasswordAsync(user);
-
-            throw new Exception(ErrorMessages.PasswordUpdatedSuccess);
+            await _auditLogRepository.LogAsync(user.UserID, "PASSWORD_RESET_SUCCESS", $"Email: {dto.Email} — Password updated");
+            return new OkObjectResult(ErrorMessages.PasswordUpdatedSuccess);
         }
         catch (Exception ex)
         {
@@ -150,15 +167,25 @@ public class AuthService : IAuthService
     }
         
     // Password Validation Method
+    // <summary>
+    // Password must be at least 8 characters
+    // Must contain all four character types:
+    // At least one uppercase letter (A-Z)
+    // At least one lowercase letter (a-z)
+    // At least one digit (0-9)
+    // At least one special character from: !@#$%^&*(),.?"':{}|
+    // <summary>
     private bool IsValidPassword(string password)
     {
         if (string.IsNullOrEmpty(password) || password.Length < 8)
             return false;
 
         var hasUpper = Regex.IsMatch(password, "[A-Z]");
+        var hasLower = Regex.IsMatch(password, "[a-z]");
         var hasNumber = Regex.IsMatch(password, "[0-9]");
+        var hasSpecial = Regex.IsMatch(password, @"[!@#$%^&*(),.?""':{}|<>]");
 
-        return hasUpper && hasNumber;
+        return hasUpper && hasNumber && hasLower && hasSpecial;
     }
 
     /// <summary>

@@ -9,6 +9,7 @@ public class MediCoreDbContext : DbContext
     public MediCoreDbContext(DbContextOptions<MediCoreDbContext> options) : base(options){}
     public virtual DbSet<User> Users { get; set; }
     public virtual DbSet<Appointment> Appointments { get; set; }
+    public virtual DbSet<AuditLog> AuditLogs { get; set; }
     public virtual DbSet<Bill> Bills { get; set; }
     public virtual DbSet<BillItem> BillItems {get; set;}
     public virtual DbSet<ComplianceRecord> ComplianceRecords {get; set;}

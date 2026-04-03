@@ -41,7 +41,7 @@ namespace MediCore.Api.Controllers
         {    
             try{
                 var message = await _authService.ForgotPasswordAsync(dto);
-                return Ok(new{message});
+                return Ok(message);
             }
             catch (Exception ex)
             {
