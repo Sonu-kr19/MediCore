@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace MediCore.Api.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
