@@ -72,24 +72,27 @@ public class UserService : IUserService
         {
             throw new Exception(ErrorMessage.UserNotFound);
         }
-        if(updateUserDto.UserID!=id)
-        {
-            throw new Exception(ErrorMessage.InvalidAction);
-        }
         if (string.IsNullOrWhiteSpace(updateUserDto.UserName))
         {
             throw new Exception(ErrorMessage.NameRequired);
         }
         user.Name=updateUserDto.UserName;
-        if (!Enum.IsDefined(typeof(RoleOption), updateUserDto.RoleName))
-        {
-           throw new Exception(ErrorMessage.InvalidRoleName);
-        }
-        user.RoleName = updateUserDto.RoleName;
+        // Email validation
         if (string.IsNullOrWhiteSpace(updateUserDto.Email) || !updateUserDto.Email.Contains("@"))
         {
-         throw new Exception(ErrorMessage.InvalidEmail);
+           throw new Exception(ErrorMessage.InvalidEmail);
         }
+        //Check only if email is changed
+        if (!string.Equals(user.Email, updateUserDto.Email, StringComparison.OrdinalIgnoreCase))
+        {
+           var existingUser = await _userRepository.GetUserByEmailAsync(updateUserDto.Email);
+           if (existingUser != null)
+           {
+              throw new Exception(ErrorMessage.EmailAlreadyExists);
+           }
+        }
+        user.Email = updateUserDto.Email;
+        user.RoleName = updateUserDto.RoleName;
         if (updateUserDto.Phone != null)
         {
            user.Phone = updateUserDto.Phone;
