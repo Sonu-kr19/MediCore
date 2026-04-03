@@ -4,6 +4,7 @@ namespace MediCore.Api.Utilities;
 
 public class ErrorMessages
 {
+    public const string EmailRequired = "Email is required.";  
     public const string PasswordsDoNotMatch ="Passwords do not match";
     public const string InvalidPassword ="Password must be at least 8 characters, include one uppercase letter and one number";
     public const string PasswordUpdatedSuccess = "Password updated successfully";

@@ -34,6 +34,12 @@ namespace MediCore.Api.Controllers
                 return NotFound(ex.Message);
             }
         }
+
+        /// <summary>
+        /// API ENDPOINT LOGIC: FORGOT PASSWORD
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns>An IActionResult containing a success message if the password reset email is sent successfully, or an error message if an exception occurs.</returns>
         [HttpPost("forgotpassword")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
@@ -41,7 +47,7 @@ namespace MediCore.Api.Controllers
         {    
             try{
                 var message = await _authService.ForgotPasswordAsync(dto);
-                return Ok(new{message});
+                return Ok(message);
             }
             catch (Exception ex)
             {
