@@ -15,4 +15,5 @@ public class ErrorMessage
         public const string UpdateFailedUser = "User update failed.";
         public const string InvalidAction = "Invalid Action";
         public const string InvalidEmail = "Invalid Email";
+        public const string EmailAlreadyExists = "Email already exists";
 }

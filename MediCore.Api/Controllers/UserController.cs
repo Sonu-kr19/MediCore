@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Http;
 using MediCore.Api.Services.AuthServices;
 using Microsoft.AspNetCore.Mvc;
 using MediCore.Api.Utilities;
- 
+using Microsoft.AspNetCore.Authorization;
+
 namespace MediCore.Api.Controllers
 {
+    [Authorize]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -19,6 +21,7 @@ namespace MediCore.Api.Controllers
             _authService = authService;
          }
        
+        [Authorize(Roles="Admin")]
         [HttpGet("GetAll")]       
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<UserResponseDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -40,6 +43,7 @@ namespace MediCore.Api.Controllers
         /// </summary>
         /// <param name="dto"></param>
         /// <returns>An IActionResult containing a success message if the password reset email is sent successfully, or an error message if an exception occurs.</returns>
+        [AllowAnonymous]
         [HttpPost("forgotpassword")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
@@ -71,12 +75,16 @@ namespace MediCore.Api.Controllers
             }
             catch (Exception ex)
             {
+                if (ex.Message == ErrorMessage.UserNotFound)
+                {
+                   return NotFound(new { Message = ex.Message });
+                }
                 return BadRequest(new { Message = ex.Message });
             }
         }
 
         //Register User
-
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
