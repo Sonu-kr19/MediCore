@@ -75,6 +75,10 @@ namespace MediCore.Api.Controllers
             }
             catch (Exception ex)
             {
+                if (ex.Message == ErrorMessage.UserNotFound)
+                {
+                   return NotFound(new { Message = ex.Message });
+                }
                 return BadRequest(new { Message = ex.Message });
             }
         }
