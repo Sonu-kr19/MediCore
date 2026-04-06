@@ -45,10 +45,10 @@ public class MediCoreDbContext : DbContext
             .OnDelete(DeleteBehavior.Restrict);
             
         modelBuilder.Entity<LabTest>()
-            .HasOne(l => l.DoctorIDNavigator)
+            .HasOne(l => l.Doctor)
             .WithMany(d => d.LabTests)
             .HasForeignKey(l => l.DoctorID)
-            .OnDelete(DeleteBehavior.Cascade); // keep cascade here
+            .OnDelete(DeleteBehavior.Restrict); // keep cascade here
 
         modelBuilder.Entity<LabTest>()
             .HasOne(l => l.PatientIDNavigator)
@@ -69,17 +69,23 @@ public class MediCoreDbContext : DbContext
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Appointment>()
-            .HasOne(a=>a.DoctorIDNavigator)
+            .HasOne(a => a.Doctor)
             .WithMany(d=>d.Appointments)
             .HasForeignKey(a=>a.DoctorID)
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<EMR>()
-            .HasOne(e => e.DoctorIDNavigator)
-            .WithMany(d => d.EMRs)
-            .HasForeignKey(e=>e.DoctorID)
-            .OnDelete(DeleteBehavior.Restrict); // or DeleteBehavior.SetNull
-        
+            .HasOne(e => e.User)            
+            .WithMany(u => u.EMRs)          
+            .HasForeignKey(e => e.DoctorID) 
+            .OnDelete(DeleteBehavior.Restrict); 
+
+        modelBuilder.Entity<EMR>()
+        .HasOne(e => e.PatientIDNavigator)
+        .WithMany(p => p.EMRs)
+        .HasForeignKey(e => e.PatientID)
+        .OnDelete(DeleteBehavior.Restrict);
+
         modelBuilder.Entity<Prescription>()
             .HasOne(p => p.DoctorIDNavigator)
             .WithMany(d => d.Prescriptions)

@@ -6,7 +6,7 @@ public class ErrorMessages
 {
     public const string EmailRequired = "Email is required.";  
     public const string PasswordsDoNotMatch ="Passwords do not match";
-    public const string InvalidPassword ="Password must be at least 8 characters, include one uppercase letter and one number";
+    public const string InvalidPassword ="Password must be at least 8 characters, include one uppercase letter, one lowercase letter, one number, and one special character.";
     public const string PasswordUpdatedSuccess = "Password updated successfully";
     public const string GenericError = "Something went wrong. Please try again.";
     public const string BadRequest = "Invalid Request";
@@ -36,5 +36,6 @@ public class ErrorMessages
     // role
     public const string InvalidRole         = "Role is invalid.";
 
-
+    //EMR
+    public const string EMRNotFound = "An error occurred while retrieving EMR data.";
 }

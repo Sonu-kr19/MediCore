@@ -11,7 +11,6 @@ public class LabTest
     public int LabTestID {get; set;}
     [ForeignKey("PatientIDNavigator")]
     public int PatientID {get; set;}
-    [ForeignKey("DoctorIDNavigator")]
     public int DoctorID {get; set;}
     public string Type {get; set;}
     public DateTime Date {get; set;}
@@ -21,6 +20,7 @@ public class LabTest
 
     public virtual LabReport? LabReport {get; set;}
     public virtual Patient? PatientIDNavigator { get; set; }
-    public virtual Doctor? DoctorIDNavigator {get; set;}
+    [ForeignKey("DoctorID")]
+    public virtual User? Doctor {get; set;}
     public virtual Technician? TechnicianIDNavigator { get; set; }
 }

@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <Folder Include="Controllers\" />
+    <Folder Include="DTOs\EmrDtos\" />
     <Folder Include="DTOs\TokenDtos\" />
     <Folder Include="Repositories\AuditRepo\" />
     <Folder Include="Repositories\TokenRepo\" />

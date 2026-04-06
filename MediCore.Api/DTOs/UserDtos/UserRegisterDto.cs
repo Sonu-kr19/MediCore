@@ -21,4 +21,5 @@ public class UserRegisterDto
     public RoleOption RoleName { get; set; }
 
     public string? Phone { get; set; }
+
 }

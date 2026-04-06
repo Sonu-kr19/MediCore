@@ -10,7 +10,6 @@ public class EMR
     [Key]
     public int EMRID {get; set;}
     public int PatientID {get; set;}
-    [ForeignKey("DoctorIDNavigator")]
     public int DoctorID {get; set;}
     public string Diagnosis {get; set;}
     public string TreatmentPlan {get; set;}
@@ -19,5 +18,6 @@ public class EMR
 
     public virtual Patient PatientIDNavigator {get; set;}
     public virtual ICollection<Prescription> Prescriptions {get; set;}
-    public virtual Doctor DoctorIDNavigator {get; set;}
+    [ForeignKey("DoctorID")]
+    public virtual User User {get; set;}
 }

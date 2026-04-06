@@ -41,6 +41,27 @@ public class UserService : IUserService
         return userResponseDtos;
         }
 
+    // public async Task<List<EmrDto>> GetEmrAsync(int PatientID)
+    // {
+        
+    //     var emrs = await _userRepository.Emrs
+    //     .Where(e => e.PatientID == PatientID && e.Status == true)
+    //     .Include(e => e.Prescriptions)
+    //     .Include(e => e.DoctorIDNavigator)
+    //     .OrderByDescending(e => e.Date)   // ✅ Sorted by EMR Date DESC
+    //     .Select(e => new EmrDto
+    //     {
+    //         EmrId = e.EMRID,
+    //         Date = e.Date,
+    //         Diagnosis = e.Diagnosis,
+    //         TreatmentPlan = e.TreatmentPlan,
+    //         DoctorName = e.DoctorIDNavigator.Name,
+    //         Prescriptions = e.Prescriptions.ToList()
+    //     })
+    //     .ToListAsync();
+    //     return emrs;
+    // }
+
     public async Task<UserResponseDto?> GetUserByIdAsync(int userId)
     {
         User user = await _userRepository.GetUserByIdAsync(userId);
@@ -133,7 +154,8 @@ public class UserService : IUserService
             Phone    = dto.Phone,
             // Role is always forced to Patient — never taken from the DTO.
             // This prevents privilege escalation where a client could send "Admin" in the request body.
-            RoleName = RoleOption.Patient,
+            // RoleName = RoleOption.Patient,                                                        
+            
             // Account is active immediately upon registration.
             Status   = true,
 
@@ -142,6 +164,15 @@ public class UserService : IUserService
             // light enough not to slow down normal registration traffic.
             Password = BCrypt.Net.BCrypt.HashPassword(dto.Password, workFactor: 12)
         };
+
+        if (dto.RoleName == null)
+        {
+            user.RoleName = RoleOption.Patient;
+        }
+        else
+        {
+            user.RoleName=dto.RoleName;
+        }   
 
         // Persist the new user. Any unexpected DB errors here will bubble up
         // as exceptions and be handled by the global error handler as 500.
