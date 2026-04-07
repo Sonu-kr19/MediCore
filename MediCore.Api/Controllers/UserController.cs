@@ -82,6 +82,19 @@ namespace MediCore.Api.Controllers
                 return BadRequest(new { Message = ex.Message });
             }
         }
+        [HttpDelete("delete/{Id}")]
+        public async Task<IActionResult> DeleteUser(int Id) // Endpoint to delete a user
+        {
+            try
+            {
+                await _userService.DeleteUserAsync(Id);
+                return Ok(new { Message = ErrorMessage.DelSuccess });
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+        }
 
         //Register User
         [AllowAnonymous]

@@ -16,4 +16,7 @@ public class ErrorMessage
         public const string InvalidAction = "Invalid Action";
         public const string InvalidEmail = "Invalid Email";
         public const string EmailAlreadyExists = "Email already exists";
+
+        //User Delete
+        public const string DelSuccess="User deleted successfully.";
 }

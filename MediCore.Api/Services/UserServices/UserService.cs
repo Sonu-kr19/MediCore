@@ -111,6 +111,16 @@ public class UserService : IUserService
         }
     }
 
+    public async Task DeleteUserAsync(int userId) // Method to delete a user by user ID
+    {
+        var user = await _userRepository.GetUserByIdAsync(userId);
+        if (user == null)
+        {
+            throw new Exception(ErrorMessage.UserNotFound);
+        }
+        await _userRepository.DeleteUserAsync(userId);
+    }
+
     //user register
 
     public async Task UserRegisterAsync(UserRegisterDto dto)

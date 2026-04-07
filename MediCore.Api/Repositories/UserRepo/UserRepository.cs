@@ -69,5 +69,14 @@ public class UserRepository:IUserRepository
          _context.Users.Add(user);
         await _context.SaveChangesAsync();
     }
-
+    //User Delete
+    public async Task DeleteUserAsync(int userId) // Implement the method to delete a user by their ID
+    {
+        var user = await _context.Users.FindAsync(userId);
+        if (user != null)
+        {
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+        }
+    }
 }
