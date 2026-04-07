@@ -118,7 +118,12 @@ public class UserService : IUserService
         {
             throw new Exception(ErrorMessage.UserNotFound);
         }
-        await _userRepository.DeleteUserAsync(userId);
+        if (user.Status == false)
+        {
+            throw new Exception(ErrorMessage.UserAlreadyDeleted);
+        }
+        user.Status=false;
+        await _userRepository.UpdateUserAsync(userId,user);
     }
 
     //user register

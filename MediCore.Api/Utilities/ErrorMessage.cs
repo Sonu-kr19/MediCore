@@ -19,4 +19,5 @@ public class ErrorMessage
 
         //User Delete
         public const string DelSuccess="User deleted successfully.";
+        public const string UserAlreadyDeleted=" User is already deleted";
 }

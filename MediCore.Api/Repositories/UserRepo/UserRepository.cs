@@ -70,13 +70,14 @@ public class UserRepository:IUserRepository
         await _context.SaveChangesAsync();
     }
     //User Delete
-    public async Task DeleteUserAsync(int userId) // Implement the method to delete a user by their ID
+    public async Task DeleteUserAsync(int userId) // Implement the method to soft-delete a user by their ID
     {
         var user = await _context.Users.FindAsync(userId);
-        if (user != null)
+        if (user == null)
         {
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
-        }
+            throw new Exception(ErrorMessage.UserNotFound);
+        }   
+    user.Status = false;
+    await _context.SaveChangesAsync();
     }
 }
