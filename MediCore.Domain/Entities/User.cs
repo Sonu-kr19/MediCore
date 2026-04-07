@@ -27,4 +27,5 @@ public class User
     public virtual Doctor? Doctor {get; set;}
     public virtual Nurse? Nurse {get; set;}
     public virtual Technician? Technician {get; set;}
+    public virtual ICollection<Schedule> Schedules {get; set;}=new List<Schedule>();
 }

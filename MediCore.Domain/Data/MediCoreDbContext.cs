@@ -86,5 +86,10 @@ public class MediCoreDbContext : DbContext
             .HasForeignKey(p => p.DoctorID)
             .OnDelete(DeleteBehavior.Restrict); // or SetNull
 
+        modelBuilder.Entity<Schedule>()
+        .HasOne(s => s.Doctor)      
+        .WithMany()                 
+        .HasForeignKey(s => s.DoctorID)
+        .OnDelete(DeleteBehavior.Restrict);
     }
 }

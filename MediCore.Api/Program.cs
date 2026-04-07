@@ -13,6 +13,8 @@ using Microsoft.IdentityModel.Tokens;
 using MediCore.Api.Repositories.AuditRepo;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.OpenApi;
+using MediCore.Api.Repositories.AppointmentServices;
+using MediCore.Api.Services.AppointmentServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +24,8 @@ builder.Services.AddScoped<IUserService,UserService>();
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 builder.Services.AddScoped<IUserService,UserService>();
 builder.Services.AddScoped<IAuditLogRepository, AuditLogRepository>();
+builder.Services.AddScoped<IScheduleRepository,ScheduleRepository>();
+builder.Services.AddScoped<IScheduleService,ScheduleService>();
 builder.Services.AddControllers();
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
