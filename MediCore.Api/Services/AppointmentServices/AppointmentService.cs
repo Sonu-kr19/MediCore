@@ -2,17 +2,22 @@ using System;
 using MediCore.Api.DTOs.AppointmentDtos;
 using MediCore.Api.Repositories.AppointmentServices;
 using MediCore.Api.Utilities;
-using MediCore.Domain.Entities;
 
 namespace MediCore.Api.Services.AppointmentServices;
 
-public class ScheduleService : IScheduleService
+public class AppointmentService:IAppointmentService
 {
-    private readonly IScheduleRepository _repository;
-    public ScheduleService(IScheduleRepository repository)
+    private readonly IAppointmentRepository _repository;
+    public AppointmentService(IAppointmentRepository repository)
     {
         _repository=repository;
     }
+
+    public Task BookAppointment(AppointmentRequestDto appointmentRequestDto)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<List<ScheduleResponseDto>> GetFreeSlots(int doctorId, DateOnly date)
     {
         // Validating doctorId input, It should not be negative and zero

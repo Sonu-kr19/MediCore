@@ -4,10 +4,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MediCore.Api.Repositories.AppointmentServices;
 
-public class ScheduleRepository : IScheduleRepository
+public class AppointmentRepository : IAppointmentRepository
 {
     private readonly MediCoreDbContext _context;
-    public ScheduleRepository(MediCoreDbContext context)
+    public AppointmentRepository(MediCoreDbContext context)
     {
         _context = context;
     }

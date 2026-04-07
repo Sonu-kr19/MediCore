@@ -3,7 +3,7 @@ using MediCore.Domain.Entities;
 
 namespace MediCore.Api.Repositories.AppointmentServices;
 
-public interface IScheduleRepository
+public interface IAppointmentRepository
 {
     /// <summary>
     ///  Method for Fetching the available slots of doctor.

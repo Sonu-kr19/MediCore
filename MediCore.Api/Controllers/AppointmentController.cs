@@ -1,21 +1,23 @@
+using MediCore.Api.DTOs.AppointmentDtos;
 using MediCore.Api.Services.AppointmentServices;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MediCore.Api.Controllers
 {
     [Authorize]
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
-    public class SchedulesController : ControllerBase
+    public class AppointmentController : ControllerBase
     {
-        private readonly IScheduleService _service;
-        public SchedulesController(IScheduleService service)
+        private readonly IAppointmentService _service;
+        public AppointmentController(IAppointmentService service)
         {
             _service=service;
         }
         
-        [HttpGet]
+        [HttpGet("Schedules")]
         public async Task<IActionResult> GetFreeSlots([FromQuery] int doctorId, [FromQuery] DateOnly date)
         {
             try

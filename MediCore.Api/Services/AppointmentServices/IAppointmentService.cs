@@ -1,10 +1,9 @@
 using System;
 using MediCore.Api.DTOs.AppointmentDtos;
-using MediCore.Domain.Entities;
 
 namespace MediCore.Api.Services.AppointmentServices;
 
-public interface IScheduleService
+public interface IAppointmentService
 {
     /// <summary>
     /// Service method to fetch ScheduleResponseDto of doctor for appointment
