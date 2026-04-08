@@ -1,6 +1,5 @@
-using System;
 using MediCore.Api.DTOs.AppointmentDtos;
-using MediCore.Api.Repositories.AppointmentServices;
+using MediCore.Api.Repositories.AppointmentRepository;
 using MediCore.Api.Utilities;
 
 namespace MediCore.Api.Services.AppointmentServices;
@@ -13,7 +12,7 @@ public class AppointmentService:IAppointmentService
         _repository=repository;
     }
 
-    public Task BookAppointment(AppointmentRequestDto appointmentRequestDto)
+    public Task BookAppointment(ScheduleResponseDto appointmentRequestDto)
     {
         throw new NotImplementedException();
     }

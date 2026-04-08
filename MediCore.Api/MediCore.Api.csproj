@@ -26,12 +26,15 @@
   <ItemGroup>
     <Folder Include="Controllers\" />
     <Folder Include="DTOs\AppointmentDtos\" />
+    <Folder Include="DTOs\LabTestDto\" />
     <Folder Include="DTOs\TokenDtos\" />
-    <Folder Include="Repositories\AppointmentServices\" />
+    <Folder Include="Repositories\AppointmentRepository\" />
     <Folder Include="Repositories\AuditRepo\" />
+    <Folder Include="Repositories\LabTestRepository\" />
     <Folder Include="Repositories\TokenRepo\" />
     <Folder Include="Services\AppointmentServices\" />
     <Folder Include="Services\AuthServices\" />
+    <Folder Include="Services\LabTestServices\" />
     <Folder Include="Utilities\Helpers\" />
     <Folder Include="Utilities\TokenUtility\" />
   </ItemGroup>
