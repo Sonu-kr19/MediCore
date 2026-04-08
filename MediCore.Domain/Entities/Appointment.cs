@@ -12,12 +12,12 @@ public class Appointment
     public int AppointmentID {get; set;}
     [ForeignKey("PatientIDNavigator")]
     public int PatientID {get; set;}
-    [ForeignKey("DoctorIDNavigator")]
     public int DoctorID {get; set;}
+    public virtual User? Doctor {get; set;}
     public DateOnly Date {get; set;}
     public TimeOnly Time {get; set;}
+    public string IdempotencyKey { get; set; } // for unique appointment between doctor and patient
     public AppointmentStatusOption Status {get; set;}
-
     public virtual Patient? PatientIDNavigator {get; set;}
-    public virtual Doctor? DoctorIDNavigator {get; set;}
+    
 }

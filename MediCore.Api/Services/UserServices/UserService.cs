@@ -151,7 +151,8 @@ public class UserService : IUserService
             Phone    = dto.Phone,
             // Role is always forced to Patient — never taken from the DTO.
             // This prevents privilege escalation where a client could send "Admin" in the request body.
-            RoleName = RoleOption.Patient,
+            // RoleName = RoleOption.Patient,
+            RoleName = dto.RoleName,
             // Account is active immediately upon registration.
             Status   = true,
 
