@@ -16,53 +16,30 @@ namespace MediCore.Api.Repositories.PrescriptionRepo
         public async Task<List<Prescription>> GetQueuedPrescriptionsAsync(
             int pageNumber, int pageSize)
         {
-            List<Prescription> allPrescriptions =
-                await _context.Prescriptions.ToListAsync();
 
-            List<Prescription> queuedPrescriptions =
-                new List<Prescription>();
+            int skip = (pageNumber - 1) * pageSize;
 
-            // Filter queued prescriptions (Status == false)
-            foreach (Prescription prescription in allPrescriptions)
-            {
-                if (prescription.Status == false)
-                {
-                    queuedPrescriptions.Add(prescription);
-                }
-            }
-
-            // Pagination logic (simple math, no LINQ)
             List<Prescription> pagedPrescriptions =
-                new List<Prescription>();
-
-            int startIndex = (pageNumber - 1) * pageSize;
-            int endIndex = startIndex + pageSize;
-
-            for (int i = startIndex; i < endIndex && i < queuedPrescriptions.Count; i++)
-            {
-                pagedPrescriptions.Add(queuedPrescriptions[i]);
-            }
+                await _context.Prescriptions
+                    .Where(p => p.Status == false)     // queued only
+                    .OrderBy(p => p.Date)              // optional but recommended
+                    .Skip(skip)                        // pagination start
+                    .Take(pageSize)                    // pagination size
+                    .ToListAsync();
 
             return pagedPrescriptions;
+
         }
 
         // Get total count of queued prescriptions
         public async Task<int> GetQueuedPrescriptionsCountAsync()
         {
-            List<Prescription> allPrescriptions =
-                await _context.Prescriptions.ToListAsync();
 
-            int count = 0;
-
-            foreach (Prescription prescription in allPrescriptions)
-            {
-                if (prescription.Status == false)
-                {
-                    count++;
-                }
-            }
+            int count = await _context.Prescriptions
+                            .CountAsync(p => p.Status == false);
 
             return count;
+
         }
     }
 }
