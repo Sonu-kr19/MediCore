@@ -17,8 +17,4 @@ public class LabTestRepository: ILabTestRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<List<LabTest>> GetAllLabTestsAsync()
-    {
-        return  await _context.LabTests.ToListAsync();
-    }
 }
