@@ -17,6 +17,8 @@ using MediCore.Api.Repositories.PrescriptionRepo;
 using MediCore.Api.Services.PrescriptionServices;
 using MediCore.Api.Repositories.AppointmentRepository;
 using MediCore.Api.Services.AppointmentServices;
+using MediCore.Api.Repositories.LabTestRepository;
+using MediCore.Api.Services.LabTestServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +30,8 @@ builder.Services.AddScoped<IUserService,UserService>();
 builder.Services.AddScoped<IAuditLogRepository, AuditLogRepository>();
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+builder.Services.AddScoped<ILabTestRepository, LabTestRepository>();
+builder.Services.AddScoped<ILabTestService, LabTestService>();
 builder.Services.AddControllers();
 builder.Services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
 builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
