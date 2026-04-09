@@ -1,4 +1,5 @@
 using System;
+using MediCore.Api.Utilities;
 using MediCore.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,12 +14,14 @@ public class AppointmentRepository : IAppointmentRepository
     }
     public async Task<bool> DoctorExists(int doctorId)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(d => d.UserID == doctorId);
-        string roleName = user.RoleName.ToString();
-        if (roleName == "Doctor")
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.UserID == doctorId);
+        if(user==null) return false;
+        if (user.RoleName.ToString() == "Doctor")
+        {
             return true;
-        else
-            return false;
+        }
+        return false;
+        
     }
 
     public async Task<List<Schedule>> GetFreeSlots(int doctorId, DateOnly date)

@@ -37,7 +37,6 @@ public class AppointmentService:IAppointmentService
         {
             throw new KeyNotFoundException(ErrorMessages.DoctorNotFound);
         }
-
         // List of schedule comming from repository
         var schedule = await _repository.GetFreeSlots(doctorId, date);
 
