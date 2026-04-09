@@ -13,7 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using MediCore.Api.Repositories.AuditRepo;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.OpenApi;
-using MediCore.Api.Repositories.AppointmentServices;
+using MediCore.Api.Repositories.AppointmentRepository;
 using MediCore.Api.Services.AppointmentServices;
 
 var builder = WebApplication.CreateBuilder(args);

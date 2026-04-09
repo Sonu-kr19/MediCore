@@ -1,6 +1,6 @@
 using System;
 using MediCore.Api.DTOs.AppointmentDtos;
-using MediCore.Api.Repositories.AppointmentServices;
+using MediCore.Api.Repositories.AppointmentRepository;
 using MediCore.Api.Utilities;
 
 namespace MediCore.Api.Services.AppointmentServices;

@@ -27,7 +27,7 @@
     <Folder Include="Controllers\" />
     <Folder Include="DTOs\AppointmentDtos\" />
     <Folder Include="DTOs\TokenDtos\" />
-    <Folder Include="Repositories\AppointmentServices\" />
+    <Folder Include="Repositories\AppointmentRepository\" />
     <Folder Include="Repositories\AuditRepo\" />
     <Folder Include="Repositories\TokenRepo\" />
     <Folder Include="Services\AppointmentServices\" />

@@ -2,7 +2,7 @@ using System;
 using MediCore.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace MediCore.Api.Repositories.AppointmentServices;
+namespace MediCore.Api.Repositories.AppointmentRepository;
 
 public class AppointmentRepository : IAppointmentRepository
 {

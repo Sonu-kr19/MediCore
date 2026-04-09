@@ -1,7 +1,7 @@
 using System;
 using MediCore.Domain.Entities;
 
-namespace MediCore.Api.Repositories.AppointmentServices;
+namespace MediCore.Api.Repositories.AppointmentRepository;
 
 public interface IAppointmentRepository
 {
