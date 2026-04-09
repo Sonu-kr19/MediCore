@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.OpenApi;
 using MediCore.Api.Repositories.AppointmentRepository;
 using MediCore.Api.Services.AppointmentServices;
+using MediCore.Api.Services.PatientServices;
+using MediCore.Api.Repositories.PatientRepo;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +28,8 @@ builder.Services.AddScoped<IUserService,UserService>();
 builder.Services.AddScoped<IAuditLogRepository, AuditLogRepository>();
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+builder.Services.AddScoped<IPatientService, PatientService>();
+builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddControllers();
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
