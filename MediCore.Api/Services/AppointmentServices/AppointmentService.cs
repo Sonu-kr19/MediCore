@@ -13,10 +13,10 @@ public class AppointmentService:IAppointmentService
         _repository=repository;
     }
 
-    public Task BookAppointment(AppointmentRequestDto appointmentRequestDto)
-    {
-        throw new NotImplementedException();
-    }
+     public Task BookAppointment(AppointmentRequestDto appointmentRequestDto)
+     {
+         throw new NotImplementedException();
+     }
 
     public async Task<List<ScheduleResponseDto>> GetFreeSlots(int doctorId, DateOnly date)
     {
@@ -37,7 +37,6 @@ public class AppointmentService:IAppointmentService
         {
             throw new KeyNotFoundException(ErrorMessages.DoctorNotFound);
         }
-
         // List of schedule comming from repository
         var schedule = await _repository.GetFreeSlots(doctorId, date);
 

@@ -50,6 +50,7 @@ packages/
 *.dll
 *.exe
 *.pdb
+*.json
 
 # Resharper
 _ReSharper*/
@@ -63,3 +64,4 @@ coverage/
 # Others
 Thumbs.db
 Desktop.ini
+

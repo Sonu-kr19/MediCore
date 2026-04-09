@@ -5,5 +5,10 @@ namespace MediCore.Api.Repositories.PrescriptionRepo;
 
 public interface IPrescriptionRepository
 {
-    Task CreatePrescriptionAsync(Prescription prescription);
+  public interface IPrescriptionRepository
+    {
+        Task CreatePrescriptionAsync(Prescription prescription);
+        Task<List<Prescription>> GetQueuedPrescriptionsAsync(int pageNumber, int pageSize);
+        Task<int> GetQueuedPrescriptionsCountAsync();
+    }
 }

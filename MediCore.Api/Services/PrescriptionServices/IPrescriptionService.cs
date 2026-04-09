@@ -1,8 +1,11 @@
 using System;
 using MediCore.Api.DTOs.PrescriptionDtos;
-namespace MediCore.Api.Services.PrescriptionServices;
-
-public interface IPrescriptionService
+using MediCore.Api.DTOs.Common;
+namespace MediCore.Api.Services.PrescriptionServices
 {
-    Task<PrescriptionResponseDto> CreatePrescriptionAsync(PrescriptionRequestDto Request);
+    public interface IPrescriptionService
+    {
+        Task<PrescriptionResponseDto> CreatePrescriptionAsync(PrescriptionRequestDto Request);
+        Task<PaginationResponseDto<QueuedPrescriptionDto>>GetQueuedPrescriptionsAsync(int pageNumber, int pageSize);
+    }
 }

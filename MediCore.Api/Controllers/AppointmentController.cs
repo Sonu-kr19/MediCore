@@ -18,6 +18,9 @@ namespace MediCore.Api.Controllers
         }
         
         [HttpGet("Schedules")]
+        [ProducesResponseType(typeof(string),StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(string),StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ScheduleResponseDto),StatusCodes.Status200OK)]
         public async Task<IActionResult> GetFreeSlots([FromQuery] int doctorId, [FromQuery] DateOnly date)
         {
             try
@@ -25,9 +28,13 @@ namespace MediCore.Api.Controllers
                 var result = await _service.GetFreeSlots(doctorId, date);
                 return Ok(result);
             }
-            catch (System.Exception ex)
+            catch(KeyNotFoundException ex)
             {
                 return NotFound(ex.Message);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
     }
