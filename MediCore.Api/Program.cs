@@ -16,8 +16,6 @@ using MediCore.Api.Services.EMR;
 using MediCore.Api.Services.PrescriptionServices;
 using MediCore.Api.Repositories.PrescriptionRepo;
 using Microsoft.OpenApi;
-using MediCore.Api.Repositories.PrescriptionRepo;
-using MediCore.Api.Services.PrescriptionServices;
 using MediCore.Api.Repositories.AppointmentRepository;
 using MediCore.Api.Services.AppointmentServices;
 

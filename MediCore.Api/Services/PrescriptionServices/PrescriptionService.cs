@@ -1,10 +1,9 @@
 using System;
 using System.Linq;
 using MediCore.Api.DTOs.PrescriptionDtos;
-using MediCore.Api.Repositories.PrescriptionRepo;
 using MediCore.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using MediCore.Api.DTOs.Common;
+using MediCore.Api.Repositories.PrescriptionRepo;
 
 namespace MediCore.Api.Services.PrescriptionServices;
 
@@ -52,15 +51,12 @@ public class PrescriptionService : IPrescriptionService
             TotalPrescriptionItems = newPrescription.PrescriptionItems.Count
         };
     }
-    public async Task<PaginationResponseDto<QueuedPrescriptionDto>>
-            GetQueuedPrescriptionsAsync(int pageNumber, int pageSize)
+    public async Task<PaginationResponseDto<QueuedPrescriptionDto>> GetQueuedPrescriptionsAsync(int pageNumber, int pageSize)
         {
             //  Get data from repository
-            List<Prescription> prescriptions =
-                await _repository.GetQueuedPrescriptionsAsync(pageNumber, pageSize);
+            List<Prescription> prescriptions = await _repository.GetQueuedPrescriptionsAsync(pageNumber, pageSize);
 
-            int totalCount =
-                await _repository.GetQueuedPrescriptionsCountAsync();
+            int totalCount = await _repository.GetQueuedPrescriptionsCountAsync();
 
             //  Convert Prescription entity to DTO manually
             List<QueuedPrescriptionDto> dtoList =
