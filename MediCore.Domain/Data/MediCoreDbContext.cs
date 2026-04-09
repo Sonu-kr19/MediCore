@@ -57,10 +57,10 @@ public class MediCoreDbContext : DbContext
             .OnDelete(DeleteBehavior.Restrict);
             
         modelBuilder.Entity<LabTest>()
-            .HasOne(l => l.DoctorIDNavigator)
-            .WithMany(d => d.LabTests)
-            .HasForeignKey(l => l.DoctorID)
-            .OnDelete(DeleteBehavior.Cascade); // keep cascade here
+        .HasOne(l => l.DoctorIDNavigator)
+        .WithMany() // no back-reference collection
+        .HasForeignKey(l => l.DoctorID)
+        .OnDelete(DeleteBehavior.Restrict); 
 
         modelBuilder.Entity<LabTest>()
             .HasOne(l => l.PatientIDNavigator)
