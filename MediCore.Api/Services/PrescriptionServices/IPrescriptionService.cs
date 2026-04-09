@@ -6,7 +6,6 @@ namespace MediCore.Api.Services.PrescriptionServices
 {
     public interface IPrescriptionService
     {
-        Task<PaginationResponseDto<QueuedPrescriptionDto>>
-            GetQueuedPrescriptionsAsync(int pageNumber, int pageSize);
+        Task<PaginationResponseDto<QueuedPrescriptionDto>>GetQueuedPrescriptionsAsync(int pageNumber, int pageSize);
     }
 }

@@ -21,10 +21,10 @@ namespace MediCore.Api.Repositories.PrescriptionRepo
 
             List<Prescription> pagedPrescriptions =
                 await _context.Prescriptions
-                    .Where(p => p.Status == false)     // queued only
-                    .OrderBy(p => p.Date)              // optional but recommended
-                    .Skip(skip)                        // pagination start
-                    .Take(pageSize)                    // pagination size
+                    .Where(p => p.Status == false)     
+                    .OrderBy(p => p.Date)             
+                    .Skip(skip)                       
+                    .Take(pageSize)                   
                     .ToListAsync();
 
             return pagedPrescriptions;

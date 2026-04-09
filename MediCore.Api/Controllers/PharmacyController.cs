@@ -16,7 +16,7 @@ namespace MediCore.Api.Controllers
             _prescriptionService = prescriptionService;
         }
 
-        // GET: /pharmacy/queue?pageNumber=1&pageSize=10
+
         [HttpGet("queue")]
         public async Task<IActionResult> GetQueuedPrescriptions(
             int pageNumber,
@@ -32,11 +32,7 @@ namespace MediCore.Api.Controllers
             {
                 throw new ArgumentException("pageSize must be greater than or equal to 1.");
             }
-
-            if (pageSize > 50)
-            {
-                throw new ArgumentException("pageSize cannot be greater than 50.");
-            }
+            
             var result =
                 await _prescriptionService
                     .GetQueuedPrescriptionsAsync(pageNumber, pageSize);
