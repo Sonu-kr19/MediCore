@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MediCore.Api.Controllers
 {
-    // [Authorize]
+    [Authorize]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class AppointmentController : ControllerBase
