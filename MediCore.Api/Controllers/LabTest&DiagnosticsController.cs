@@ -7,15 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MediCore.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class LabTestController : ControllerBase
     {
-         private readonly ILabTestRepository _labTestRepository;
         private readonly ILabTestService _labTestService;
         public LabTestController(ILabTestRepository labTestRepository, ILabTestService labTestService)
         {
-            _labTestRepository = labTestRepository;
+           
             _labTestService = labTestService;
         }
     
@@ -33,13 +32,6 @@ namespace MediCore.Api.Controllers
             {
                 return BadRequest(new { Message = ex.Message });
             }
-        }
-        [HttpGet("lab/tests")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<LabTest>))]
-        public async Task<IActionResult> GetLabTests()
-        {
-            var labTests = await _labTestRepository.GetAllLabTestsAsync();
-            return Ok(labTests);
         }
     }
 }

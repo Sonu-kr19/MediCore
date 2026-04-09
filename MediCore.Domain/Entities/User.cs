@@ -29,4 +29,5 @@ public class User
     public virtual Technician? Technician {get; set;}
     public virtual ICollection<Schedule> Schedules {get; set;}=new List<Schedule>();
     public virtual ICollection<Appointment> Appointments {get; set;}=new List<Appointment>();
+    public virtual ICollection<LabTest> LabTests {get; set;}=new List<LabTest>();
 }

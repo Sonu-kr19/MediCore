@@ -7,5 +7,4 @@ namespace MediCore.Api.Services.LabTestServices;
 public interface ILabTestService
 {
     Task<int> AddLabTestAsync(LabTestRequestDto dto);
-
 }

@@ -13,5 +13,5 @@ public class Technician
     public int UserID {get; set;}
 
     public virtual User? UserIDNavigator {get; set;}
-    public virtual ICollection<LabTest> LabTests {get; set;} = new List<LabTest>();
+    // public virtual ICollection<LabTest> LabTests {get; set;} = new List<LabTest>();
 }
