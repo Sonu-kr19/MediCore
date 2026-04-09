@@ -3,9 +3,11 @@ using MediCore.Api.Services.EMR;
 using MediCore.Api.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using MediCore.Api.DTOs.EmrDtos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MediCore.Api.Controllers;
 
+[Authorize(Roles = "Doctor")]
 [ApiController]
 [Route("api/v1/[controller]")]
 public class EmrController : ControllerBase
@@ -17,7 +19,7 @@ public class EmrController : ControllerBase
         _emrService = emrService;
     }
 
-    
+
     [HttpPost]
     public async Task<IActionResult> CreateEmr(
         [FromBody] EmrRequestDto request)

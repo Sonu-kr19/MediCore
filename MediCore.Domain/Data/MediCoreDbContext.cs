@@ -70,16 +70,19 @@ public class MediCoreDbContext : DbContext
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Appointment>()
-            .HasOne(a => a.Doctor)
-            .WithMany()
-            .HasForeignKey(a => a.DoctorID)
+            .HasOne(a=>a.Doctor)
+            .WithMany(d=>d.Appointments)
+            .HasForeignKey(a=>a.DoctorID)
             .OnDelete(DeleteBehavior.Restrict);
 
-        modelBuilder.Entity<EMR>()
-            .HasOne(e => e.Doctor)
-            .WithMany(u => u.EMRs)
-            .HasForeignKey(e => e.DoctorID)
-            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Appointment>()
+            .Property(a=>a.IdempotencyKey)
+            .IsRequired()
+            .HasMaxLength(100);
+        
+        modelBuilder.Entity<Appointment>()
+            .HasIndex(a=>a.IdempotencyKey)
+            .IsUnique();
 
         modelBuilder.Entity<EMR>()
         .HasOne(e => e.Patient)
@@ -93,12 +96,5 @@ public class MediCoreDbContext : DbContext
             .HasForeignKey(p => p.DoctorID)
             .OnDelete(DeleteBehavior.Restrict); // or SetNull
 
-        modelBuilder.Entity<BillItem>()
-            .Property(b => b.Rate)
-            .HasColumnType("decimal(18,2)");
-
-        modelBuilder.Entity<InsuranceClaim>()
-            .Property(i => i.Amount)
-            .HasColumnType("decimal(18,2)");
     }
 }

@@ -30,7 +30,6 @@ public class PrescriptionController : ControllerBase
         catch (ArgumentException ex)
         {
             return BadRequest(new { Message = ex.Message });
-            // return BadRequest("Error" );
         }
     }
 }

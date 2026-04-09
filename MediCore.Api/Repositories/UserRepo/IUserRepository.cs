@@ -10,4 +10,5 @@ public interface IUserRepository
     Task<User?> GetUserByEmailAsync(string email);
     Task UpdatePasswordAsync(User user);
     Task RegisterUserAsync(User user);
+    Task DeleteUserAsync(int userId);
 }

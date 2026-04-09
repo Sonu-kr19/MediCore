@@ -37,5 +37,9 @@ public class ErrorMessages
     public const string InvalidRole         = "Role is invalid.";
 
     //EMR
-    public const string EMRNotFound = "No EMR records found for the specified patient.";
+    public const string EMRNotFound = "No EMR records found for the specified patient.";    // Get free Slots
+    public const string InvalidDoctorId = "Doctor Id can't be negative or Zero.";
+    public const string DoctorNotFound = "Doctor with this Doctor Id doesn't exists.";
+    public const string DateRequired = "Date is required";
+
 }
