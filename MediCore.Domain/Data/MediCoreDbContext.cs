@@ -97,7 +97,7 @@ public class MediCoreDbContext : DbContext
 
         modelBuilder.Entity<Schedule>()
         .HasOne(s => s.Doctor)      
-        .WithMany()                 
+        .WithMany(u => u.Schedules)                 
         .HasForeignKey(s => s.DoctorID)
         .OnDelete(DeleteBehavior.Restrict);
     }

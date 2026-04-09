@@ -10,8 +10,8 @@ public class Schedule
     [Key]
     public int ScheduleID {get; set;}
     public int DoctorID {get; set;}
-    public virtual User? Doctor {get; set;}
     public DateOnly Date {get; set;}
     public TimeOnly TimeSlot {get; set;}
     public bool Availability {get; set;}
+    public virtual User? Doctor {get; set;}
 }
