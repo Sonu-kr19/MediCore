@@ -13,10 +13,10 @@ public class AppointmentService:IAppointmentService
         _repository=repository;
     }
 
-    public Task BookAppointment(AppointmentRequestDto appointmentRequestDto)
-    {
-        throw new NotImplementedException();
-    }
+     public Task BookAppointment(AppointmentRequestDto appointmentRequestDto)
+     {
+         throw new NotImplementedException();
+     }
 
     public async Task<List<ScheduleResponseDto>> GetFreeSlots(int doctorId, DateOnly date)
     {

@@ -13,6 +13,8 @@ using Microsoft.IdentityModel.Tokens;
 using MediCore.Api.Repositories.AuditRepo;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.OpenApi;
+using MediCore.Api.Repositories.PrescriptionRepo;
+using MediCore.Api.Services.PrescriptionServices;
 using MediCore.Api.Repositories.AppointmentRepository;
 using MediCore.Api.Services.AppointmentServices;
 
@@ -27,6 +29,8 @@ builder.Services.AddScoped<IAuditLogRepository, AuditLogRepository>();
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddControllers();
+builder.Services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
+builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
@@ -56,6 +60,21 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey=new SymmetricSecurityKey(key),
         ClockSkew=TimeSpan.Zero
     };
+    
+ options.Events = new JwtBearerEvents
+        {
+            OnForbidden = async context =>
+            {
+                context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                context.Response.ContentType = "application/json";
+
+                await context.Response.WriteAsJsonAsync(new
+                {
+                    message = "Access denied. You are not authorized to access this resource."
+                });
+            }
+        };
+
 });
 
 // Added Authorization
@@ -129,4 +148,3 @@ app.UseAuthorization();
 
 app.UseHttpsRedirection();
 app.Run();
-
