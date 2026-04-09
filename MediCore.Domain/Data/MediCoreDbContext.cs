@@ -69,10 +69,19 @@ public class MediCoreDbContext : DbContext
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Appointment>()
-            .HasOne(a=>a.DoctorIDNavigator)
+            .HasOne(a=>a.Doctor)
             .WithMany(d=>d.Appointments)
             .HasForeignKey(a=>a.DoctorID)
             .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Appointment>()
+            .Property(a=>a.IdempotencyKey)
+            .IsRequired()
+            .HasMaxLength(100);
+        
+        modelBuilder.Entity<Appointment>()
+            .HasIndex(a=>a.IdempotencyKey)
+            .IsUnique();
 
         modelBuilder.Entity<EMR>()
             .HasOne(e => e.DoctorIDNavigator)
@@ -86,5 +95,10 @@ public class MediCoreDbContext : DbContext
             .HasForeignKey(p => p.DoctorID)
             .OnDelete(DeleteBehavior.Restrict); // or SetNull
 
+        modelBuilder.Entity<Schedule>()
+        .HasOne(s => s.Doctor)      
+        .WithMany(u => u.Schedules)                 
+        .HasForeignKey(s => s.DoctorID)
+        .OnDelete(DeleteBehavior.Restrict);
     }
 }

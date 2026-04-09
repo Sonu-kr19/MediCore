@@ -36,5 +36,9 @@ public class ErrorMessages
     // role
     public const string InvalidRole         = "Role is invalid.";
 
+    // Get free Slots
+    public const string InvalidDoctorId = "Doctor Id can't be negative or Zero.";
+    public const string DoctorNotFound = "Doctor with this Doctor Id doesn't exists.";
+    public const string DateRequired = "Date is required";
 
 }

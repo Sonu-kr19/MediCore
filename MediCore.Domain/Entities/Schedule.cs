@@ -13,6 +13,5 @@ public class Schedule
     public DateOnly Date {get; set;}
     public TimeOnly TimeSlot {get; set;}
     public bool Availability {get; set;}
-
-    public virtual Doctor? DoctorIDNavigator {get; set;}
+    public virtual User? Doctor {get; set;}
 }

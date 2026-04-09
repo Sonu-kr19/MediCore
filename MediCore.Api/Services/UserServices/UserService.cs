@@ -111,6 +111,21 @@ public class UserService : IUserService
         }
     }
 
+    public async Task DeleteUserAsync(int userId) // Method to delete a user by user ID
+    {
+        var user = await _userRepository.GetUserByIdAsync(userId);
+        if (user == null)
+        {
+            throw new Exception(ErrorMessage.UserNotFound);
+        }
+        if (user.Status == false)
+        {
+            throw new Exception(ErrorMessage.UserAlreadyDeleted);
+        }
+        user.Status=false;
+        await _userRepository.UpdateUserAsync(userId,user);
+    }
+
     //user register
 
     public async Task UserRegisterAsync(UserRegisterDto dto)
@@ -136,7 +151,8 @@ public class UserService : IUserService
             Phone    = dto.Phone,
             // Role is always forced to Patient — never taken from the DTO.
             // This prevents privilege escalation where a client could send "Admin" in the request body.
-            RoleName = RoleOption.Patient,
+            // RoleName = RoleOption.Patient,
+            RoleName = dto.RoleName,
             // Account is active immediately upon registration.
             Status   = true,
 

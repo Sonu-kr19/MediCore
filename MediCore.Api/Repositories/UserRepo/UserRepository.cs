@@ -69,5 +69,15 @@ public class UserRepository:IUserRepository
          _context.Users.Add(user);
         await _context.SaveChangesAsync();
     }
-
+    //User Delete
+    public async Task DeleteUserAsync(int userId) // Implement the method to soft-delete a user by their ID
+    {
+        var user = await _context.Users.FindAsync(userId);
+        if (user == null)
+        {
+            throw new Exception(ErrorMessage.UserNotFound);
+        }   
+    user.Status = false;
+    await _context.SaveChangesAsync();
+    }
 }

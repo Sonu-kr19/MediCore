@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.OpenApi;
 using MediCore.Api.Repositories.PrescriptionRepo;
 using MediCore.Api.Services.PrescriptionServices;
+using MediCore.Api.Repositories.AppointmentRepository;
+using MediCore.Api.Services.AppointmentServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +26,8 @@ builder.Services.AddScoped<IUserService,UserService>();
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 builder.Services.AddScoped<IUserService,UserService>();
 builder.Services.AddScoped<IAuditLogRepository, AuditLogRepository>();
+builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddControllers();
 builder.Services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
 builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
