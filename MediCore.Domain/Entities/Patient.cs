@@ -24,5 +24,4 @@ public class Patient
     public virtual ICollection<Bill> Bills {get; set;}
     public virtual ICollection<LabTest> LabTests {get; set;}
     public virtual ICollection<ComplianceRecord> ComplianceRecords {get; set;}
-    public virtual ICollection<Prescription> Prescriptions {get; set;}
 }

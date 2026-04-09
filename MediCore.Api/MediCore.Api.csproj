@@ -25,10 +25,14 @@
 
   <ItemGroup>
     <Folder Include="Controllers\" />
+    <Folder Include="DTOs\EmrDtos\" />
     <Folder Include="DTOs\TokenDtos\" />
     <Folder Include="Repositories\AuditRepo\" />
+    <Folder Include="Repositories\PrescriptionRepo\" />
     <Folder Include="Repositories\TokenRepo\" />
     <Folder Include="Services\AuthServices\" />
+    <Folder Include="Services\EmrServices\" />
+    <Folder Include="Services\PrescriptionServices\" />
     <Folder Include="Utilities\Helpers\" />
     <Folder Include="Utilities\TokenUtility\" />
   </ItemGroup>

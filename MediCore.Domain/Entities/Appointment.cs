@@ -10,14 +10,18 @@ public class Appointment
 {
     [Key]
     public int AppointmentID {get; set;}
-    [ForeignKey("PatientIDNavigator")]
-    public int PatientID {get; set;}
-    [ForeignKey("DoctorIDNavigator")]
+
+    public int PatientID {get; set;} // The ID
+    
     public int DoctorID {get; set;}
+
     public DateOnly Date {get; set;}
     public TimeOnly Time {get; set;}
     public AppointmentStatusOption Status {get; set;}
 
+    [ForeignKey("PatientID")] // Point to the int property
     public virtual Patient? PatientIDNavigator {get; set;}
-    public virtual Doctor? DoctorIDNavigator {get; set;}
+
+    [ForeignKey("DoctorID")] // Point to the int property
+    public virtual Doctor? Doctor {get; set;}
 }

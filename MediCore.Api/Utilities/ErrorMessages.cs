@@ -36,5 +36,6 @@ public class ErrorMessages
     // role
     public const string InvalidRole         = "Role is invalid.";
 
-
+    //EMR
+    public const string EMRNotFound = "No EMR records found for the specified patient.";
 }
