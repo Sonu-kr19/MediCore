@@ -10,6 +10,8 @@ public class Patient
     public int PatientID {get; set;}
     [ForeignKey("UserIDNavigator")]
     public int UserID {get; set;}
+    //added name column in patient table
+    public string Name { get; set; } = null!;
     public DateOnly DOB {get; set;}
     public GenderOption Gender {get; set;}
     public string Address {get; set;}
@@ -17,7 +19,7 @@ public class Patient
     public int? InsuranceID {get; set;}
     public bool Status {get; set;}
     public virtual User? UserIDNavigator {get; set;}
-    public virtual InsuranceClaim? InsuranceIDNavigator {get; set;}
+    public virtual Insurance? InsuranceIDNavigator {get; set;}
     public virtual ICollection<PatientDocument> PatientDocuments {get; set;}
     public virtual ICollection<Appointment> Appointments {get; set;}
     public virtual ICollection<EMR> EMRs {get; set;}

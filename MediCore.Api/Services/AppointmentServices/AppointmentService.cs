@@ -15,6 +15,7 @@ public class AppointmentService:IAppointmentService
     {
         throw new NotImplementedException();
     }
+    }
 
      public async Task<List<ScheduleResponseDto>> GetFreeSlots(int doctorId, DateOnly date)
       {

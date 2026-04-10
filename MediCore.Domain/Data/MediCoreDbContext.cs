@@ -15,10 +15,11 @@ public class MediCoreDbContext : DbContext
     public virtual DbSet<ComplianceRecord> ComplianceRecords { get; set; }
     public virtual DbSet<Dispense> Dispenses { get; set; }
     public virtual DbSet<Doctor> Doctors { get; set; }
-    public virtual DbSet<EMR> EMRs { get; set; }
-    public virtual DbSet<FinanceOfficer> FinanceOfficers { get; set; }
-    public virtual DbSet<InsuranceClaim> InsuranceClaims { get; set; }
-    public virtual DbSet<LabReport> LabReports { get; set; }
+    public virtual DbSet<EMR> EMRs { get; set; }    
+    public virtual DbSet<FinanceOfficer> FinanceOfficers {get; set;}
+    public DbSet<Insurance> Insurances { get; set; }
+    public virtual DbSet<InsuranceClaim> InsuranceClaims {get; set;}
+    public virtual DbSet<LabReport> LabReports  { get; set; }
     public virtual DbSet<LabTest> LabTests { get; set; }
     public virtual DbSet<Medicine> Medicines { get; set; }
     public virtual DbSet<Nurse> Nurses { get; set; }
@@ -38,6 +39,17 @@ public class MediCoreDbContext : DbContext
         modelBuilder.Entity<User>()
             .Property(u => u.RoleName)
             .HasConversion<string>();
+
+        modelBuilder.Entity<Patient>()
+            .Property(p => p.Gender)
+            .HasConversion<string>();
+
+        // patient to Insurance (policy) fk — if insurence tabke data will delete will not effect to patient tableand it make nullable, set null on delete.
+        modelBuilder.Entity<Patient>()
+        .HasOne(p => p.InsuranceIDNavigator)
+        .WithMany()
+        .HasForeignKey(p => p.InsuranceID)
+        .OnDelete(DeleteBehavior.SetNull);
 
         modelBuilder.Entity<Bill>()
             .HasOne(b => b.Patient)

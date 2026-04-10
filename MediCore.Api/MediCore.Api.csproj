@@ -27,10 +27,13 @@
     <Folder Include="DTOs\AppointmentDtos\" />
     <Folder Include="DTOs\EmrDtos\" />
     <Folder Include="DTOs\LabTestDto\" />
+    <Folder Include="DTOs\AppointmentDtos\PatientDtos\" />
+    <Folder Include="DTOs\PatientDtos\" />
     <Folder Include="DTOs\TokenDtos\" />
     <Folder Include="Repositories\AppointmentRepository\" />
     <Folder Include="Repositories\AuditRepo\" />
     <Folder Include="Repositories\LabTestRepository\" />
+    <Folder Include="Repositories\PatientRepo\" />
     <Folder Include="Repositories\TokenRepo\" />
     <Folder Include="Services\AppointmentServices\" />
     <Folder Include="Services\AuthServices\" />
@@ -38,6 +41,7 @@
     <Folder Include="Repositories\PrescriptionRepo\" />
     <Folder Include="Services\EmrServices\" />
     <Folder Include="Services\PrescriptionServices\" />
+    <Folder Include="Services\PatientServices\" />
     <Folder Include="Utilities\Helpers\" />
     <Folder Include="Utilities\TokenUtility\" />
   </ItemGroup>

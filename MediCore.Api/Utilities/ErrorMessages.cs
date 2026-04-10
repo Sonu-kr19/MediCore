@@ -35,6 +35,7 @@ public class ErrorMessages
 
     // role
     public const string InvalidRole         = "Role is invalid.";
+    public const string AdminRegister = "Admin role cannot be assigned during registration.";
 
     //EMR
     public const string EMRNotFound = "No EMR records found for the specified patient.";    // Get free Slots
