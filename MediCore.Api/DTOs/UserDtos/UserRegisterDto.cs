@@ -15,10 +15,12 @@ public class UserRegisterDto
     public string Email { get; set; }
 
     [Required]
+
     public string Password { get; set; }
 
     [Required]
-    public RoleOption RoleName { get; set; }
+    
+    public RoleOption RoleName { get; set; } = RoleOption.Patient;
 
     public string? Phone { get; set; }
 }

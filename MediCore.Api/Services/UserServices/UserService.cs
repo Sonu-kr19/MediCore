@@ -1,5 +1,6 @@
 using MediCore.Api.DTOs.UserDtos;
 using MediCore.Api.Repositories;
+using MediCore.Api.Repositories.AuditRepo;
 using MediCore.Api.Utilities;
 using MediCore.Api.Utilities.Helpers;
 using MediCore.Domain.Entities;
@@ -9,9 +10,11 @@ namespace MediCore.Api.Services.UserServices;
 public class UserService : IUserService
 {
     IUserRepository _userRepository;
-    public UserService(IUserRepository repository)
+    IAuditLogRepository _auditLogRepository;
+    public UserService(IUserRepository repository,IAuditLogRepository auditLogRepository)
     {
         _userRepository = repository;
+        _auditLogRepository = auditLogRepository;
     }
     public async Task<List<UserResponseDto>> GetAllUsersAsync()
     {
@@ -144,6 +147,9 @@ public class UserService : IUserService
         if (exists != null)
             throw new InvalidOperationException(ErrorMessages.EmailAlreadyExists);
 
+        if (dto.RoleName == RoleOption.Admin)
+            throw new ArgumentException(ErrorMessages.AdminRegister);
+
         var user = new User
         {
             Name     = dto.Name,
@@ -151,7 +157,7 @@ public class UserService : IUserService
             Phone    = dto.Phone,
             // Role is always forced to Patient — never taken from the DTO.
             // This prevents privilege escalation where a client could send "Admin" in the request body.
-            // RoleName = RoleOption.Patient,
+            // RoleName = dto.RoleName,
             RoleName = dto.RoleName,
             // Account is active immediately upon registration.
             Status   = true,
@@ -164,6 +170,7 @@ public class UserService : IUserService
 
         // Persist the new user. Any unexpected DB errors here will bubble up
         // as exceptions and be handled by the global error handler as 500.
+        await _auditLogRepository.LogAsync(null, "Register_Successfull", $"Email: {dto.Email} — is Registered");
         await _userRepository.RegisterUserAsync(user);
     }
 }

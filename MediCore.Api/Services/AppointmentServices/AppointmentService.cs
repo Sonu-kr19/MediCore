@@ -10,9 +10,15 @@ public class AppointmentService:IAppointmentService
     public AppointmentService(IAppointmentRepository repository)
     {
         _repository=repository;
-    }
-    public async Task<List<ScheduleResponseDto>> GetFreeSlots(int doctorId, DateOnly date)
+    }    
+    public Task BookAppointment(AppointmentRequestDto appointmentRequestDto)
     {
+        throw new NotImplementedException();
+    }
+    }
+
+     public async Task<List<ScheduleResponseDto>> GetFreeSlots(int doctorId, DateOnly date)
+      {
         // Validating doctorId input, It should not be negative and zero
         if (doctorId <= 0)
         {

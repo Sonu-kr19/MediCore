@@ -6,6 +6,8 @@ namespace MediCore.Domain.Entities;
 
 public class PrescriptionItem
 {
+    // [Key]
+    // [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int PrescriptionItemID {get; set;}
     [ForeignKey("Prescription")]
     public int PrescriptionID {get; set;}
