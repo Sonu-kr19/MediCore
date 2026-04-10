@@ -13,7 +13,7 @@ public class Prescription
     public int DoctorID { get; set; }
     public DateTime Date {get; set;}
     public bool Status {get; set;}
-    public virtual EMR? EMRIDNavigator { get; set; }
-    public virtual User? DoctorIDNavigator { get; set; }
+    public virtual EMR? EMR { get; set; }
+    public virtual User? Doctor { get; set; }
     public virtual ICollection<PrescriptionItem>? PrescriptionItems {get; set;}
 }

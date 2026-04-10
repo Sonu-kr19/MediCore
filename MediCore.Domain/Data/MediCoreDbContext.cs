@@ -85,16 +85,29 @@ public class MediCoreDbContext : DbContext
             .IsUnique();
 
         modelBuilder.Entity<EMR>()
-        .HasOne(e => e.Patient)
-        .WithMany(p => p.EMRs)
-        .HasForeignKey(e => e.PatientID)
-        .OnDelete(DeleteBehavior.Restrict);
+            .HasOne(e => e.Patient)
+            .WithMany(p => p.EMRs)
+            .HasForeignKey(e => e.PatientID)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<EMR>()
+            .HasOne(e => e.Doctor)         
+            .WithMany(d => d.EMRs)         
+            .HasForeignKey(e => e.DoctorID) 
+            .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Prescription>()
-            .HasOne(p => p.DoctorIDNavigator)
+            .HasOne(p => p.Doctor)
             .WithMany(d => d.Prescriptions)
             .HasForeignKey(p => p.DoctorID)
             .OnDelete(DeleteBehavior.Restrict); // or SetNull
+        
+        modelBuilder.Entity<Prescription>()
+            .HasOne(p => p.EMR)
+            .WithMany(e => e.Prescriptions)
+            .HasForeignKey(p => p.EMRID)
+            .OnDelete(DeleteBehavior.ClientSetNull);
+        
 
     }
 }
