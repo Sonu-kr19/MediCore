@@ -50,7 +50,7 @@ public class MediCoreDbContext : DbContext
             .WithMany()
             .HasForeignKey(l => l.DoctorID)
             .OnDelete(DeleteBehavior.Restrict); // keep cascade here
-
+            
         modelBuilder.Entity<LabTest>()
             .HasOne(l => l.PatientIDNavigator)
             .WithMany(p => p.LabTests)

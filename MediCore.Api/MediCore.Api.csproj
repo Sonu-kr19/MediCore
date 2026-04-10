@@ -24,16 +24,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
     <Folder Include="DTOs\AppointmentDtos\" />
     <Folder Include="DTOs\EmrDtos\" />
+    <Folder Include="DTOs\LabTestDto\" />
     <Folder Include="DTOs\TokenDtos\" />
     <Folder Include="Repositories\AppointmentRepository\" />
     <Folder Include="Repositories\AuditRepo\" />
-    <Folder Include="Repositories\PrescriptionRepo\" />
+    <Folder Include="Repositories\LabTestRepository\" />
     <Folder Include="Repositories\TokenRepo\" />
     <Folder Include="Services\AppointmentServices\" />
     <Folder Include="Services\AuthServices\" />
+    <Folder Include="Services\LabTestServices\" />
+    <Folder Include="Repositories\PrescriptionRepo\" />
     <Folder Include="Services\EmrServices\" />
     <Folder Include="Services\PrescriptionServices\" />
     <Folder Include="Utilities\Helpers\" />

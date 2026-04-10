@@ -1,4 +1,3 @@
-using System;
 using MediCore.Api.DTOs.AppointmentDtos;
 using MediCore.Api.Repositories.AppointmentRepository;
 using MediCore.Api.Utilities;
@@ -11,15 +10,14 @@ public class AppointmentService:IAppointmentService
     public AppointmentService(IAppointmentRepository repository)
     {
         _repository=repository;
+    }    
+    public Task BookAppointment(AppointmentRequestDto appointmentRequestDto)
+    {
+        throw new NotImplementedException();
     }
 
-    //  public Task BookAppointment(AppointmentRequestDto appointmentRequestDto)
-    //  {
-    //      throw new NotImplementedException();
-    //  }
-
-    public async Task<List<ScheduleResponseDto>> GetFreeSlots(int doctorId, DateOnly date)
-    {
+     public async Task<List<ScheduleResponseDto>> GetFreeSlots(int doctorId, DateOnly date)
+      {
         // Validating doctorId input, It should not be negative and zero
         if (doctorId <= 0)
         {

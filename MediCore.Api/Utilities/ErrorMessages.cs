@@ -42,4 +42,9 @@ public class ErrorMessages
     public const string DoctorNotFound = "Doctor with this Doctor Id doesn't exists.";
     public const string DateRequired = "Date is required";
 
+    //Patient
+    public const string PatientIdNotFound = "PatientId is Required.";
+    public const string PatientNotFound = "Patient not found.";
+    //Technician
+    public const string TechnicianNotFound = "Technician not found.";
 }
