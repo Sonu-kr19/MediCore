@@ -21,21 +21,21 @@ private readonly ILabTestRepository _labTestRepository;
        
         if (labTest.PatientID == null)
         {
-            throw new Exception(ErrorMessages.PatientIdNotFound);
+            throw new KeyNotFoundException(ErrorMessages.PatientIdNotFound);
         }
         Patient patient = await _context.Patients.FindAsync(labTest.PatientID);
         if (patient == null)
         {
-            throw new Exception(ErrorMessages.PatientNotFound);
+            throw new KeyNotFoundException(ErrorMessages.PatientNotFound);
         }
         if (labTest.DoctorID == null)
         {
-            throw new Exception(ErrorMessages.InvalidDoctorId);
+            throw new KeyNotFoundException(ErrorMessages.InvalidDoctorId);
         }
         User doctor = await _context.Users.FindAsync(labTest.DoctorID);
         if (doctor == null || doctor.RoleName.ToString() != "Doctor")
         {
-            throw new Exception(ErrorMessages.DoctorNotFound);
+            throw new KeyNotFoundException(ErrorMessages.DoctorNotFound);
         }
         if (labTest.TechnicianID != null)
         {
