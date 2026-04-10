@@ -28,6 +28,10 @@ namespace MediCore.Api.Controllers
                 var labTestID = await _labTestService.AddLabTestAsync(labTest);
                 return Ok(new { Message = "Lab test added successfully", LabTestID = labTestID });
             }
+            catch(KeyNotFoundException ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
             catch(Exception ex)
             {
                 return BadRequest(new { Message = ex.Message });
