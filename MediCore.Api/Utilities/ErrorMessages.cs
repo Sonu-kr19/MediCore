@@ -35,6 +35,7 @@ public class ErrorMessages
 
     // role
     public const string InvalidRole         = "Role is invalid.";
+    public const string AdminRegister = "Admin role cannot be assigned during registration.";
 
     // Get free Slots
     public const string InvalidDoctorId = "Doctor Id can't be negative or Zero.";
