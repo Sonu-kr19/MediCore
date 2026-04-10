@@ -18,5 +18,4 @@ public class Doctor
     public bool Status {get; set;}
 
     public virtual User? UserIDNavigator {get; set;}
-    public virtual ICollection<Prescription> Prescriptions {get; set;}=new List<Prescription>();
 }
