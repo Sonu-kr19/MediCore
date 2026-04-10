@@ -12,7 +12,7 @@ public class Pharmacist
     [ForeignKey("UserIDNavigator")]
     public int UserID { get; set; }
     public virtual User? UserIDNavigator { get; set; }
-    public virtual ICollection<Prescription>? Prescriptions { get; set; }
+    // public virtual ICollection<Prescription>? Prescriptions { get; set; }
     public virtual ICollection<Medicine>? Medicines { get; set; }
     public virtual ICollection<Dispense>? Dispenses { get; set; }
 }

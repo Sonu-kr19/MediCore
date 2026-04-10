@@ -12,9 +12,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MediCore.Api.Repositories.AuditRepo;
 using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.OpenApi;
-using MediCore.Api.Repositories.PrescriptionRepo;
+using MediCore.Api.Services.EMR;
 using MediCore.Api.Services.PrescriptionServices;
+using MediCore.Api.Repositories.PrescriptionRepo;
+using Microsoft.OpenApi;
 using MediCore.Api.Repositories.AppointmentRepository;
 using MediCore.Api.Services.AppointmentServices;
 using MediCore.Api.Repositories.LabTestRepository;
@@ -30,6 +31,10 @@ builder.Services.AddScoped<IUserService,UserService>();
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 builder.Services.AddScoped<IUserService,UserService>();
 builder.Services.AddScoped<IAuditLogRepository, AuditLogRepository>();
+builder.Services.AddScoped<IEmrService, EmrService>();
+builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
+builder.Services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
+
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddControllers();
@@ -100,8 +105,9 @@ builder.Services.AddSwaggerGen(options =>
     {
         { new OpenApiSecuritySchemeReference("Bearer", doc), new List<string>() }
     });
-});
+}
 
+);
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {

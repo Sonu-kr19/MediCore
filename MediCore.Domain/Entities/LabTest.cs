@@ -11,13 +11,13 @@ public class LabTest
     public int LabTestID {get; set;}
     public int PatientID {get; set;}
     public int DoctorID {get; set;}
+    public int? TechnicianID {get; set;}
     public string Type {get; set;}
     public DateTime Date {get; set;}
-    public int? TechnicianID {get; set;}
     public bool Status {get; set;}
 
     public virtual LabReport? LabReport {get; set;}
     public virtual Patient? PatientIDNavigator { get; set; }
-    public virtual User? DoctorIDNavigator {get; set;}
+    public virtual User? Doctor {get; set;}
     public virtual User? TechnicianIDNavigator { get; set; }
 }
