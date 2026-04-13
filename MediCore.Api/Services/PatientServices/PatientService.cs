@@ -4,6 +4,7 @@ using MediCore.Api.Repositories.PatientRepo;
 using MediCore.Api.Utilities;
 using MediCore.Domain.Entities;
 using MediCore.Api.Repositories.AuditRepo;
+using MediCore.Api.Utilities.Helpers;
 
 namespace MediCore.Api.Services.PatientServices;
 
@@ -28,12 +29,18 @@ public class PatientService : IPatientService
     //logs the outcome in auditlogs table
     public async Task<int> RegisterPatientAsync(PatientRequestDto dto)
     {
+        PatientHelper.Validate(dto.Name, dto.Address, dto.DOB, dto.Gender, dto.InsuranceID);
+
         var userExists = await _patientRepository.UserExistsAsync(dto.UserID);
         if (!userExists)
         {
             await _auditLogRepository.LogAsync(dto.UserID, "PATIENT_REGISTER_FAILED", $"{dto.UserID} — {PatientErrorMessages.UserNotFound}");
             throw new ArgumentException(PatientErrorMessages.UserNotFound);
         }
+
+        var patientExists = await _patientRepository.PatientUserExistsAsync(dto.UserID);
+        if (patientExists)
+            throw new InvalidOperationException(PatientErrorMessages.PatientAlreadyRegistered);
 
         if (dto.DOB > DateOnly.FromDateTime(DateTime.Today))
         {

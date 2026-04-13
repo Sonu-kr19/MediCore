@@ -16,7 +16,13 @@ public class PatientErrorMessages
     public const string PatientNotFound = "Patient does not exist.";
     public const string PatientAlreadyDeleted = "Patient is already deleted.";
     public const string PatientsNotFound  = "No patients found.";
+    public const string PatientAlreadyRegistered = "A patient record already exists for this UserID.";
     // DOB
     public const string DOBFutureDate = "Date of birth cannot be a future date.";
+
+    public const string NameRequired = "Name is required.";
+    public const string AddressRequired = "Address is required.";
+    public const string GenderRequired = "Gender is required.";
+    public const string InsuranceIDRequired = "InsuranceID is required.";
 
 }
