@@ -20,7 +20,8 @@ public class AppointmentRepository : IAppointmentRepository
         {
             return true;
         }
-        return false;      
+        return false;
+        
     }
 
     public async Task<List<Schedule>> GetFreeSlots(int doctorId, DateOnly date)
@@ -29,19 +30,5 @@ public class AppointmentRepository : IAppointmentRepository
             s => s.DoctorID == doctorId && s.Date == date && s.Availability == true)
             .OrderBy(s => s.TimeSlot)
             .ToListAsync();
-    }
-
-    public async Task<Appointment> CreateAppointment(Appointment appointment)
-    {
-        await _context.Appointments.AddAsync(appointment);
-        await _context.SaveChangesAsync();
-        return appointment;
-    }
-
-    public async Task<Appointment?> FindIdempotencyKey(string key)
-    {
-        var appointment = await _context.Appointments.FirstOrDefaultAsync(k=>k.IdempotencyKey==key);
-        if(appointment==null) return null;
-        return appointment;
     }
 }

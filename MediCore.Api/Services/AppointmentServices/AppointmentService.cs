@@ -1,44 +1,21 @@
-using AutoMapper;
 using MediCore.Api.DTOs.AppointmentDtos;
-using MediCore.Api.Mapper;
 using MediCore.Api.Repositories.AppointmentRepository;
 using MediCore.Api.Utilities;
-using MediCore.Domain.Entities;
-using MediCore.Domain.Enum;
 
 namespace MediCore.Api.Services.AppointmentServices;
 
 public class AppointmentService:IAppointmentService
 {
     private readonly IAppointmentRepository _repository;
-    private readonly IMapper _mapper;
-    public AppointmentService(IAppointmentRepository repository, IMapper mapper)
+    public AppointmentService(IAppointmentRepository repository)
     {
         _repository=repository;
-        _mapper=mapper;
     }    
-    public async Task<(AppointmentResponseDto result, bool isNew)> BookAppointment(AppointmentRequestDto appointmentRequestDto)
-    {
-        try
-        {
-            bool isNew = false;
-            var appointment = await _repository.FindIdempotencyKey(appointmentRequestDto.IdempotencyKey);
-            if (appointment==null)
-            {
-                var appointmentToAdd = _mapper.Map<AppointmentRequestDto, Appointment>(appointmentRequestDto);
-                appointmentToAdd.Status=AppointmentStatusOption.Scheduled;
-                var response = await _repository.CreateAppointment(appointmentToAdd);
-                isNew = true;
-                var result = _mapper.Map<Appointment, AppointmentResponseDto>(response);
-                return (result,isNew);
-            }
-            return (_mapper.Map<Appointment, AppointmentResponseDto>(appointment), isNew);
-        }
-        catch (Exception)
-        {
-            throw new MediCoreException(ErrorMessages.FailedToCreateAppointment);
-        }
-    }
+    // public Task BookAppointment(AppointmentRequestDto appointmentRequestDto)
+    // {
+    //     throw new NotImplementedException();
+    // }
+    // }
 
      public async Task<List<ScheduleResponseDto>> GetFreeSlots(int doctorId, DateOnly date)
       {
@@ -72,5 +49,4 @@ public class AppointmentService:IAppointmentService
             Availability = s.Availability
         }).ToList();
     }
-
 }
