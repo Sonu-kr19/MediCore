@@ -34,6 +34,8 @@ public class AppointmentRepository : IAppointmentRepository
     public async Task<Appointment> CreateAppointment(Appointment appointment)
     {
         await _context.Appointments.AddAsync(appointment);
+        var schedule = await _context.Schedules.FirstOrDefaultAsync(a => a.DoctorID == appointment.DoctorID && a.Date == appointment.Date && a.TimeSlot == appointment.Time);
+        schedule.Availability=false;
         await _context.SaveChangesAsync();
         return appointment;
     }

@@ -49,4 +49,5 @@ public class ErrorMessages
     //Technician
     public const string TechnicianNotFound = "Technician not found.";
     public const string FailedToCreateAppointment = "Error in adding appointment";
+    public const string SlotTaken = "Slot Taken";
 }

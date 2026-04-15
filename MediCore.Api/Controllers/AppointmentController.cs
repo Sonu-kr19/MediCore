@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MediCore.Api.Controllers
 {
-    [Authorize(Roles ="Admin, Patient")]
+    // [Authorize(Roles ="Admin, Patient")]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class AppointmentController : ControllerBase
@@ -46,18 +46,16 @@ namespace MediCore.Api.Controllers
         {
             try
             {
-                var response= await GetFreeSlots(dto.DoctorID,dto.Date);
-                if (response == null)
-                {
-                    return Conflict(new {message="No free Slot Available"});
-                }
-                
                 var (result, isNew) = await _service.BookAppointment(dto);
                 // When new Idempotency Key is provided then response code will be 201 ok created.
                 if (isNew)
                     return StatusCode(StatusCodes.Status201Created, result);  
                 // If IdempotencyKey is same then it will return already existing appointment 
                 return Ok(result);
+            }
+            catch(ConflictException ex)
+            {
+                return Conflict(ex.Message);
             }
             catch (MediCoreException ex)
             {
