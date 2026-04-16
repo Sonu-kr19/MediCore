@@ -94,4 +94,31 @@ public class AppointmentService:IAppointmentService
         return false;
     }
 
+    
+    public async Task CancelAppointmentAsync(int appointmentId)
+    {
+        var appointment = await _repository.GetByIdAsync(appointmentId);
+
+        if (appointment == null)
+        {
+            throw new KeyNotFoundException(ErrorMessage.AppointmentNotFound);
+        }
+
+        if (appointment.Status == AppointmentStatusOption.Cancelled)
+        {
+            throw new InvalidOperationException(ErrorMessage.AppointmentAlreadyCancelled);
+        }
+
+        if (appointment.Status == AppointmentStatusOption.Completed)
+        {
+            throw new InvalidOperationException(ErrorMessage.CompletedAppointmet);
+        }
+        
+        if (appointment.Status == AppointmentStatusOption.Ongoing)
+        {
+         throw new InvalidOperationException(ErrorMessage.OngoingAppointment);
+        }
+        appointment.Status = AppointmentStatusOption.Cancelled;
+        await _repository.UpdateAsync(appointment);
+    }
 }

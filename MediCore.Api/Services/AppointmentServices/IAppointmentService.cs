@@ -19,4 +19,5 @@ public interface IAppointmentService
     /// <param name="dto">An object of appointment containing doctor id, patient id and timeslot with idempotency key</param>
     /// <returns>An object of appointment if create or already exist, else return error.</returns>
     Task<(AppointmentResponseDto result, bool isNew)> BookAppointment(AppointmentRequestDto dto);
+    Task CancelAppointmentAsync(int appointmentId);
 }
