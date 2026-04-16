@@ -66,5 +66,28 @@ namespace MediCore.Api.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+        
+        [HttpPost("cancel/{id}")]
+        public async Task<IActionResult> CancelAppointment(int id)
+        {
+            try
+            {
+                await _service.CancelAppointmentAsync(id);
+                return Ok(new CancelAppointmentResponseDto
+                {
+                    AppointmentId = id,
+                    Message = "Appointment cancelled successfully"
+                });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { error = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
     }
 }

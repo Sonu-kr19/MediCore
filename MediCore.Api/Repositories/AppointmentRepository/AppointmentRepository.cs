@@ -46,4 +46,16 @@ public class AppointmentRepository : IAppointmentRepository
         if(appointment==null) return null;
         return appointment;
     }
+    
+    public async Task<Appointment?> GetByIdAsync(int appointmentId)
+    {
+        return await _context.Appointments.FirstOrDefaultAsync(a => a.AppointmentID == appointmentId);
+    }
+    
+    public async Task UpdateAsync(Appointment appointment)
+    {
+        _context.Appointments.Update(appointment);
+        await _context.SaveChangesAsync();
+    }
+
 }

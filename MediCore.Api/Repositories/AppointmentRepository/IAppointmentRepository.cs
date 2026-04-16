@@ -33,4 +33,7 @@ public interface IAppointmentRepository
     /// <param name="key">A unique string for checking appointment in database.</param>
     /// <returns>return appointment if key is matched, else return null</returns>
     Task<Appointment?> FindIdempotencyKey(string key); 
+    
+    Task<Appointment?> GetByIdAsync(int appointmentId);
+    Task UpdateAsync(Appointment appointment);
 }
