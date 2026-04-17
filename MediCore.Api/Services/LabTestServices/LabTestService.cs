@@ -14,7 +14,7 @@ public class LabTestService : ILabTestService
     {
         _labTestRepository = labTestRepository;
     }
-    public async Task<int> AddLabTestAsync(LabTestRequestDto dto)
+    public async Task<int> AddLabTestAsync(LabTestRequestDto dto, int id)
     {
        try{
             if (dto.PatientID == 0)
@@ -26,11 +26,6 @@ public class LabTestService : ILabTestService
             {
                 throw new KeyNotFoundException(ErrorMessages.PatientNotFound);
             }
-            var doctor = await _labTestRepository.DoctorExistsAsync(dto.DoctorID);
-            if (!doctor)
-            {
-                throw new KeyNotFoundException(ErrorMessages.DoctorNotFound);
-            }
             var technician = await _labTestRepository.TechnicianExistsAsync(dto.TechnicianID);
             if (!technician)
             {
@@ -39,7 +34,7 @@ public class LabTestService : ILabTestService
              LabTest labTestEntity = new LabTest
             {
                 PatientID = dto.PatientID,
-                DoctorID = dto.DoctorID,
+                DoctorID = id,
                 Type = dto.Type,
                 Date = dto.Date,
                 TechnicianID = dto.TechnicianID,
