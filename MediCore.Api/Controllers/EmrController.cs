@@ -33,11 +33,15 @@ public class EmrController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetEmr([FromQuery] int patientId)
+    public async Task<IActionResult> GetEmr([FromQuery] int? patientId)
     {
         try
         {
-            var emrs = await _emrService.GetEmrAsync(patientId);
+            if(patientId == null)
+            {
+                return BadRequest("PatientId is required");
+            }
+            var emrs = await _emrService.GetEmrAsync(patientId.Value);
             return Ok(emrs);
         }
         catch (Exception)

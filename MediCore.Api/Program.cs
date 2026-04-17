@@ -22,6 +22,7 @@ using MediCore.Api.Repositories.LabTestRepository;
 using MediCore.Api.Services.LabTestServices;
 using MediCore.Api.Services.PatientServices;
 using MediCore.Api.Repositories.PatientRepo;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +37,9 @@ builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
 builder.Services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
 builder.Services.AddScoped<ILabTestRepository, LabTestRepository>();
 builder.Services.AddScoped<ILabTestService, LabTestService>();
+builder.Services.AddScoped<IPatientRepository,PatientRepository>();
+builder.Services.AddScoped<IPatientService,PatientService>();
+
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddControllers();
@@ -117,6 +121,21 @@ builder.Services.AddControllers()
             new JsonStringEnumConverter());
         
     });
+
+builder.Services.AddControllers()
+.ConfigureApiBehaviorOptions(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        var firstError = context.ModelState
+            .Values
+            .SelectMany(v => v.Errors)
+            .Select(e => e.ErrorMessage)
+            .FirstOrDefault() ?? "Invalid request.";
+
+        return new BadRequestObjectResult(new { error = firstError });
+    };
+});
 var app = builder.Build();
 
 // Must be FIRST — before all other middleware
