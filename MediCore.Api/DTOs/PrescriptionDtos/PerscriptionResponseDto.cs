@@ -1,12 +1,12 @@
-using System;
-
-namespace MediCore.Api.DTOs.PrescriptionDtos;
-
-public class PrescriptionResponseDto
+namespace MediCore.Api.DTOs.PrescriptionDtos
 {
-    public int PrescriptionID;
+    public class PrescriptionResponseDto
+    {
+        public int PrescriptionID { get; set; }
 
-    public int EmrId { get; set; }
+        public int DoctorID { get; set; }
+        public string DoctorName { get; set; }
 
-    public int TotalPrescriptionItems { get; set; }
+        public int TotalPrescriptionItems { get; set; }
+    }
 }

@@ -20,4 +20,10 @@ public class ErrorMessage
         //User Delete
         public const string DelSuccess="User deleted successfully.";
         public const string UserAlreadyDeleted=" User is already deleted";
+
+        //Cancel Appointment
+        public const string AppointmentNotFound="Appointment Not Found with that ID";
+        public const string AppointmentAlreadyCancelled="Appointment is already cancelled";
+        public const string CompletedAppointmet="Completed appointments cannot be cancelled";
+        public const string OngoingAppointment="Ongoing appointments cannot be cancelled";
 }
