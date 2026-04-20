@@ -30,28 +30,28 @@ namespace MediCore.Api.Services.DispenseServices
         public async Task<DispensePrescriptionResponseDto>
             DispensePrescriptionAsync(DispensePrescriptionRequestDto request)
         {
-            // ✅ Basic request validation (TC_PD_012)
+            // Basic request validation (TC_PD_012)
             if (request == null || request.PrescriptionID <= 0)
                 throw new ArgumentException("prescriptionId is required");
 
-            // ✅ Start transaction (TC_PD_005, TC_PD_020)
+            // Start transaction (TC_PD_005, TC_PD_020)
             using var transaction =
                 await _context.Database.BeginTransactionAsync();
 
-            // ✅ Load prescription with items
+            // Load prescription with items
             var prescription =
                 await _dispenseRepository
                     .GetPrescriptionWithItemsAsync(request.PrescriptionID);
 
-            // ✅ Prescription existence check (TC_PD_017)
+            // Prescription existence check (TC_PD_017)
             if (prescription == null)
                 throw new KeyNotFoundException("Prescription not found");
 
-            // ✅ Already-dispensed check (TC_PD_010, TC_PD_011)
+            // Already-dispensed check (TC_PD_010, TC_PD_011)
             if (prescription.Status == true)
                 throw new ArgumentException("Prescription already dispensed");
 
-            // ✅ Must have prescription items
+            // Must have prescription items
             if (prescription.PrescriptionItems == null ||
                 !prescription.PrescriptionItems.Any())
             {
@@ -61,33 +61,29 @@ namespace MediCore.Api.Services.DispenseServices
 
             var warnings = new List<string>();
 
-            // =====================================================
-            // ✅ STEP 1: STOCK VALIDATION (NO UPDATES HERE)
-            // =====================================================
+            // STEP 1: STOCK VALIDATION (NO UPDATES HERE)
             foreach (var item in prescription.PrescriptionItems)
             {
-                // ✅ Extract quantity from duration
+                // Extract quantity from duration
                 int requiredQty = ExtractQuantity(item.Duration);
 
-                // ✅ Fetch medicine by name
+                // Fetch medicine by name
                 var medicine =
                     await _dispenseRepository
                         .GetMedicineByNameAsync(item.Medicine);
 
-                // ✅ Medicine must exist (TC_PD_016)
+                // Medicine must exist (TC_PD_016)
                 if (medicine == null)
                     throw new KeyNotFoundException(
                         $"Medicine '{item.Medicine}' not found");
 
-                // ✅ Insufficient stock check (TC_PD_004)
+                // Insufficient stock check (TC_PD_004)
                 if (medicine.Stock < requiredQty)
                     throw new InvalidOperationException(
                         $"Insufficient stock for medicine '{medicine.Name}'");
             }
 
-            // =====================================================
-            // ✅ STEP 2: STOCK DECREMENT (SAFE TO UPDATE NOW)
-            // =====================================================
+            // STEP 2: STOCK DECREMENT (SAFE TO UPDATE NOW)
             foreach (var item in prescription.PrescriptionItems)
             {
                 int requiredQty = ExtractQuantity(item.Duration);
@@ -96,10 +92,10 @@ namespace MediCore.Api.Services.DispenseServices
                     await _dispenseRepository
                         .GetMedicineByNameAsync(item.Medicine);
 
-                // ✅ Decrement stock accurately
+                // Decrement stock accurately
                 medicine.Stock -= requiredQty;
 
-                // ✅ Low-stock warning (TC_PD_007 → TC_PD_022)
+                // Low-stock warning (TC_PD_007 → TC_PD_022)
                 if (medicine.Stock <= LowStockThreshold)
                 {
                     warnings.Add(
@@ -109,20 +105,16 @@ namespace MediCore.Api.Services.DispenseServices
                 await _dispenseRepository.UpdateMedicineAsync(medicine);
             }
 
-            // =====================================================
-            // ✅ STEP 3: UPDATE PRESCRIPTION STATUS
-            // =====================================================
+            // STEP 3: UPDATE PRESCRIPTION STATUS
             prescription.Status = true; // Dispensed
             await _dispenseRepository
                 .UpdatePrescriptionAsync(prescription);
 
-            // =====================================================
-            // ✅ COMMIT TRANSACTION
-            // =====================================================
+            // COMMIT TRANSACTION
             await _dispenseRepository.SaveChangesAsync();
             await transaction.CommitAsync();
 
-            // ✅ SUCCESS RESPONSE
+            // SUCCESS RESPONSE
             return new DispensePrescriptionResponseDto
             {
                 Success = true,
