@@ -1,5 +1,8 @@
+using System.Security.Claims;
 using MediCore.Api.DTOs.AppointmentDtos;
+using MediCore.Api.Services;
 using MediCore.Api.Services.AppointmentServices;
+using MediCore.Api.Services.PatientServices;
 using MediCore.Api.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -7,15 +10,17 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MediCore.Api.Controllers
 {
-    // [Authorize(Roles ="Admin, Patient")]
+    [Authorize(Roles ="Admin, Patient")]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class AppointmentController : ControllerBase
     {
         private readonly IAppointmentService _service;
-        public AppointmentController(IAppointmentService service)
+        private readonly IPatientService _patientService;
+        public AppointmentController(IAppointmentService service, IPatientService patientService)
         {
             _service=service;
+            _patientService=patientService;
         }
         
         [HttpGet("Schedules")]
@@ -46,12 +51,22 @@ namespace MediCore.Api.Controllers
         {
             try
             {
-                var (result, isNew) = await _service.BookAppointment(dto);
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrWhiteSpace(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+                {
+                    return Unauthorized("Invalid user identifier.");
+                }
+                var patient = await _patientService.GetByIdAsync(userId);
+                var (result, isNew) = await _service.BookAppointment(patient.PatientID, dto);
                 // When new Idempotency Key is provided then response code will be 201 ok created.
                 if (isNew)
                     return StatusCode(StatusCodes.Status201Created, result);  
                 // If IdempotencyKey is same then it will return already existing appointment 
                 return Ok(result);
+            }
+            catch(ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch(ConflictException ex)
             {
