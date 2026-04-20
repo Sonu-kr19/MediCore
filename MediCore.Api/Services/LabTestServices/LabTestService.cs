@@ -34,15 +34,6 @@ public class LabTestService : ILabTestService
             {
                 throw new KeyNotFoundException(ErrorMessages.TechnicianNotFound);
             }
-            // LabTest labTestEntity = new LabTest
-            // {
-            //     PatientID = dto.PatientID,
-            //     DoctorID = id,
-            //     Type = dto.Type,
-            //     Date = dto.Date,
-            //     TechnicianID = dto.TechnicianID,
-            //     Status = dto.Status
-            // };
             var labTestEntity = _mapper.Map<LabTestRequestDto, LabTest>(dto);
             labTestEntity.DoctorID = id;
            
@@ -60,16 +51,6 @@ public class LabTestService : ILabTestService
         var labTests = await _labTestRepository.GetPendingLabTestsAsync();
         foreach (var labTest in labTests)
         {
-            // labTestDtos.Add(new LabTestResponseDto
-            // {
-            //     LabTestID = labTest.LabTestID,
-            //     PatientID = labTest.PatientID,
-            //     DoctorID = labTest.DoctorID,
-            //     Type = labTest.Type,
-            //     Date = labTest.Date,
-            //     TechnicianID = labTest.TechnicianID,
-            //     Status = labTest.Status
-            // });
             var labTestDto = _mapper.Map<LabTest,LabTestResponseDto>(labTest);
             labTestDtos.Add(labTestDto);
         }
