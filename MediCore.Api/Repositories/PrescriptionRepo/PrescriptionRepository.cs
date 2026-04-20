@@ -37,10 +37,14 @@ namespace MediCore.Api.Repositories.PrescriptionRepo
             return count;
         }
 
-        public async Task CreatePrescriptionAsync(Prescription prescription)
+        public async Task<Prescription> CreatePrescriptionAsync(Prescription prescription)
         {
             _context.Prescriptions.Add(prescription);
             await _context.SaveChangesAsync();
+
+            return await _context.Prescriptions
+            .Include(p => p.PrescriptionItems)
+            .FirstOrDefaultAsync(p => p.PrescriptionID == prescription.PrescriptionID);
         }
     }
 }

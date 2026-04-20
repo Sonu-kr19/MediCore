@@ -11,5 +11,5 @@ public class PrescriptionRequestDto
     public int EmrID { get; set; }
     [Required]
     public int DoctorID { get; set; }
-    public List<PrescriptionItemRequestDto> PrescriptionItems { get; set; }
+    public List<PrescriptionItemRequestDto>? PrescriptionItems { get; set; }
 }

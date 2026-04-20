@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using MediCore.Api.DTOs.PrescriptionDtos;
 using MediCore.Domain.Entities;
 using MediCore.Api.DTOs.Common;
@@ -22,7 +20,7 @@ public class PrescriptionService : IPrescriptionService
         foreach (var item in Request.PrescriptionItems)
         {
             if (string.IsNullOrWhiteSpace(item.Dosage) || !item.Dosage.Any(char.IsDigit))
-                throw new ArgumentException($"Invalid dosage for {item.MedicineName}.");
+                throw new ArgumentException($"Invalid dosage for {item.Medicine}.");
         }
     
         var newPrescription = new Prescription
@@ -33,7 +31,7 @@ public class PrescriptionService : IPrescriptionService
             Status   = true,
             PrescriptionItems = Request.PrescriptionItems.Select(m => new PrescriptionItem
             {
-                Medicine  = m.MedicineName,
+                Medicine  = m.Medicine,
                 Dosage    = m.Dosage,
                 Frequency = m.Frequency,
                 Duration  = m.Duration
@@ -42,14 +40,21 @@ public class PrescriptionService : IPrescriptionService
     
         // Single save — EF Core inserts Prescription + all PrescriptionItems
         // in one transaction and wires up the FK (PrescriptionID) automatically.
-        await _repository.CreatePrescriptionAsync(newPrescription);
+        var savedPrescription = await _repository.CreatePrescriptionAsync(newPrescription);
     
         return new PrescriptionResponseDto
         {
-            PrescriptionID       = newPrescription.PrescriptionID,
-            EmrId                = Request.EmrID,
-            TotalPrescriptionItems = newPrescription.PrescriptionItems.Count
-        };
+        PrescriptionID = savedPrescription.PrescriptionID,
+        EmrId = savedPrescription.EMRID,
+        TotalPrescriptionItems = savedPrescription.PrescriptionItems.Count,
+        PrescriptionItems = savedPrescription.PrescriptionItems.Select(item => new PrescriptionItemRequestDto
+        {
+            Medicine = item.Medicine,
+            Dosage = item.Dosage,
+            Frequency = item.Frequency,
+            Duration = item.Duration
+        }).ToList()
+    };
     }
     public async Task<PaginationResponseDto<QueuedPrescriptionDto>> GetQueuedPrescriptionsAsync(int pageNumber, int pageSize)
         {
