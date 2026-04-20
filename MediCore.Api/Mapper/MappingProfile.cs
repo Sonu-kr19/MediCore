@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediCore.Api.DTOs.AppointmentDtos;
+using MediCore.Api.DTOs.LabTestDto;
 using MediCore.Domain.Entities;
 using MediCore.Domain.Enum;
 
@@ -16,5 +17,11 @@ public class MappingProfile:Profile
         
         // Connect Appointment to AppointmentRequestDto object
         CreateMap<Appointment, AppointmentResponseDto>();
+        CreateMap<LabTestRequestDto, LabTest>()
+            .ForMember(dest => dest.LabTestID, opt => opt.Ignore())
+            .ForMember(dest => dest.DoctorID, opt => opt.Ignore());
+        CreateMap<LabTest, LabTestResponseDto>();
+            
+
     }
 }

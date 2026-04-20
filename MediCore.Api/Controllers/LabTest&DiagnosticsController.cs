@@ -44,5 +44,18 @@ namespace MediCore.Api.Controllers
                 return BadRequest(new { Message = ex.Message });
             }
         }
+        [Authorize(Roles = "Lab_Technician")]
+        [HttpGet("lab/testStatus")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> ListPendingTests()
+        {
+            var labTests = await _labTestService.GetPendingLabTestsAsync();
+            if (labTests == null || !labTests.Any())
+            {
+                return NotFound(new { Message = "No lab tests found with the specified status" });
+            }
+            return Ok(labTests);
+        }
     }
 }

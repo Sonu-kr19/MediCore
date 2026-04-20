@@ -1,4 +1,5 @@
 using System;
+using AutoMapper;
 using MediCore.Api.DTOs.LabTestDto;
 using MediCore.Api.Repositories.LabTestRepository;
 using MediCore.Api.Utilities;
@@ -10,9 +11,11 @@ namespace MediCore.Api.Services.LabTestServices;
 public class LabTestService : ILabTestService
 {
     private readonly ILabTestRepository _labTestRepository;
-    public LabTestService(ILabTestRepository labTestRepository)
+    private readonly IMapper _mapper;
+    public LabTestService(ILabTestRepository labTestRepository, IMapper mapper)
     {
         _labTestRepository = labTestRepository;
+        _mapper = mapper;
     }
     public async Task<int> AddLabTestAsync(LabTestRequestDto dto, int id)
     {
@@ -31,15 +34,17 @@ public class LabTestService : ILabTestService
             {
                 throw new KeyNotFoundException(ErrorMessages.TechnicianNotFound);
             }
-             LabTest labTestEntity = new LabTest
-            {
-                PatientID = dto.PatientID,
-                DoctorID = id,
-                Type = dto.Type,
-                Date = dto.Date,
-                TechnicianID = dto.TechnicianID,
-                Status = dto.Status
-            };
+            // LabTest labTestEntity = new LabTest
+            // {
+            //     PatientID = dto.PatientID,
+            //     DoctorID = id,
+            //     Type = dto.Type,
+            //     Date = dto.Date,
+            //     TechnicianID = dto.TechnicianID,
+            //     Status = dto.Status
+            // };
+            var labTestEntity = _mapper.Map<LabTestRequestDto, LabTest>(dto);
+            labTestEntity.DoctorID = id;
            
             var result = await _labTestRepository.AddLabTestAsync(labTestEntity);
             return result.LabTestID;
@@ -48,6 +53,27 @@ public class LabTestService : ILabTestService
        {
         throw new Exception(ex.Message);
        }
-
+    }
+    public async Task<List<LabTestResponseDto>> GetPendingLabTestsAsync()
+    {
+        List<LabTestResponseDto> labTestDtos = new List<LabTestResponseDto>();
+        var labTests = await _labTestRepository.GetPendingLabTestsAsync();
+        foreach (var labTest in labTests)
+        {
+            // labTestDtos.Add(new LabTestResponseDto
+            // {
+            //     LabTestID = labTest.LabTestID,
+            //     PatientID = labTest.PatientID,
+            //     DoctorID = labTest.DoctorID,
+            //     Type = labTest.Type,
+            //     Date = labTest.Date,
+            //     TechnicianID = labTest.TechnicianID,
+            //     Status = labTest.Status
+            // });
+            var labTestDto = _mapper.Map<LabTest,LabTestResponseDto>(labTest);
+            labTestDtos.Add(labTestDto);
+        }
+        return labTestDtos;
     }
 }
+
