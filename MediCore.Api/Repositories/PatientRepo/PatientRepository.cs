@@ -29,6 +29,10 @@ public class PatientRepository : IPatientRepository
     public async Task<bool> DuplicateInsuranceAssignedAsync(int insuranceId)
         => await _db.Patients.AnyAsync(p => p.InsuranceID == insuranceId);
 
+    // Check if this UserID already has a patient record — prevents duplicate registration.
+    public async Task<bool> PatientUserExistsAsync(int userId)
+        => await _db.Patients.AnyAsync(p => p.UserID == userId);
+
     // Persists a new patient record to the database and returns it with the generated PatientID
     public async Task<Patient> CreateAsync(Patient patient)
     {

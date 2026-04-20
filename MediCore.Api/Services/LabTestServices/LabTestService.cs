@@ -3,59 +3,56 @@ using MediCore.Api.DTOs.LabTestDto;
 using MediCore.Api.Repositories.LabTestRepository;
 using MediCore.Api.Utilities;
 using MediCore.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace MediCore.Api.Services.LabTestServices;
 
 public class LabTestService : ILabTestService
 {
-private readonly ILabTestRepository _labTestRepository;
-    private readonly MediCoreDbContext _context;
-    public LabTestService(ILabTestRepository labTestRepository, MediCoreDbContext context)
+    private readonly ILabTestRepository _labTestRepository;
+    public LabTestService(ILabTestRepository labTestRepository)
     {
         _labTestRepository = labTestRepository;
-        _context = context;
     }
-    public async Task<int> AddLabTestAsync(LabTestRequestDto labTest)
+    public async Task<int> AddLabTestAsync(LabTestRequestDto dto)
     {
-
-       
-        if (labTest.PatientID == null)
-        {
-            throw new KeyNotFoundException(ErrorMessages.PatientIdNotFound);
-        }
-        Patient patient = await _context.Patients.FindAsync(labTest.PatientID);
-        if (patient == null)
-        {
-            throw new KeyNotFoundException(ErrorMessages.PatientNotFound);
-        }
-        if (labTest.DoctorID == null)
-        {
-            throw new KeyNotFoundException(ErrorMessages.InvalidDoctorId);
-        }
-        User doctor = await _context.Users.FindAsync(labTest.DoctorID);
-        if (doctor == null || doctor.RoleName.ToString() != "Doctor")
-        {
-            throw new KeyNotFoundException(ErrorMessages.DoctorNotFound);
-        }
-        if (labTest.TechnicianID != null)
-        {
-            User technician = await _context.Users.FindAsync(labTest.TechnicianID);
-            if (technician == null || technician.RoleName.ToString() != "Lab_Technician")
+       try{
+            if (dto.PatientID == 0)
             {
-                throw new Exception(ErrorMessages.TechnicianNotFound);
+                throw new KeyNotFoundException(ErrorMessages.PatientIdNotFound);
             }
-        }
-        LabTest labTestEntity = new LabTest
-        {
-            PatientID = labTest.PatientID,
-            DoctorID = labTest.DoctorID,
-            Type = labTest.Type,
-            Date = labTest.Date,
-            TechnicianID = labTest.TechnicianID,
-            Status = labTest.Status
-        };
-        await _labTestRepository.AddLabTestAsync(labTestEntity);
-        return labTestEntity.LabTestID;
+            var patient = await _labTestRepository.PatientExistsAsync(dto.PatientID);
+            if (!patient)
+            {
+                throw new KeyNotFoundException(ErrorMessages.PatientNotFound);
+            }
+            var doctor = await _labTestRepository.DoctorExistsAsync(dto.DoctorID);
+            if (!doctor)
+            {
+                throw new KeyNotFoundException(ErrorMessages.DoctorNotFound);
+            }
+            var technician = await _labTestRepository.TechnicianExistsAsync(dto.TechnicianID);
+            if (!technician)
+            {
+                throw new KeyNotFoundException(ErrorMessages.TechnicianNotFound);
+            }
+             LabTest labTestEntity = new LabTest
+            {
+                PatientID = dto.PatientID,
+                DoctorID = dto.DoctorID,
+                Type = dto.Type,
+                Date = dto.Date,
+                TechnicianID = dto.TechnicianID,
+                Status = dto.Status
+            };
+           
+            var result = await _labTestRepository.AddLabTestAsync(labTestEntity);
+            return result.LabTestID;
+         }
+       catch (System.Exception ex)
+       {
+        throw new Exception(ex.Message);
+       }
 
     }
 }
