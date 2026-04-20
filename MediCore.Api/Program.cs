@@ -18,12 +18,14 @@ using MediCore.Api.Repositories.PrescriptionRepo;
 using Microsoft.OpenApi;
 using MediCore.Api.Repositories.AppointmentRepository;
 using MediCore.Api.Services.AppointmentServices;
-using MediCore.Api.Repositories.LabTestRepository;
+using MediCore.Api.Repositories.LabTestRepository; 
 using MediCore.Api.Services.LabTestServices;
 using MediCore.Api.Services.PatientServices;
 using MediCore.Api.Repositories.PatientRepo;
 using Microsoft.AspNetCore.Mvc;
 using MediCore.Api.Mapper;
+using MediCore.Api.Repositories.DispenseRepo;
+using MediCore.Api.Services.DispenseServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +47,8 @@ builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddControllers();
 builder.Services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
 builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
+builder.Services.AddScoped<IDispenseRepository, DispenseRepository>();
+builder.Services.AddScoped<IDispenseService, DispenseService>();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 // Add services to the container.
