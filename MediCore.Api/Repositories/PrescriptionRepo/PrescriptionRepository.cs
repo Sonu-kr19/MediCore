@@ -12,7 +12,7 @@ namespace MediCore.Api.Repositories.PrescriptionRepo
             _context = context;
         }
 
-        // ✅ Get queued (pending) prescriptions with optional doctor filter
+        // Get queued (pending) prescriptions with optional doctor filter
         public async Task<List<Prescription>> GetQueuedPrescriptionsAsync(
             int pageNumber,
             int pageSize,
@@ -25,7 +25,7 @@ namespace MediCore.Api.Repositories.PrescriptionRepo
                 .Include(p => p.PrescriptionItems)
                 .Where(p => p.Status == false); // queued only
 
-            // ✅ Apply doctor filter if provided
+            // Apply doctor filter if provided
             if (doctorId.HasValue)
             {
                 query = query.Where(p => p.DoctorID == doctorId.Value);
@@ -38,7 +38,7 @@ namespace MediCore.Api.Repositories.PrescriptionRepo
                 .ToListAsync();
         }
 
-        // ✅ Get total count of queued prescriptions with optional doctor filter
+        // Get total count of queued prescriptions with optional doctor filter
         public async Task<int> GetQueuedPrescriptionsCountAsync(int? doctorId)
         {
             IQueryable<Prescription> query =
@@ -50,13 +50,17 @@ namespace MediCore.Api.Repositories.PrescriptionRepo
             }
 
             return await query.CountAsync();
-        }
-
-        // ✅ Create prescription with items (single transaction)
-        public async Task CreatePrescriptionAsync(Prescription prescription)
+        }        
+        
+        // Create prescription with items (single transaction)
+        public async Task<Prescription> CreatePrescriptionAsync(Prescription prescription)
         {
             _context.Prescriptions.Add(prescription);
             await _context.SaveChangesAsync();
+
+            return await _context.Prescriptions
+            .Include(p => p.PrescriptionItems)
+            .FirstOrDefaultAsync(p => p.PrescriptionID == prescription.PrescriptionID);
         }
     }
 }

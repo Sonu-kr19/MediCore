@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using MediCore.Api.DTOs.PrescriptionDtos;
 using MediCore.Api.DTOs.Common;
 using MediCore.Api.Repositories.PrescriptionRepo;
@@ -16,7 +14,7 @@ namespace MediCore.Api.Services.PrescriptionServices
             _repository = repository;
         }
 
-        // ✅ Create new prescription (queued by default)
+        // Create new prescription (queued by default)
         public async Task<PrescriptionResponseDto> CreatePrescriptionAsync(
             PrescriptionRequestDto request)
         {
@@ -48,7 +46,7 @@ namespace MediCore.Api.Services.PrescriptionServices
             };
         }
 
-        // ✅ Get queued prescriptions with optional doctor filter
+        // Get queued prescriptions with optional doctor filter
         public async Task<PaginationResponseDto<QueuedPrescriptionDto>>
             GetQueuedPrescriptionsAsync(int pageNumber, int pageSize, int? doctorId)
         {

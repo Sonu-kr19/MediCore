@@ -22,7 +22,6 @@ public class AppointmentService:IAppointmentService
         try
         {
             var appointmentDateTime = appointmentRequestDto.Date.ToDateTime(appointmentRequestDto.Time);
-            // var appointmentUtc = DateTime.SpecifyKind(appointmentDateTime, DateTimeKind.Utc);
             if (appointmentDateTime < DateTime.Now)
             {
                 throw new ArgumentException(ErrorMessages.InvalidDate);
@@ -57,7 +56,6 @@ public class AppointmentService:IAppointmentService
         }
         catch (Exception ex)
         {
-            // throw new MediCoreException(ErrorMessages.FailedToCreateAppointment);
             throw new Exception(ex.Message);
         }
     }
