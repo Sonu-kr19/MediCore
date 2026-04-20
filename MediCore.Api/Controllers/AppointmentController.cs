@@ -82,7 +82,7 @@ namespace MediCore.Api.Controllers
             }
         }
         
-        [HttpPost("cancel/{id}")]
+        [HttpPut("cancel/{id}")]
         public async Task<IActionResult> CancelAppointment(int id)
         {
             try
