@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediCore.Api.DTOs.AppointmentDtos;
+using MediCore.Api.DTOs.PatientDtos;
 using MediCore.Domain.Entities;
 using MediCore.Domain.Enum;
 
@@ -11,6 +12,7 @@ public class MappingProfile:Profile
     {
         // Connect AppointmentRequestDto to Appointment object
         CreateMap<AppointmentRequestDto, Appointment>()
+            .ForMember(dest=> dest.PatientID, opt => opt.Ignore())
             .ForMember(dest => dest.Status,
                opt => opt.MapFrom(_ => AppointmentStatusOption.Scheduled));
         
