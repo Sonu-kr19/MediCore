@@ -4,16 +4,9 @@ namespace MediCore.Api.DTOs.PrescriptionDtos
 {
     public class PrescriptionItemRequestDto
     {
-        [Required]
-        public string MedicineId { get; set; }
-
-        [Required]
-        public string Dosage { get; set; }
-
-        [Required]
-        public string Frequency { get; set; }
-
-        [Required]
-        public string DurationInDays { get; set; }
+       public required string Medicine { get; set; }
+       public required string Dosage { get; set; }
+       public required string Frequency { get; set; }
+       public required string Duration { get; set; }
     }
 }

@@ -4,15 +4,13 @@ using MediCore.Domain.Entities;
 namespace MediCore.Api.Repositories.PrescriptionRepo;
 
 public interface IPrescriptionRepository
-    {
-        Task CreatePrescriptionAsync(Prescription prescription);
-
-        Task<List<Prescription>> GetQueuedPrescriptionsAsync(
-            int pageNumber,
-            int pageSize,
-            int? doctorId);
-
-        Task<int> GetQueuedPrescriptionsCountAsync(int? doctorId);
-    }
+{
+    Task<Prescription> CreatePrescriptionAsync(Prescription prescription);
+    Task<List<Prescription>> GetQueuedPrescriptionsAsync(
+        int pageNumber,
+        int pageSize,
+        int? doctorId);
+    Task<int> GetQueuedPrescriptionsCountAsync(int? doctorId);
+}
 
 

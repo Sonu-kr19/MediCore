@@ -16,7 +16,7 @@ public class AppointmentService:IAppointmentService
     {
         _repository=repository;
         _mapper=mapper;
-    }    
+    }       
     public async Task<(AppointmentResponseDto result, bool isNew)> BookAppointment(AppointmentRequestDto appointmentRequestDto)
     {
         try
