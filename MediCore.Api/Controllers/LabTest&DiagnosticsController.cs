@@ -2,6 +2,7 @@ using System.Security.Claims;
 using MediCore.Api.DTOs.LabTestDto;
 using MediCore.Api.Repositories.LabTestRepository;
 using MediCore.Api.Services.LabTestServices;
+using MediCore.Domain.Enum;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,10 +16,9 @@ namespace MediCore.Api.Controllers
         private readonly ILabTestService _labTestService;
         public LabTestController(ILabTestService labTestService)
         {
-           
             _labTestService = labTestService;
         }
-        [Authorize(Roles = "Doctor")]
+        [Authorize(Roles = nameof(RoleOption.Doctor))]
         [HttpPost("lab/tests/")]       
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
