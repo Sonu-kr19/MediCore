@@ -1,4 +1,5 @@
 using MediCore.Api.Services.PrescriptionServices;
+using MediCore.Domain.Enum;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,7 +7,7 @@ namespace MediCore.Api.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    [Authorize(Roles = "Pharmacist,Admin")]
+    [Authorize(Roles = $"{nameof(RoleOption.Admin)},{nameof(RoleOption.Pharmacist)}")]
     public class PharmacyController : ControllerBase
     {
         private readonly IPrescriptionService _prescriptionService;

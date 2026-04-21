@@ -29,10 +29,10 @@ namespace MediCore.Api.Services.PrescriptionServices
                 PrescriptionItems = request.PrescriptionItems.Select(item =>
                     new PrescriptionItem
                     {
-                        Medicine = item.MedicineId,
+                        Medicine = item.Medicine,
                         Dosage = item.Dosage,
                         Frequency = item.Frequency,
-                        Duration = item.DurationInDays
+                        Duration = item.Duration
                     }).ToList()
             };
 
