@@ -14,6 +14,7 @@ public class Prescription
     public DateTime Date {get; set;}
     public bool Status {get; set;}
     public virtual EMR? EMR { get; set; }
+    [ForeignKey("DoctorID")]
     public virtual User? Doctor { get; set; }
     public virtual ICollection<PrescriptionItem>? PrescriptionItems {get; set;}
 }

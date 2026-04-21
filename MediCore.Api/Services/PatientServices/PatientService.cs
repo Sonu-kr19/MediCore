@@ -5,6 +5,7 @@ using MediCore.Api.Utilities;
 using MediCore.Domain.Entities;
 using MediCore.Api.Repositories.AuditRepo;
 using MediCore.Api.Utilities.Helpers;
+using AutoMapper;
 
 namespace MediCore.Api.Services.PatientServices;
 
@@ -105,6 +106,38 @@ public class PatientService : IPatientService
             Phone = p.UserIDNavigator!.Phone,
             InsuranceAmount = p.InsuranceIDNavigator != null? p.InsuranceIDNavigator.CoverageAmount : null
         }).ToList();
+    }
+
+    public async Task<PatientDetailsDto?> GetByIdAsync(int userId)
+    {
+        try
+        {
+            var patient = await _patientRepository.GetByIdAsync(userId);
+            if (patient == null)
+            {
+                throw new MediCoreException(ErrorMessages.PatientNotFound);
+            } 
+            return new PatientDetailsDto
+            {
+                PatientID  = patient.PatientID,
+                Name = patient.Name,
+                DOB = patient.DOB,
+                Gender = patient.Gender,
+                Address = patient.Address,
+                InsuranceID = patient.InsuranceID,
+                Email = patient.UserIDNavigator!.Email,
+                Phone = patient.UserIDNavigator!.Phone,
+                InsuranceAmount = patient.InsuranceIDNavigator != null? patient.InsuranceIDNavigator.CoverageAmount : null
+            };
+        }
+        catch (MediCoreException)
+        {
+            throw;
+        }
+        catch (System.Exception)
+        {
+            throw;
+        }
     }
 
 }

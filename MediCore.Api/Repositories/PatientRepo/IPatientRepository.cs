@@ -11,8 +11,6 @@ public interface IPatientRepository
     Task<bool> InsuranceExistsAsync(int insuranceId);
     Task<bool> DuplicateInsuranceAssignedAsync(int insuranceId);
     Task<Patient> CreateAsync(Patient patient);
-
-    // Task<List<PatientDetailsDto>> GetAllPatientsAsync();
-     Task<List<Patient>> GetAllPatientsAsync();
-
+    Task<List<Patient>> GetAllPatientsAsync();
+    Task<Patient?> GetByIdAsync(int userId);
 }

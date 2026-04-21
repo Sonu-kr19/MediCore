@@ -110,9 +110,9 @@ public class MediCoreDbContext : DbContext
 
         modelBuilder.Entity<Prescription>()
             .HasOne(p => p.Doctor)
-            .WithMany(d => d.Prescriptions)
+            .WithMany()
             .HasForeignKey(p => p.DoctorID)
-            .OnDelete(DeleteBehavior.Restrict); // or SetNull
+            .OnDelete(DeleteBehavior.Restrict);
         
         modelBuilder.Entity<Prescription>()
             .HasOne(p => p.EMR)
@@ -120,6 +120,9 @@ public class MediCoreDbContext : DbContext
             .HasForeignKey(p => p.EMRID)
             .OnDelete(DeleteBehavior.ClientSetNull);
         
-
+        modelBuilder.Entity<Appointment>()
+            .Property(a => a.Status)
+            .HasConversion<string>()
+            .HasMaxLength(50);
     }
 }
