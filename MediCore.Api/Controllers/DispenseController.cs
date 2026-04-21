@@ -1,5 +1,6 @@
 using MediCore.Api.DTOs.DispenseDtos;
 using MediCore.Api.Services.DispenseServices;
+using MediCore.Domain.Enum;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,7 +8,7 @@ namespace MediCore.Api.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    [Authorize(Roles = "Pharmacist,Admin")]
+    [Authorize(Roles = $"{nameof(RoleOption.Admin)},{nameof(RoleOption.Pharmacist)}")]
     public class DispenseController : ControllerBase
     {
         private readonly IDispenseService _dispenseService;
