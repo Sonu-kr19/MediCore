@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace MediCore.Api.Controllers
 {
     [ApiController]
-    [Route("api/v1/pharmacy/dispense")]
+    [Route("api/v1/[controller]")]
     [Authorize(Roles = "Pharmacist,Admin")]
     public class DispenseController : ControllerBase
     {
