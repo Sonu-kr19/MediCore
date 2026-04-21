@@ -4,13 +4,14 @@ using MediCore.Api.Services;
 using MediCore.Api.Services.AppointmentServices;
 using MediCore.Api.Services.PatientServices;
 using MediCore.Api.Utilities;
+using MediCore.Domain.Enum;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MediCore.Api.Controllers
 {
-    [Authorize(Roles ="Admin, Patient")]
+    [Authorize(Roles = $"{nameof(RoleOption.Admin)},{nameof(RoleOption.Patient)}")]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class AppointmentController : ControllerBase
