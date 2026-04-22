@@ -120,6 +120,9 @@ public class MediCoreDbContext : DbContext
             .HasForeignKey(p => p.EMRID)
             .OnDelete(DeleteBehavior.ClientSetNull);
         
-
+        modelBuilder.Entity<Appointment>()
+            .Property(a => a.Status)
+            .HasConversion<string>()
+            .HasMaxLength(50);
     }
 }

@@ -54,4 +54,9 @@ public class PatientRepository : IPatientRepository
             .ToListAsync();
     }
 
+    public async Task<Patient?> GetByIdAsync(int userId)
+    {
+        return await _db.Patients.Where(p => p.Status == true).Include(p => p.UserIDNavigator).Include(p => p.InsuranceIDNavigator).FirstOrDefaultAsync(p=>p.UserID==userId);
+    }
+
 }

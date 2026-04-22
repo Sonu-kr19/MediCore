@@ -5,23 +5,24 @@ using MediCore.Api.Services.AuthServices;
 using Microsoft.AspNetCore.Mvc;
 using MediCore.Api.Utilities;
 using Microsoft.AspNetCore.Authorization;
+using MediCore.Domain.Enum;
 
 namespace MediCore.Api.Controllers
 {
-    [Authorize]
+    
+    [Authorize(Roles = nameof(RoleOption.Admin))]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
         private readonly IAuthService _authService;
-         public UserController(IUserService userService, IAuthService authService)
-         {
-            _userService = userService;
-            _authService = authService;
-         }
+        public UserController(IUserService userService, IAuthService authService)
+        {
+        _userService = userService;
+        _authService = authService;
+        }
        
-        [Authorize(Roles="Admin")]
         [HttpGet("GetAll")]       
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<UserResponseDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -82,6 +83,7 @@ namespace MediCore.Api.Controllers
                 return BadRequest(new { Message = ex.Message });
             }
         }
+
         [HttpDelete("delete/{Id}")]
         public async Task<IActionResult> DeleteUser(int Id) // Endpoint to delete a user
         {
@@ -97,7 +99,7 @@ namespace MediCore.Api.Controllers
         }
 
         //Register User
-        [AllowAnonymous]
+        [Authorize(Roles = $"{nameof(RoleOption.Admin)},{nameof(RoleOption.Patient)}")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]

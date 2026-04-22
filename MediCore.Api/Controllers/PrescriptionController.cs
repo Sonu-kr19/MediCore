@@ -1,6 +1,8 @@
 using System;
 using MediCore.Api.DTOs.PrescriptionDtos;
 using MediCore.Api.Services.PrescriptionServices;
+using MediCore.Domain.Enum;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MediCore.Api.Controllers;
@@ -16,6 +18,7 @@ public class PrescriptionController : ControllerBase
         _prescriptionService = prescriptionService;
     }
 
+    [Authorize(Roles = nameof(RoleOption.Doctor))]
     [HttpPost]
     public async Task<IActionResult> CreatePrescription(PrescriptionRequestDto request)
     {

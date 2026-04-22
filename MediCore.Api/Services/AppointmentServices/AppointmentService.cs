@@ -16,11 +16,16 @@ public class AppointmentService:IAppointmentService
     {
         _repository=repository;
         _mapper=mapper;
-    }       
-    public async Task<(AppointmentResponseDto result, bool isNew)> BookAppointment(AppointmentRequestDto appointmentRequestDto)
+    }    
+    public async Task<(AppointmentResponseDto result, bool isNew)> BookAppointment(int patientId,AppointmentRequestDto appointmentRequestDto)
     {
         try
         {
+            var appointmentDateTime = appointmentRequestDto.Date.ToDateTime(appointmentRequestDto.Time);
+            if (appointmentDateTime < DateTime.Now)
+            {
+                throw new ArgumentException(ErrorMessages.InvalidDate);
+            }
             bool isNew = false;
             var appointment = await _repository.FindIdempotencyKey(appointmentRequestDto.IdempotencyKey);
             if (appointment==null)
@@ -32,6 +37,7 @@ public class AppointmentService:IAppointmentService
                     throw new ConflictException(ErrorMessages.SlotTaken);
                 }
                 var appointmentToAdd = _mapper.Map<AppointmentRequestDto, Appointment>(appointmentRequestDto);
+                appointmentToAdd.PatientID=patientId;
                 appointmentToAdd.Status=AppointmentStatusOption.Scheduled;
                 var response = await _repository.CreateAppointment(appointmentToAdd);
                 isNew = true;
@@ -44,9 +50,13 @@ public class AppointmentService:IAppointmentService
         {
             throw;
         }
-        catch (Exception)
+        catch (ArgumentException)
         {
-            throw new MediCoreException(ErrorMessages.FailedToCreateAppointment);
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
         }
     }
 
