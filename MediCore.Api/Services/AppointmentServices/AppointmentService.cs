@@ -11,11 +11,13 @@ namespace MediCore.Api.Services.AppointmentServices;
 public class AppointmentService:IAppointmentService
 {
     private readonly IAppointmentRepository _repository;
+    private readonly IScheduleRepository _scheduleRepository;
     private readonly IMapper _mapper;
-    public AppointmentService(IAppointmentRepository repository, IMapper mapper)
+    public AppointmentService(IAppointmentRepository repository, IMapper mapper, IScheduleRepository scheduleRepository)
     {
         _repository=repository;
         _mapper=mapper;
+        _scheduleRepository=scheduleRepository;
     }    
     public async Task<(AppointmentResponseDto result, bool isNew)> BookAppointment(int patientId,AppointmentRequestDto appointmentRequestDto)
     {
@@ -92,6 +94,7 @@ public class AppointmentService:IAppointmentService
             Availability = s.Availability
         }).ToList();
     }
+
     private bool CheckSlotsTiming(List<ScheduleResponseDto> slots, TimeOnly time)
     {
         foreach(var slot in slots)
@@ -104,7 +107,6 @@ public class AppointmentService:IAppointmentService
         return false;
     }
 
-    
     public async Task CancelAppointmentAsync(int appointmentId)
     {
         var appointment = await _repository.GetByIdAsync(appointmentId);
@@ -130,5 +132,44 @@ public class AppointmentService:IAppointmentService
         }
         appointment.Status = AppointmentStatusOption.Cancelled;
         await _repository.UpdateAsync(appointment);
+    }
+
+    public async Task<bool> RescheduleAppointmentAsync(int appointmentId, RescheduleRequestDto dto)
+    {
+        try
+        {
+            var appointment = await _repository.GetByIdAsync(appointmentId);
+            if (appointment == null)
+            {
+                return false;
+            }
+            var oldSlot = await _scheduleRepository.GetAllotedSlotAsync(appointment.DoctorID, appointment.Date, appointment.Time);
+            if (oldSlot != null)
+            {
+                oldSlot.Availability = true;
+                await _scheduleRepository.UpdateAsync(oldSlot);
+            }
+
+            var newSlot = await _scheduleRepository.GetSlotAsync(appointment.DoctorID, dto.NewDate, dto.NewTime);
+            if (newSlot == null)
+            {
+                throw new InvalidOperationException(ErrorMessages.NoNewSlotAvailable);
+            }
+            appointment.Date = dto.NewDate;
+            appointment.Time = dto.NewTime;
+            appointment.Status = AppointmentStatusOption.Scheduled;
+            await _repository.UpdateAsync(appointment);
+            newSlot.Availability = false;
+            await _scheduleRepository.UpdateAsync(newSlot);
+            return true;
+        }
+        catch (InvalidOperationException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
     }
 }

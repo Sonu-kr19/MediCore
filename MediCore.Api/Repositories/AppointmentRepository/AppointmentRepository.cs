@@ -35,6 +35,7 @@ public class AppointmentRepository : IAppointmentRepository
     {
         await _context.Appointments.AddAsync(appointment);
         var schedule = await _context.Schedules.FirstOrDefaultAsync(a => a.DoctorID == appointment.DoctorID && a.Date == appointment.Date && a.TimeSlot == appointment.Time);
+        
         schedule.Availability=false;
         await _context.SaveChangesAsync();
         return appointment;
@@ -49,7 +50,14 @@ public class AppointmentRepository : IAppointmentRepository
     
     public async Task<Appointment?> GetByIdAsync(int appointmentId)
     {
-        return await _context.Appointments.FirstOrDefaultAsync(a => a.AppointmentID == appointmentId);
+        try
+        {
+            return await _context.Appointments.FirstOrDefaultAsync(a => a.AppointmentID == appointmentId);  
+        }
+        catch (System.Exception)
+        {
+            throw new Exception("Error from here");
+        }
     }
     
     public async Task UpdateAsync(Appointment appointment)
