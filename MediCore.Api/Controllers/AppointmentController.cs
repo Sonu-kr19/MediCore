@@ -77,10 +77,10 @@ namespace MediCore.Api.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
+            // catch (Exception ex)
+            // {
+            //     return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            // }
         }
         
         [HttpPut("cancel/{id}")]
@@ -105,5 +105,23 @@ namespace MediCore.Api.Controllers
             }
         }
 
+        [HttpPut("{id}/reschedule")]
+        public async Task<IActionResult> Reschedule(int id, [FromBody] RescheduleRequestDto dto)
+        {
+            try
+            {
+                var result = await _service.RescheduleAppointmentAsync(id, dto);
+                if (!result) return NotFound();
+                return Accepted(new { status = true, message = "Update request accepted." });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
     }
 }

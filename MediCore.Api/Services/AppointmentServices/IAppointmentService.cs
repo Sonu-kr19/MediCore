@@ -20,4 +20,5 @@ public interface IAppointmentService
     /// <returns>An object of appointment if create or already exist, else return error.</returns>
     Task<(AppointmentResponseDto result, bool isNew)> BookAppointment(int patientId,AppointmentRequestDto appointmentRequestDto);
     Task CancelAppointmentAsync(int appointmentId);
+    Task<bool> RescheduleAppointmentAsync(int appointmentId, RescheduleRequestDto dto);
 }

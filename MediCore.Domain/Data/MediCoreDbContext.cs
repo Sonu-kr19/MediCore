@@ -122,7 +122,7 @@ public class MediCoreDbContext : DbContext
         
         modelBuilder.Entity<Appointment>()
             .Property(a => a.Status)
-            .HasConversion<string>()
+            .HasConversion<int>()
             .HasMaxLength(50);
     }
 }

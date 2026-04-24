@@ -51,4 +51,5 @@ public class ErrorMessages
     public const string FailedToCreateAppointment = "Error in adding appointment";
     public const string SlotTaken = "Slot Taken";
     public const string InvalidDate = "Appointment date and time cannot be in the past.";
+    public const string NoNewSlotAvailable = "New slot is not available.";
 }

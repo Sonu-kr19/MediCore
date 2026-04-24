@@ -44,6 +44,7 @@
     <Folder Include="Services\EmrServices\" />
     <Folder Include="Services\PrescriptionServices\" />
     <Folder Include="Services\PatientServices\" />
+    <Folder Include="Utilities\Exceptions\" />
     <Folder Include="Utilities\Helpers\" />
   </ItemGroup>
 
