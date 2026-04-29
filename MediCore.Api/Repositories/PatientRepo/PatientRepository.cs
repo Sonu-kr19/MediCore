@@ -29,6 +29,10 @@ public class PatientRepository : IPatientRepository
     public async Task<bool> DuplicateInsuranceAssignedAsync(int insuranceId)
         => await _db.Patients.AnyAsync(p => p.InsuranceID == insuranceId);
 
+    // Check if this UserID already has a patient record — prevents duplicate registration.
+    public async Task<bool> PatientUserExistsAsync(int userId)
+        => await _db.Patients.AnyAsync(p => p.UserID == userId);
+
     // Persists a new patient record to the database and returns it with the generated PatientID
     public async Task<Patient> CreateAsync(Patient patient)
     {
@@ -48,6 +52,11 @@ public class PatientRepository : IPatientRepository
             // Join Insurance table to get CoverageAmount; may be null if unlinked
             .Include(p => p.InsuranceIDNavigator)
             .ToListAsync();
+    }
+
+    public async Task<Patient?> GetByIdAsync(int userId)
+    {
+        return await _db.Patients.Where(p => p.Status == true).Include(p => p.UserIDNavigator).Include(p => p.InsuranceIDNavigator).FirstOrDefaultAsync(p=>p.UserID==userId);
     }
 
 }

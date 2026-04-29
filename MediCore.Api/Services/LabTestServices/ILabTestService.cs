@@ -6,5 +6,6 @@ namespace MediCore.Api.Services.LabTestServices;
 
 public interface ILabTestService
 {
-    Task<int> AddLabTestAsync(LabTestRequestDto dto);
+    Task<int> AddLabTestAsync(LabTestRequestDto dto, int id);
+    Task<List<LabTestResponseDto>> GetPendingLabTestsAsync();
 }

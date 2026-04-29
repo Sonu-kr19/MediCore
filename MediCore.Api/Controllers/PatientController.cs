@@ -1,5 +1,6 @@
 using MediCore.Api.DTOs.PatientDtos;
 using MediCore.Api.Services.PatientServices;
+using MediCore.Domain.Enum;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace MediCore.Api.Controllers
 {
     // Handles all HTTP requests related to patient operations (register, fetch, etc.)
+    [Authorize(Roles = $"{nameof(RoleOption.Admin)},{nameof(RoleOption.Patient)}")]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class PatientController : ControllerBase
@@ -48,7 +50,7 @@ namespace MediCore.Api.Controllers
         }
 
         // Retrieves all patients — restricted to Admin roles only
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = nameof(RoleOption.Admin))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("GetAll")]

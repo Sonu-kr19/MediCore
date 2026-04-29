@@ -1,96 +1,88 @@
 using MediCore.Api.DTOs.PrescriptionDtos;
-using MediCore.Domain.Entities;
 using MediCore.Api.DTOs.Common;
 using MediCore.Api.Repositories.PrescriptionRepo;
+using MediCore.Domain.Entities;
+using MediCore.Api.DTOs.DispenseDtos;
 
-namespace MediCore.Api.Services.PrescriptionServices;
-
-public class PrescriptionService : IPrescriptionService
+namespace MediCore.Api.Services.PrescriptionServices
 {
-    private readonly IPrescriptionRepository _repository;
-    public PrescriptionService(IPrescriptionRepository repository)
+    public class PrescriptionService : IPrescriptionService
     {
-        _repository = repository;
-    }
-    public async Task<PrescriptionResponseDto> CreatePrescriptionAsync(PrescriptionRequestDto Request)
-    {
-        if (Request.PrescriptionItems == null || !Request.PrescriptionItems.Any())
-            throw new ArgumentException("At least one prescription item is required.");
-    
-        foreach (var item in Request.PrescriptionItems)
+        private readonly IPrescriptionRepository _repository;
+
+        public PrescriptionService(IPrescriptionRepository repository)
         {
-            if (string.IsNullOrWhiteSpace(item.Dosage) || !item.Dosage.Any(char.IsDigit))
-                throw new ArgumentException($"Invalid dosage for {item.Medicine}.");
+            _repository = repository;
         }
-    
-        var newPrescription = new Prescription
+
+        // Create new prescription (queued by default)
+        public async Task<PrescriptionResponseDto> CreatePrescriptionAsync(
+            PrescriptionRequestDto request)
         {
-            EMRID    = Request.EmrID,
-            DoctorID = Request.DoctorID,
-            Date     = DateTime.UtcNow,
-            Status   = true,
-            PrescriptionItems = Request.PrescriptionItems.Select(m => new PrescriptionItem
+            if (request.PrescriptionItems == null || !request.PrescriptionItems.Any())
+                throw new ArgumentException("At least one prescription item is required.");
+
+            var newPrescription = new Prescription
             {
-                Medicine  = m.Medicine,
-                Dosage    = m.Dosage,
-                Frequency = m.Frequency,
-                Duration  = m.Duration
-            }).ToList()
-        };
-    
-        // Single save — EF Core inserts Prescription + all PrescriptionItems
-        // in one transaction and wires up the FK (PrescriptionID) automatically.
-        var savedPrescription = await _repository.CreatePrescriptionAsync(newPrescription);
-    
-        return new PrescriptionResponseDto
-        {
-        PrescriptionID = savedPrescription.PrescriptionID,
-        EmrId = savedPrescription.EMRID,
-        // TotalPrescriptionItems = savedPrescription.PrescriptionItems.Count,
-        PrescriptionItems = savedPrescription.PrescriptionItems.Select(item => new PrescriptionItemRequestDto
-        {
-            Medicine = item.Medicine,
-            Dosage = item.Dosage,
-            Frequency = item.Frequency,
-            Duration = item.Duration
-        }).ToList()
-    };
-    }
-    public async Task<PaginationResponseDto<QueuedPrescriptionDto>> GetQueuedPrescriptionsAsync(int pageNumber, int pageSize)
-        {
-            //  Get data from repository
-            List<Prescription> prescriptions = await _repository.GetQueuedPrescriptionsAsync(pageNumber, pageSize);
+                EMRID = request.EmrID,
+                DoctorID = request.DoctorID,
+                Date = DateTime.UtcNow,
+                Status = false,
+                PrescriptionItems = request.PrescriptionItems.Select(item =>
+                    new PrescriptionItem
+                    {
+                        Medicine = item.Medicine,
+                        Dosage = item.Dosage,
+                        Frequency = item.Frequency,
+                        Duration = item.Duration
+                    }).ToList()
+            };
 
-            int totalCount = await _repository.GetQueuedPrescriptionsCountAsync();
+            await _repository.CreatePrescriptionAsync(newPrescription);
 
-            //  Convert Prescription entity to DTO manually
-            List<QueuedPrescriptionDto> dtoList =
-                new List<QueuedPrescriptionDto>();
-
-            foreach (Prescription prescription in prescriptions)
+            return new PrescriptionResponseDto
             {
-                QueuedPrescriptionDto dto =
-                    new QueuedPrescriptionDto();
-
-                dto.PrescriptionID = prescription.PrescriptionID;
-                dto.EMRID = prescription.EMRID;
-                dto.DoctorID = prescription.DoctorID;
-                dto.Date = prescription.Date;
-
-                dtoList.Add(dto);
-            }
-
-            //  Prepare paginated response
-            PaginationResponseDto<QueuedPrescriptionDto> response =
-                new PaginationResponseDto<QueuedPrescriptionDto>();
-
-            response.PageNumber = pageNumber;
-            response.PageSize = pageSize;
-            response.TotalCount = totalCount;
-            response.Data = dtoList;
-
-            return response;
+                PrescriptionID = newPrescription.PrescriptionID,
+                EmrId = newPrescription.EMRID,
+                PrescriptionItems = request.PrescriptionItems
+            };
         }
+
+        // Get queued prescriptions with optional doctor filter
+        public async Task<PaginationResponseDto<QueuedPrescriptionDto>>
+            GetQueuedPrescriptionsAsync(int pageNumber, int pageSize, int? doctorId)
+        {
+            var prescriptions =
+                await _repository.GetQueuedPrescriptionsAsync(
+                    pageNumber, pageSize, doctorId);
+
+            int totalCount =
+                await _repository.GetQueuedPrescriptionsCountAsync(doctorId);
+
+            var dtoList = prescriptions.Select(p => new QueuedPrescriptionDto
+            {
+                PrescriptionID = p.PrescriptionID,
+                DoctorID = p.DoctorID,
+                DoctorName = p.Doctor != null ? p.Doctor.Name : string.Empty,
+                Date = p.Date,
+                Medicines = p.PrescriptionItems.Select(i =>
+                    new PrescriptionMedicineDto
+                    {
+                        Medicine = i.Medicine,
+                        MedicineName = i.Medicine.ToString(),
+                        Dosage = i.Dosage,
+                        Frequency = i.Frequency,
+                        Duration = i.Duration
+                    }).ToList()
+            }).ToList();
+
+            return new PaginationResponseDto<QueuedPrescriptionDto>
+            {
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalCount = totalCount,
+                Data = dtoList
+            };
+        }
+    }
 }
-
-

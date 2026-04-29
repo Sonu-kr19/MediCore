@@ -40,7 +40,7 @@ public class ErrorMessages
     //EMR
     public const string EMRNotFound = "No EMR records found for the specified patient.";    // Get free Slots
     public const string InvalidDoctorId = "Doctor Id can't be negative or Zero.";
-    public const string DoctorNotFound = "Doctor with this Doctor Id doesn't exists.";
+    public const string DoctorNotFound = "Doctor not found.";
     public const string DateRequired = "Date is required";
 
     //Patient
@@ -48,4 +48,8 @@ public class ErrorMessages
     public const string PatientNotFound = "Patient not found.";
     //Technician
     public const string TechnicianNotFound = "Technician not found.";
+    public const string FailedToCreateAppointment = "Error in adding appointment";
+    public const string SlotTaken = "Slot Taken";
+    public const string InvalidDate = "Appointment date and time cannot be in the past.";
+    public const string NoNewSlotAvailable = "New slot is not available.";
 }

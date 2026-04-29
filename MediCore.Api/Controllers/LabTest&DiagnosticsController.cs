@@ -1,7 +1,9 @@
+using System.Security.Claims;
 using MediCore.Api.DTOs.LabTestDto;
 using MediCore.Api.Repositories.LabTestRepository;
 using MediCore.Api.Services.LabTestServices;
-using MediCore.Domain.Entities;
+using MediCore.Domain.Enum;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,21 +14,26 @@ namespace MediCore.Api.Controllers
     public class LabTestController : ControllerBase
     {
         private readonly ILabTestService _labTestService;
-        public LabTestController(ILabTestRepository labTestRepository, ILabTestService labTestService)
+        public LabTestController(ILabTestService labTestService)
         {
-           
             _labTestService = labTestService;
         }
-    
-        [HttpPost("lab/tests")]       
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = nameof(RoleOption.Doctor))]
+        [HttpPost("lab/tests/")]       
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateLabTest(LabTestRequestDto labTest)
         {
             try
             {   
-                var labTestID = await _labTestService.AddLabTestAsync(labTest);
-                return Ok(new { Message = "Lab test added successfully", LabTestID = labTestID });
+                var doctorId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if(string.IsNullOrEmpty(doctorId))
+                {
+                    return BadRequest(new { Message = "Doctor ID is missing." });
+                }
+                int id = int.Parse(doctorId);
+                var labTestID = await _labTestService.AddLabTestAsync(labTest,id);
+                return Created($"/api/v1/lab/tests/{labTestID}", new { LabTestID = labTestID, Message = "Lab test created successfully." });
             }
             catch(KeyNotFoundException ex)
             {
@@ -36,6 +43,19 @@ namespace MediCore.Api.Controllers
             {
                 return BadRequest(new { Message = ex.Message });
             }
+        }
+        [Authorize(Roles = nameof(RoleOption.Lab_Technician))]
+        [HttpGet("lab/testStatus")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> ListPendingTests()
+        {
+            var labTests = await _labTestService.GetPendingLabTestsAsync();
+            if (labTests == null || !labTests.Any())
+            {
+                return NotFound(new { Message = "No lab tests found with the specified status" });
+            }
+            return Ok(labTests);
         }
     }
 }

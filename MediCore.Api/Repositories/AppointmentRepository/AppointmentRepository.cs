@@ -20,8 +20,7 @@ public class AppointmentRepository : IAppointmentRepository
         {
             return true;
         }
-        return false;
-        
+        return false;      
     }
 
     public async Task<List<Schedule>> GetFreeSlots(int doctorId, DateOnly date)
@@ -31,4 +30,42 @@ public class AppointmentRepository : IAppointmentRepository
             .OrderBy(s => s.TimeSlot)
             .ToListAsync();
     }
+
+    public async Task<Appointment> CreateAppointment(Appointment appointment)
+    {
+        await _context.Appointments.AddAsync(appointment);
+        var schedule = await _context.Schedules.FirstOrDefaultAsync(a => a.DoctorID == appointment.DoctorID && a.Date == appointment.Date && a.TimeSlot == appointment.Time);
+        
+        schedule.Availability=false;
+        await _context.SaveChangesAsync();
+        return appointment;
+    }
+
+    public async Task<Appointment?> FindIdempotencyKey(string key)
+    {
+        var appointment = await _context.Appointments.FirstOrDefaultAsync(k=>k.IdempotencyKey==key);
+        if(appointment==null) return null;
+        return appointment;
+    }
+    
+    public async Task<Appointment?> GetByIdAsync(int appointmentId)
+    {
+        try
+        {
+            return await _context.Appointments.FirstOrDefaultAsync(a => a.AppointmentID == appointmentId);  
+        }
+        catch (System.Exception)
+        {
+            throw new Exception("Error from here");
+        }
+    }
+    
+    public async Task UpdateAsync(Appointment appointment)
+    {
+        _context.Appointments.Update(appointment);
+        var schedule = await _context.Schedules.FirstOrDefaultAsync(a => a.DoctorID == appointment.DoctorID && a.Date == appointment.Date && a.TimeSlot == appointment.Time);
+        schedule.Availability=true;
+        await _context.SaveChangesAsync();
+    }
+
 }

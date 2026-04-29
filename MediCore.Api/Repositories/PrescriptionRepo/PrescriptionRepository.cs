@@ -6,37 +6,53 @@ namespace MediCore.Api.Repositories.PrescriptionRepo
     public class PrescriptionRepository : IPrescriptionRepository
     {
         private readonly MediCoreDbContext _context;
+
         public PrescriptionRepository(MediCoreDbContext context)
         {
             _context = context;
         }
 
-        // Get queued (pending) prescriptions
+        // Get queued (pending) prescriptions with optional doctor filter
         public async Task<List<Prescription>> GetQueuedPrescriptionsAsync(
-            int pageNumber, int pageSize)
+            int pageNumber,
+            int pageSize,
+            int? doctorId)
         {
-
             int skip = (pageNumber - 1) * pageSize;
 
-            List<Prescription> pagedPrescriptions =
-                await _context.Prescriptions
-                    .Where(p => p.Status == false)
-                    .OrderBy(p => p.Date)
-                    .Skip(skip)
-                    .Take(pageSize)
-                    .ToListAsync();
+            IQueryable<Prescription> query = _context.Prescriptions
+                .Include(p => p.Doctor)
+                .Include(p => p.PrescriptionItems)
+                .Where(p => p.Status == false); // queued only
 
-            return pagedPrescriptions;
+            // Apply doctor filter if provided
+            if (doctorId.HasValue)
+            {
+                query = query.Where(p => p.DoctorID == doctorId.Value);
+            }
 
+            return await query
+                .OrderBy(p => p.Date)
+                .Skip(skip)
+                .Take(pageSize)
+                .ToListAsync();
         }
 
-        // Get total count of queued prescriptions
-        public async Task<int> GetQueuedPrescriptionsCountAsync()
+        // Get total count of queued prescriptions with optional doctor filter
+        public async Task<int> GetQueuedPrescriptionsCountAsync(int? doctorId)
         {
-            int count = await _context.Prescriptions.CountAsync(p => p.Status == false);
-            return count;
-        }
+            IQueryable<Prescription> query =
+                _context.Prescriptions.Where(p => p.Status == false);
 
+            if (doctorId.HasValue)
+            {
+                query = query.Where(p => p.DoctorID == doctorId.Value);
+            }
+
+            return await query.CountAsync();
+        }        
+        
+        // Create prescription with items (single transaction)
         public async Task<Prescription> CreatePrescriptionAsync(Prescription prescription)
         {
             _context.Prescriptions.Add(prescription);

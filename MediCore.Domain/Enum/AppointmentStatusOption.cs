@@ -5,5 +5,5 @@ namespace MediCore.Domain.Enum;
 
 public enum AppointmentStatusOption
 {
-    Scheduled, Ongoing, Completed
+    Scheduled, Ongoing, Completed,Cancelled
 }

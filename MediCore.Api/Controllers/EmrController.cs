@@ -4,10 +4,11 @@ using MediCore.Api.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using MediCore.Api.DTOs.EmrDtos;
 using Microsoft.AspNetCore.Authorization;
+using MediCore.Domain.Enum;
 
 namespace MediCore.Api.Controllers;
 
-[Authorize(Roles = "Doctor")]
+[Authorize(Roles = $"{nameof(RoleOption.Admin)},{nameof(RoleOption.Doctor)}")]
 [ApiController]
 [Route("api/v1/[controller]")]
 public class EmrController : ControllerBase
