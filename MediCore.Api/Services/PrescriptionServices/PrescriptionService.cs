@@ -46,7 +46,7 @@ public class PrescriptionService : IPrescriptionService
         {
         PrescriptionID = savedPrescription.PrescriptionID,
         EmrId = savedPrescription.EMRID,
-        TotalPrescriptionItems = savedPrescription.PrescriptionItems.Count,
+        // TotalPrescriptionItems = savedPrescription.PrescriptionItems.Count,
         PrescriptionItems = savedPrescription.PrescriptionItems.Select(item => new PrescriptionItemRequestDto
         {
             Medicine = item.Medicine,
