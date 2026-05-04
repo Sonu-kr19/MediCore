@@ -47,4 +47,8 @@ public class LabTestRepository: ILabTestRepository
     {
         return  await _context.LabTests.Where(l => l.Status == false).ToListAsync();
     }
+     public async Task<List<LabTest>> GetAllLabTestsAsync()
+    {
+        return  await _context.LabTests.ToListAsync();
+    }
 }
