@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace MediCore.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     public class LabReportController : ControllerBase
     {
         private readonly ILabReportService _service;
