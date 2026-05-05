@@ -120,18 +120,15 @@ public class MediCoreDbContext : DbContext
             .HasForeignKey(p => p.EMRID)
             .OnDelete(DeleteBehavior.ClientSetNull);
         
-<<<<<<< Updated upstream
         modelBuilder.Entity<Appointment>()
             .Property(a => a.Status)
             .HasConversion<int>()
             .HasMaxLength(50);
-=======
         modelBuilder.Entity<InsuranceClaim>()
             .HasOne(ic => ic.User)
             .WithMany()
             .HasForeignKey(ic => ic.UserID)
             .OnDelete(DeleteBehavior.NoAction); 
 
->>>>>>> Stashed changes
     }
 }
