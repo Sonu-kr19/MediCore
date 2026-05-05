@@ -28,6 +28,7 @@ using MediCore.Api.Repositories.DispenseRepo;
 using MediCore.Api.Services.DispenseServices;
 using MediCore.Api.Repositories.LabReportRepo;
 using MediCore.Api.Services.LabReportServices;
+using MediCore.Api.Repositories.BillingRepo;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,6 +60,10 @@ builder.Services.AddScoped<ILabReportService, LabReportService>();
 // builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddAutoMapper(typeof(Program));
 
+builder.Services.AddScoped<IBillService, BillService>();
+builder.Services.AddScoped<IBillRepository,BillRepository>();
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();

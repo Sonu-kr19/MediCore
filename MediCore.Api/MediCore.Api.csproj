@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <Folder Include="DTOs\AppointmentDtos\" />
+    <Folder Include="DTOs\BillingDtos\" />
     <Folder Include="DTOs\EmrDtos\" />
     <Folder Include="DTOs\LabTestDto\" />
     <Folder Include="DTOs\AppointmentDtos\PatientDtos\" />
@@ -34,6 +35,7 @@
     <Folder Include="Mapper\" />
     <Folder Include="Repositories\AppointmentRepository\" />
     <Folder Include="Repositories\AuditRepo\" />
+    <Folder Include="Repositories\BillingRepo\" />
     <Folder Include="Repositories\LabTestRepository\" />
     <Folder Include="Repositories\PatientRepo\" />
     <Folder Include="Repositories\TokenRepo\" />

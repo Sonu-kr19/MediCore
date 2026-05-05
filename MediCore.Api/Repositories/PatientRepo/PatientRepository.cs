@@ -59,4 +59,14 @@ public class PatientRepository : IPatientRepository
         return await _db.Patients.Where(p => p.Status == true).Include(p => p.UserIDNavigator).Include(p => p.InsuranceIDNavigator).FirstOrDefaultAsync(p=>p.UserID==userId);
     }
 
+    public async Task<bool> PatientExistsAsync(int patientId)
+    {
+        Patient patient = await _db.Patients.FindAsync(patientId);
+
+        if (patient == null)
+        {
+            return false;
+        }
+        return true;
+    }
 }
