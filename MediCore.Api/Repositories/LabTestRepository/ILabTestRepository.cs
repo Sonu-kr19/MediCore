@@ -10,5 +10,7 @@ public interface ILabTestRepository
     Task<bool> PatientExistsAsync(int patientId);
     Task<bool> TechnicianExistsAsync(int technicianId);
     Task<List<LabTest>> GetPendingLabTestsAsync();
+    Task<List<LabTest>> GetAllLabTestsAsync();
+
 
 }

@@ -1,4 +1,6 @@
+using System.Runtime.CompilerServices;
 using System.Security.Claims;
+using System.Security.Cryptography.X509Certificates;
 using MediCore.Api.DTOs.LabTestDto;
 using MediCore.Api.Repositories.LabTestRepository;
 using MediCore.Api.Services.LabTestServices;
@@ -6,6 +8,7 @@ using MediCore.Domain.Enum;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic;
 
 namespace MediCore.Api.Controllers
 {
@@ -54,6 +57,19 @@ namespace MediCore.Api.Controllers
             if (labTests == null || !labTests.Any())
             {
                 return NotFound(new { Message = "No lab tests found with the specified status" });
+            }
+            return Ok(labTests);
+        }
+        [Authorize(Roles = nameof(RoleOption.Lab_Technician))]
+        [HttpGet("lab/allTests")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> ListAllTests()
+        {
+            var labTests = await _labTestService.GetAllLabTestsAsync();
+            if (labTests == null || !labTests.Any())
+            {
+                return NotFound(new { Message = "No lab tests found" });
             }
             return Ok(labTests);
         }
