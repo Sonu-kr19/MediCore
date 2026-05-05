@@ -26,6 +26,8 @@ using Microsoft.AspNetCore.Mvc;
 using MediCore.Api.Mapper;
 using MediCore.Api.Repositories.DispenseRepo;
 using MediCore.Api.Services.DispenseServices;
+using MediCore.Api.Repositories.ComplianceRepo;
+using MediCore.Api.Services.ComplianceServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,6 +51,8 @@ builder.Services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
 builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
 builder.Services.AddScoped<IDispenseRepository, DispenseRepository>();
 builder.Services.AddScoped<IDispenseService, DispenseService>();
+builder.Services.AddScoped<IComplianceRepository, ComplianceRepository>();
+builder.Services.AddScoped<IComplianceService, ComplianceService>();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 // Add services to the container.
