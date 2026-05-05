@@ -51,12 +51,6 @@ public class MediCoreDbContext : DbContext
         .HasForeignKey(p => p.InsuranceID)
         .OnDelete(DeleteBehavior.SetNull);
 
-        modelBuilder.Entity<Bill>()
-            .HasOne(b => b.Patient)
-            .WithMany()
-            .HasForeignKey(b => b.PatientID)
-            .OnDelete(DeleteBehavior.Restrict);
-
         modelBuilder.Entity<LabTest>()
             .HasOne(l => l.Doctor)
             .WithMany()
@@ -124,5 +118,11 @@ public class MediCoreDbContext : DbContext
             .Property(a => a.Status)
             .HasConversion<int>()
             .HasMaxLength(50);
+        modelBuilder.Entity<InsuranceClaim>()
+            .HasOne(ic => ic.User)
+            .WithMany()
+            .HasForeignKey(ic => ic.UserID)
+            .OnDelete(DeleteBehavior.NoAction); 
+
     }
 }
