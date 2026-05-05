@@ -43,4 +43,12 @@ public class LabTestRepository: ILabTestRepository
         var technicianExists = _context.Users.Any(u => u.UserID == technicianId && u.RoleName.ToString() == "Lab_Technician");
         return Task.FromResult(technicianExists);
     }
+    public async Task<List<LabTest>> GetPendingLabTestsAsync()
+    {
+        return  await _context.LabTests.Where(l => l.Status == false).ToListAsync();
+    }
+     public async Task<List<LabTest>> GetAllLabTestsAsync()
+    {
+        return  await _context.LabTests.ToListAsync();
+    }
 }

@@ -2,6 +2,7 @@ using MediCore.Api.DTOs.PrescriptionDtos;
 using MediCore.Api.DTOs.Common;
 using MediCore.Api.Repositories.PrescriptionRepo;
 using MediCore.Domain.Entities;
+using MediCore.Api.DTOs.DispenseDtos;
 
 namespace MediCore.Api.Services.PrescriptionServices
 {
@@ -23,6 +24,7 @@ namespace MediCore.Api.Services.PrescriptionServices
 
             var newPrescription = new Prescription
             {
+                EMRID = request.EmrID,
                 DoctorID = request.DoctorID,
                 Date = DateTime.UtcNow,
                 Status = false,
@@ -41,8 +43,8 @@ namespace MediCore.Api.Services.PrescriptionServices
             return new PrescriptionResponseDto
             {
                 PrescriptionID = newPrescription.PrescriptionID,
-                DoctorID = newPrescription.DoctorID,
-                TotalPrescriptionItems = newPrescription.PrescriptionItems.Count
+                EmrId = newPrescription.EMRID,
+                PrescriptionItems = request.PrescriptionItems
             };
         }
 

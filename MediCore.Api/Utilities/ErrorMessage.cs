@@ -26,4 +26,11 @@ public class ErrorMessage
         public const string AppointmentAlreadyCancelled="Appointment is already cancelled";
         public const string CompletedAppointmet="Completed appointments cannot be cancelled";
         public const string OngoingAppointment="Ongoing appointments cannot be cancelled";
+
+        //Creating Bills
+        public const string PatientNotFound="No patient exists with this ID.";
+        public const string BillItemsNotNull="BillItems cannot be null.";
+        public const string BillItemRequired="At least one BillItem is required.";
+        public const string ItemNameNotEmpty="ItemName cannot be empty.";
+        public const string RateGreaterThanZero="Rate must be greater than zero.";
 }

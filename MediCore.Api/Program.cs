@@ -28,6 +28,9 @@ using MediCore.Api.Repositories.DispenseRepo;
 using MediCore.Api.Services.DispenseServices;
 using MediCore.Api.Repositories.ComplianceRepo;
 using MediCore.Api.Services.ComplianceServices;
+using MediCore.Api.Repositories.LabReportRepo;
+using MediCore.Api.Services.LabReportServices;
+using MediCore.Api.Repositories.BillingRepo;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,6 +49,7 @@ builder.Services.AddScoped<IPatientRepository,PatientRepository>();
 builder.Services.AddScoped<IPatientService,PatientService>();
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+builder.Services.AddScoped<IScheduleRepository,ScheduleRepository>();
 builder.Services.AddControllers();
 builder.Services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
 builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
@@ -53,6 +57,15 @@ builder.Services.AddScoped<IDispenseRepository, DispenseRepository>();
 builder.Services.AddScoped<IDispenseService, DispenseService>();
 builder.Services.AddScoped<IComplianceRepository, ComplianceRepository>();
 builder.Services.AddScoped<IComplianceService, ComplianceService>();
+builder.Services.AddScoped<ILabReportRepository, LabReportRepository>();
+builder.Services.AddScoped<ILabReportService, LabReportService>();
+
+// builder.Services.AddAutoMapper(typeof(MappingProfile));
+// builder.Services.AddAutoMapper(typeof(Program).Assembly);
+builder.Services.AddAutoMapper(typeof(Program));
+
+builder.Services.AddScoped<IBillService, BillService>();
+builder.Services.AddScoped<IBillRepository,BillRepository>();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 // Add services to the container.
