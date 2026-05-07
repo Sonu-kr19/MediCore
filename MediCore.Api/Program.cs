@@ -31,6 +31,7 @@ using MediCore.Api.Services.ComplianceServices;
 using MediCore.Api.Repositories.LabReportRepo;
 using MediCore.Api.Services.LabReportServices;
 using MediCore.Api.Repositories.BillingRepo;
+using MediCore.Api.Services.AuditServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,6 +58,8 @@ builder.Services.AddScoped<IDispenseRepository, DispenseRepository>();
 builder.Services.AddScoped<IDispenseService, DispenseService>();
 builder.Services.AddScoped<IComplianceRepository, ComplianceRepository>();
 builder.Services.AddScoped<IComplianceService, ComplianceService>();
+builder.Services.AddScoped<IAuditRepository,AuditRepository>();
+builder.Services.AddScoped<IAuditService, AuditService>();
 builder.Services.AddScoped<ILabReportRepository, LabReportRepository>();
 builder.Services.AddScoped<ILabReportService, LabReportService>();
 
