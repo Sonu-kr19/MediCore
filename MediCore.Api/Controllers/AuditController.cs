@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace MediCore.Api.Controllers
 {
     [ApiController]
-    [Route("api/compliance/audits")]
+    [Route("api/v1/[controller]")]
     [Authorize(Roles = "Admin,Finance_Officer")]
     public class AuditController : ControllerBase
     {
@@ -16,7 +16,7 @@ namespace MediCore.Api.Controllers
         {
             _auditService = auditService;
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> GetAudits(
             [FromQuery] GetAuditRequestDto request)
