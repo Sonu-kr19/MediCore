@@ -37,6 +37,7 @@
     <Folder Include="Repositories\AuditRepo\" />
     <Folder Include="Repositories\BillingRepo\" />
     <Folder Include="Repositories\LabTestRepository\" />
+    <Folder Include="Repositories\PatientDocumentRepo\" />
     <Folder Include="Repositories\PatientRepo\" />
     <Folder Include="Repositories\TokenRepo\" />
     <Folder Include="Services\AppointmentServices\" />
@@ -44,6 +45,7 @@
     <Folder Include="Services\LabTestServices\" />
     <Folder Include="Repositories\PrescriptionRepo\" />
     <Folder Include="Services\EmrServices\" />
+    <Folder Include="Services\PatientDocumentService\" />
     <Folder Include="Services\PrescriptionServices\" />
     <Folder Include="Services\PatientServices\" />
     <Folder Include="Utilities\Exceptions\" />
