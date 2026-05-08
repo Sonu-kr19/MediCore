@@ -6,6 +6,7 @@ using MediCore.Domain.Entities;
 using MediCore.Api.Repositories.AuditRepo;
 using MediCore.Api.Utilities.Helpers;
 using AutoMapper;
+using MediCore.Domain.Enum;
 
 namespace MediCore.Api.Services.PatientServices;
 
@@ -31,6 +32,22 @@ public class PatientService : IPatientService
     public async Task<int> RegisterPatientAsync(PatientRequestDto dto)
     {
         PatientHelper.Validate(dto.Name, dto.Address, dto.DOB, dto.Gender, dto.InsuranceID);
+
+        //updated only Patient can register . no other role cannot be register
+        //added audit log for it if success or fail
+        var role = await _patientRepository.GetUserRoleAsync(dto.UserID);
+
+        if (role != RoleOption.Patient)
+        {
+            await _auditLogRepository.LogAsync(
+                dto.UserID,
+                "PATIENT_REGISTER_FAILED",
+                $"UserID: {dto.UserID} — Invalid role: {role}"
+            );
+            throw new ArgumentException(
+                "Only users with Patient role can register as a patient."
+            );
+        }
 
         var userExists = await _patientRepository.UserExistsAsync(dto.UserID);
         if (!userExists)
@@ -108,7 +125,7 @@ public class PatientService : IPatientService
         }).ToList();
     }
 
-    public async Task<PatientDetailsDto?> GetByIdAsync(int userId)
+    public async Task<PatientResponseDto?> GetByIdAsync(int userId)
     {
         try
         {
@@ -117,17 +134,15 @@ public class PatientService : IPatientService
             {
                 throw new MediCoreException(ErrorMessages.PatientNotFound);
             } 
-            return new PatientDetailsDto
+            return new PatientResponseDto
             {
                 PatientID  = patient.PatientID,
                 Name = patient.Name,
                 DOB = patient.DOB,
                 Gender = patient.Gender,
                 Address = patient.Address,
-                InsuranceID = patient.InsuranceID,
-                Email = patient.UserIDNavigator!.Email,
-                Phone = patient.UserIDNavigator!.Phone,
-                InsuranceAmount = patient.InsuranceIDNavigator != null? patient.InsuranceIDNavigator.CoverageAmount : null
+                InsuranceID = patient.InsuranceID
+                
             };
         }
         catch (MediCoreException)
@@ -139,5 +154,70 @@ public class PatientService : IPatientService
             throw;
         }
     }
+
+    
+
+    //searching a patient 
+    //the term takes patient id, name or insurance id
+    //is user direcly search it will display first 20 records by default
+    // or otherwise it will show the specific patient data only
+    public async Task<PagedResult<PatientResponseDto>> SearchPatientsAsync(PatientSearchDto request)
+    {
+        var term = string.IsNullOrWhiteSpace(request.Search) ? string.Empty : request.Search.Trim();
+
+        List<Patient> allMatches;
+        if (string.IsNullOrWhiteSpace(term))
+            allMatches = await _patientRepository.GetAllPatientsAsync();
+        else
+            allMatches = await _patientRepository.SearchPatientsAsync(term);
+
+        // Pagination logic lives in the service — not the repository.
+        var totalCount = allMatches.Count;
+        var paged = allMatches
+            .OrderBy(p => p.PatientID)
+            .Skip((request.Page - 1) * request.PageSize)
+            .Take(request.PageSize)
+            .ToList();
+
+         
+        // Map entity → DTO in the service layer.
+        var data = paged.Select(p => new PatientResponseDto
+        {
+            PatientID = p.PatientID,
+            Name = p.Name,
+            Gender = p.Gender,
+            DOB = p.DOB,
+            Address = p.Address,
+            InsuranceID = p.InsuranceID
+        }).ToList();
+
+        return new PagedResult<PatientResponseDto>
+        {
+            Data = data,
+            TotalCount = totalCount,
+        };
+    }
+
+    //deleting the patient softly
+    //only changing the status in to false
+    // and added errors if patient is not exist, or if patient is already deleted 
+    // and finally printing response as patient id and message is patient delete successfully
+     public async Task<PatientDeleteResponseDto> DeletePatientAsync(int patientId)
+    {
+        var patient = await _patientRepository.GetPatientByIdAsync(patientId);
+        if (patient == null)
+            throw new KeyNotFoundException(PatientErrorMessages.PatientNotFound);
+
+        if (patient.Status == false)
+            throw new InvalidOperationException(PatientErrorMessages.PatientAlreadyDeleted);
+
+        await _patientRepository.SoftDeleteAsync(patient);
+
+        return new PatientDeleteResponseDto
+        {
+            PatientID = patientId,
+            Message = $"PatientID {patientId} deleted successfully."
+        };
+    } 
 
 }

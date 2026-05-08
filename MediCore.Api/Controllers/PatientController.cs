@@ -74,5 +74,30 @@ namespace MediCore.Api.Controllers
             }
         }
 
+
+        // this is search controller which it will take query as patient id , name or insurance id
+        //anyone can search the patient 
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpGet("search")]
+        public async Task<IActionResult> Search([FromQuery] PatientSearchDto request)
+        {
+            var result = await _patientService.SearchPatientsAsync(request);
+            return Ok(result);
+        }
+
+        //this is the delete the patient controller
+        //it will not delete data in backend. Only it will change status to 0
+        [Authorize(Roles = nameof(RoleOption.Admin))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [HttpDelete("{patientId}")]
+        public async Task<IActionResult> Delete(int patientId)
+        {
+            var result = await _patientService.DeletePatientAsync(patientId);
+            return Ok(result);
+        }
+
     }
 }
