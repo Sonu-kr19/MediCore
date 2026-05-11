@@ -35,7 +35,6 @@
     <Folder Include="DTOs\TokenDtos\" />
     <Folder Include="Mapper\" />
     <Folder Include="Repositories\AppointmentRepository\" />
-    <Folder Include="Repositories\AuditRepo\" />
     <Folder Include="Repositories\BillingRepo\" />
     <Folder Include="Repositories\InsuranceClaimRepo\" />
     <Folder Include="Repositories\LabTestRepository\" />
@@ -43,6 +42,7 @@
     <Folder Include="Repositories\PatientRepo\" />
     <Folder Include="Repositories\TokenRepo\" />
     <Folder Include="Services\AppointmentServices\" />
+    <Folder Include="Services\AuditServices\" />
     <Folder Include="Services\AuthServices\" />
     <Folder Include="Services\InsuranceClaimServices\" />
     <Folder Include="Services\LabTestServices\" />
