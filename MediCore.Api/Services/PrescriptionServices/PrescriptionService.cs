@@ -27,7 +27,7 @@ namespace MediCore.Api.Services.PrescriptionServices
                 EMRID = request.EmrID,
                 DoctorID = request.DoctorID,
                 Date = DateTime.UtcNow,
-                Status = false,
+                Status = true,
                 PrescriptionItems = request.PrescriptionItems.Select(item =>
                     new PrescriptionItem
                     {

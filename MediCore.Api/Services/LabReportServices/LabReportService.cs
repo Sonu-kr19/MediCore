@@ -24,7 +24,7 @@ namespace MediCore.Api.Services.LabReportServices
                 Status = true
             };
 
-            await _repository.CreateLabReportAsync(newReport);
+            // await _repository.CreateLabReportAsync(newReport);
 
             return new LabReportResponseDto
             {
