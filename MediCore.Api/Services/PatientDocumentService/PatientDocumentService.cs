@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using MediCore.Api.DTOs.PatientDtos;
 using MediCore.Api.Repositories.PatientDocumentRepo;
-using MediCore.Api.Services.ComplianceService;
+using MediCore.Api.Services.ComplianceServices;
 using MediCore.Api.Utilities;
 using MediCore.Domain.Entities;
 

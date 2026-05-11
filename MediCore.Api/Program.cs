@@ -31,6 +31,8 @@ using MediCore.Api.Services.ComplianceServices;
 using MediCore.Api.Repositories.LabReportRepo;
 using MediCore.Api.Services.LabReportServices;
 using MediCore.Api.Repositories.BillingRepo;
+using MediCore.Api.Services.PatientDocumentServices;
+using MediCore.Api.Repositories.PatientDocumentRepo;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,6 +61,8 @@ builder.Services.AddScoped<IComplianceRepository, ComplianceRepository>();
 builder.Services.AddScoped<IComplianceService, ComplianceService>();
 builder.Services.AddScoped<ILabReportRepository, LabReportRepository>();
 builder.Services.AddScoped<ILabReportService, LabReportService>();
+builder.Services.AddScoped<IPatientDocumentService,PatientDocumentService>();
+builder.Services.AddScoped<IPatientDocumentRepo,PatientDocumentRepo>();
 
 // builder.Services.AddAutoMapper(typeof(MappingProfile));
 // builder.Services.AddAutoMapper(typeof(Program).Assembly);

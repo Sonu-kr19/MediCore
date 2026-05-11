@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MediCore.Domain.Enum;
 using MediCore.Api.DTOs.ComplianceDtos;
+using MediCore.Api.DTOs.PatientDtos;
 
 namespace MediCore.Api.Controllers
 {
@@ -37,6 +38,30 @@ namespace MediCore.Api.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        // Admin gets all pending compliance records.
+        [Authorize(Roles = nameof(RoleOption.Admin))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [HttpGet("pending")]
+        public async Task<IActionResult> GetAllPending()
+        {
+            var result = await _complianceService.GetAllPendingAsync();
+            return Ok(result);
+        }
+
+        // Admin verifies a compliance record — Result must be Approved or Rejected.
+        [Authorize(Roles = nameof(RoleOption.Admin))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [HttpPut("{id}/verify")]
+        public async Task<IActionResult> Verify(int id, ComplianceVerifyDto dto)
+        {
+            var result = await _complianceService.VerifyAsync(id, dto);
+            return Ok(result);
         }
     }
 }
