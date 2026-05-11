@@ -34,8 +34,6 @@
     <Folder Include="DTOs\TokenDtos\" />
     <Folder Include="Mapper\" />
     <Folder Include="Repositories\AppointmentRepository\" />
-    <Folder Include="Repositories\AuditLogRepo\" />
-    <Folder Include="Repositories\AuditRepo\" />
     <Folder Include="Repositories\BillingRepo\" />
     <Folder Include="Repositories\LabTestRepository\" />
     <Folder Include="Repositories\PatientRepo\" />

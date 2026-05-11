@@ -17,12 +17,12 @@ namespace MediCore.Api.Services.AuditServices
         {
             // Call repository with filters
             var audits = await _auditRepository.GetAuditsAsync(
-                adminId: null,                 // Optional, can be extended later
-                scope: null,                   // Optional
+                adminId: null,
+                scope: null,                  
                 findings: request.Findings,
                 fromDate: request.FromDate,
                 toDate: request.ToDate,
-                status: null                   // Optional
+                status: null
             );
 
             // Map entities to response DTO
