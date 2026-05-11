@@ -31,6 +31,8 @@ using MediCore.Api.Services.ComplianceServices;
 using MediCore.Api.Repositories.LabReportRepo;
 using MediCore.Api.Services.LabReportServices;
 using MediCore.Api.Repositories.BillingRepo;
+using MediCore.Api.Services.PatientDocumentServices;
+using MediCore.Api.Repositories.PatientDocumentRepo;
 using MediCore.Api.Services.AuditServices;
 using MediCore.Api.Repositories.InsuranceClaimRepo;
 
@@ -63,6 +65,9 @@ builder.Services.AddScoped<IAuditRepository,AuditRepository>();
 builder.Services.AddScoped<IAuditService, AuditService>();
 builder.Services.AddScoped<ILabReportRepository, LabReportRepository>();
 builder.Services.AddScoped<ILabReportService, LabReportService>();
+builder.Services.AddScoped<IPatientDocumentService,PatientDocumentService>();
+builder.Services.AddScoped<IPatientDocumentRepo,PatientDocumentRepo>();
+
 // builder.Services.AddAutoMapper(typeof(MappingProfile));
 // builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddAutoMapper(typeof(Program));
