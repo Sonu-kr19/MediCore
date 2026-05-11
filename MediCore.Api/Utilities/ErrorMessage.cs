@@ -33,4 +33,11 @@ public class ErrorMessage
         public const string BillItemRequired="At least one BillItem is required.";
         public const string ItemNameNotEmpty="ItemName cannot be empty.";
         public const string RateGreaterThanZero="Rate must be greater than zero.";
+
+        //Submit insurance claims
+        public const string InvalidInsuranceId="Invalid InsuranceID";
+        public const string BillNotFound="Bill not found";
+        public const string DuplicateClaim="Duplicate claim for Bill";
+        public const string NotAuthenticated="User not authenticated";
+        
 }
