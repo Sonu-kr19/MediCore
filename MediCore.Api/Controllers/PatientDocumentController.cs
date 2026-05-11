@@ -12,7 +12,7 @@ namespace MediCore.Api.Controllers;
 //for uploading and downloading using file stream
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/v1/[controller]")]
 public class PatientDocumentController : ControllerBase
 {
     private readonly IPatientDocumentService _documentService;
@@ -23,7 +23,7 @@ public class PatientDocumentController : ControllerBase
     }
 
     // Patient or Admin uploads an ID proof document.
-    [Authorize(Roles = $"{nameof(RoleOption.Admin)},{nameof(RoleOption.Patient)}")]
+    // [Authorize(Roles = $"{nameof(RoleOption.Admin)},{nameof(RoleOption.Patient)}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -35,7 +35,7 @@ public class PatientDocumentController : ControllerBase
     }
 
     // Admin enters PatientID — shows all documents uploaded by that patient.
-    [Authorize(Roles = $"{nameof(RoleOption.Admin)},{nameof(RoleOption.Patient)}")]
+    // [Authorize(Roles = $"{nameof(RoleOption.Admin)},{nameof(RoleOption.Patient)}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpGet("{id}/documents")]
@@ -47,7 +47,7 @@ public class PatientDocumentController : ControllerBase
 
     // Admin enters PatientID — downloads all documents of that patient.
     // Single document → returns file directly. Multiple → returns as zip.
-    [Authorize(Roles = $"{nameof(RoleOption.Admin)},{nameof(RoleOption.Patient)}")]
+    // [Authorize(Roles = $"{nameof(RoleOption.Admin)},{nameof(RoleOption.Patient)}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpGet("{id}/documents/download")]
