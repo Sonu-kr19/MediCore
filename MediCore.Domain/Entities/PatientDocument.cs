@@ -15,6 +15,8 @@ public class PatientDocument
     public string FileURI {get; set;}
     public DateTime UploadedDate {get; set;}
     public bool VerificationStatus {get; set;}
+    // Stores actual file content as bytes — no disk storage needed.
+    public byte[] FileData { get; set; } = null!;
 
     public virtual Patient? PatientIDNavigator {get; set;}
 }
