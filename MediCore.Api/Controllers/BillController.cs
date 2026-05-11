@@ -1,10 +1,13 @@
 using MediCore.Api.DTOs.BillingDtos;
 using MediCore.Api.Services;
+using MediCore.Domain.Enum;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MediCore.Api.Controllers
 {
+    [Authorize(Roles = $"{nameof(RoleOption.Admin)},{nameof(RoleOption.Finance_Officer)}")]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class BillController : ControllerBase
