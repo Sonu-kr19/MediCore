@@ -1,3 +1,4 @@
+using MediCore.Api.Utilities;
 using MediCore.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,7 +12,18 @@ namespace MediCore.Api.Repositories.LabReportRepo
         {
             _context = context;
         }
-
+        public async Task<LabReport> AddLabReportAsync(LabReport labReport)
+    {
+        LabTest labTest = _context.LabTests.Find(labReport.LabTestID);
+        if(labTest == null)
+        {
+            throw new KeyNotFoundException(ErrorMessages.LabTestNotFound);
+        }
+        labTest.Status = true;
+        await _context.LabReports.AddAsync(labReport);
+        await _context.SaveChangesAsync();
+        return labReport;
+    }
         // public async Task CreateLabReportAsync(LabReport report)
         // {
         //     _context.LabReports.Add(report);

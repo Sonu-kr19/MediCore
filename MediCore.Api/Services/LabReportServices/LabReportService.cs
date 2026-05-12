@@ -13,7 +13,33 @@ namespace MediCore.Api.Services.LabReportServices
         {
             _repository = repository;
         }
+        public async Task<LabReport> AddLabReportAsync(UploadLabReportDto labReportDto, int labTestId)
+        {
+            // Save file to disk
+            var uploadsFolder = Path.Combine("wwwroot", "lab-reports");
+            Directory.CreateDirectory(uploadsFolder);
 
+            var uniqueFileName = $"{Guid.NewGuid()}_{labReportDto.File.FileName}";
+            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await labReportDto.File.CopyToAsync(stream);
+            }
+
+            // Manual mapping — no AutoMapper needed
+            LabReport labReport = new LabReport
+            {
+                LabTestID = labTestId,
+                FileURI = filePath,
+                Status = false,
+                Date = DateTime.UtcNow
+            };
+
+            await _repository.AddLabReportAsync(labReport);
+
+            return labReport;
+        }
         public async Task<LabReportResponseDto> AttachLabReportAsync(LabReportRequestDto request)
         {
             var newReport = new LabReport

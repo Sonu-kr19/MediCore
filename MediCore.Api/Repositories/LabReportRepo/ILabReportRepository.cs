@@ -9,5 +9,7 @@ namespace MediCore.Api.Repositories.LabReportRepo
         // Task CreateLabReportAsync(LabReport report);
         Task<IEnumerable<LabReport>> GetQueuedLabReportsAsync(int pageNumber, int pageSize, int? labTestId);
         Task<int> GetQueuedLabReportsCountAsync(int? labTestId);
+        Task<LabReport> AddLabReportAsync(LabReport labReport);
+
     }
 }
