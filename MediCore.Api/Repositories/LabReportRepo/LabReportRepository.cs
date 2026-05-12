@@ -12,11 +12,11 @@ namespace MediCore.Api.Repositories.LabReportRepo
             _context = context;
         }
 
-        public async Task CreateLabReportAsync(LabReport report)
-        {
-            _context.LabReports.Add(report);
-            await _context.SaveChangesAsync();
-        }
+        // public async Task CreateLabReportAsync(LabReport report)
+        // {
+        //     _context.LabReports.Add(report);
+        //     await _context.SaveChangesAsync();
+        // }
 
         public async Task<IEnumerable<LabReport>> GetQueuedLabReportsAsync(int pageNumber, int pageSize, int? labTestId)
         {

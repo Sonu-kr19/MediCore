@@ -19,8 +19,9 @@ public class MediCoreDbContext : DbContext
     public virtual DbSet<EMR> EMRs { get; set; }
     public virtual DbSet<FinanceOfficer> FinanceOfficers { get; set; }
     public DbSet<Insurance> Insurances { get; set; }
-    public virtual DbSet<InsuranceClaim> InsuranceClaims { get; set; }
-    public virtual DbSet<LabReport> LabReports { get; set; }
+    public virtual DbSet<InsuranceClaim> InsuranceClaims {get; set;}
+    public virtual DbSet<LabReport> LabReports  { get; set; }
+    public virtual DbSet<EMRLabReport> EMRLabReport { get; set; }
     public virtual DbSet<LabTest> LabTests { get; set; }
     public virtual DbSet<Medicine> Medicines { get; set; }
     public virtual DbSet<Nurse> Nurses { get; set; }
@@ -102,6 +103,18 @@ public class MediCoreDbContext : DbContext
             .WithMany(d => d.EMRs)
             .HasForeignKey(e => e.DoctorID)
             .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<EMRLabReport>()
+            .HasOne(el => el.EMR)
+            .WithMany(e => e.EMRLabReport)
+            .HasForeignKey(el => el.EMRID)
+            .OnDelete(DeleteBehavior.Cascade);       // delete EMR → removes its attachments
+
+        modelBuilder.Entity<EMRLabReport>()
+            .HasOne(el => el.LabReport)
+            .WithMany(lr => lr.EMRLabReport)
+            .HasForeignKey(el => el.LabReportID)
+            .OnDelete(DeleteBehavior.Restrict); 
 
         modelBuilder.Entity<Prescription>()
             .HasOne(p => p.Doctor)

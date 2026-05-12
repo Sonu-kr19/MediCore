@@ -7,5 +7,7 @@ namespace MediCore.Api.DTOs.LabReportDtos
         public int LabTestID { get; set; }
         public string FileURI { get; set; }
         public string Notes { get; set; }
+        public int EmrId { get; set; }
+        public int LabReportID { get; set; }
     }
 }

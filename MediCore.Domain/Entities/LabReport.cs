@@ -16,4 +16,5 @@ public class LabReport
     public bool Status {get; set; }
 
     public virtual LabTest? LabTestIDNavigator {get; set;}
+    public virtual ICollection<EMRLabReport> EMRLabReport { get; set; } = new List<EMRLabReport>();
 }
