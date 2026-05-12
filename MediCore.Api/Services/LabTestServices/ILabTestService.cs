@@ -8,4 +8,5 @@ public interface ILabTestService
 {
     Task<int> AddLabTestAsync(LabTestRequestDto dto, int id);
     Task<List<LabTestResponseDto>> GetPendingLabTestsAsync();
+    Task<List<LabTestResponseDto>> GetAllLabTestsAsync();
 }

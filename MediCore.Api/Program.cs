@@ -26,8 +26,17 @@ using Microsoft.AspNetCore.Mvc;
 using MediCore.Api.Mapper;
 using MediCore.Api.Repositories.DispenseRepo;
 using MediCore.Api.Services.DispenseServices;
+using MediCore.Api.Repositories.ComplianceRepo;
+using MediCore.Api.Services.ComplianceServices;
 using MediCore.Api.Repositories.LabReportRepo;
 using MediCore.Api.Services.LabReportServices;
+using MediCore.Api.Repositories.BillingRepo;
+using MediCore.Api.Services.PatientDocumentServices;
+using MediCore.Api.Repositories.PatientDocumentRepo;
+using MediCore.Api.Services.AuditServices;
+using MediCore.Api.Repositories.InsuranceClaimRepo;
+using MediCore.Api.Repositories.PaymentRepo;
+using MediCore.Api.Services.PaymentServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,7 +45,7 @@ builder.Services.AddScoped<IUserRepository,UserRepository>();
 builder.Services.AddScoped<IUserService,UserService>();
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 builder.Services.AddScoped<IUserService,UserService>();
-builder.Services.AddScoped<IAuditLogRepository, AuditLogRepository>();
+builder.Services.AddScoped<IAuditLogRepository, AuditLogRepository>(); 
 builder.Services.AddScoped<IEmrService, EmrService>();
 builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
 builder.Services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
@@ -52,13 +61,27 @@ builder.Services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
 builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
 builder.Services.AddScoped<IDispenseRepository, DispenseRepository>();
 builder.Services.AddScoped<IDispenseService, DispenseService>();
+builder.Services.AddScoped<IComplianceRepository, ComplianceRepository>();
+builder.Services.AddScoped<IComplianceService, ComplianceService>();
+builder.Services.AddScoped<IAuditRepository,AuditRepository>();
+builder.Services.AddScoped<IAuditService, AuditService>();
 builder.Services.AddScoped<ILabReportRepository, LabReportRepository>();
 builder.Services.AddScoped<ILabReportService, LabReportService>();
+builder.Services.AddScoped<IPatientDocumentService,PatientDocumentService>();
+builder.Services.AddScoped<IPatientDocumentRepo,PatientDocumentRepo>();
 
+builder.Services.AddScoped<IPaymentRepository,PaymentRepository>();
+builder.Services.AddScoped<IPaymentService,PaymentService>();
 // builder.Services.AddAutoMapper(typeof(MappingProfile));
 // builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddAutoMapper(typeof(Program));
 
+builder.Services.AddScoped<IBillService, BillService>();
+builder.Services.AddScoped<IBillRepository,BillRepository>();
+builder.Services.AddScoped<IInsuranceClaimService,InsuranceClaimService>();
+builder.Services.AddScoped<IInsuranceClaimRepository,InsuranceClaimRepository>();
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();

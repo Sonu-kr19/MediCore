@@ -1,4 +1,6 @@
 using System;
+using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 using AutoMapper;
 using MediCore.Api.DTOs.LabTestDto;
 using MediCore.Api.Repositories.LabTestRepository;
@@ -56,5 +58,16 @@ public class LabTestService : ILabTestService
         }
         return labTestDtos;
     }
-}
+     public async Task<List<LabTestResponseDto>> GetAllLabTestsAsync()
+    {
+        List<LabTestResponseDto> labTestDtos = new List<LabTestResponseDto>();
+        var labTests = await _labTestRepository.GetAllLabTestsAsync();
+        foreach (var labTest in labTests)
+        {
+            var labTestDto = _mapper.Map<LabTest,LabTestResponseDto>(labTest);
+            labTestDtos.Add(labTestDto);
+        }
+        return labTestDtos;
+    }
+    }
 

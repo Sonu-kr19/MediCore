@@ -7,5 +7,7 @@ public interface IPatientService
 {
     Task<int> RegisterPatientAsync(PatientRequestDto dto);
     Task<List<PatientDetailsDto>> GetAllPatientsAsync();
-    Task<PatientDetailsDto?> GetByIdAsync(int userId);
+    Task<PatientResponseDto?> GetByIdAsync(int userId);
+    Task<PagedResult<PatientResponseDto>> SearchPatientsAsync(PatientSearchDto request);
+    Task<PatientDeleteResponseDto> DeletePatientAsync(int patientId);
 }

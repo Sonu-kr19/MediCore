@@ -1,6 +1,7 @@
 using System;
 using MediCore.Api.DTOs.PatientDtos;
 using MediCore.Domain.Entities;
+using MediCore.Domain.Enum;
 using Microsoft.EntityFrameworkCore;
 
 namespace MediCore.Api.Repositories.PatientRepo;
@@ -58,5 +59,52 @@ public class PatientRepository : IPatientRepository
     {
         return await _db.Patients.Where(p => p.Status == true).Include(p => p.UserIDNavigator).Include(p => p.InsuranceIDNavigator).FirstOrDefaultAsync(p=>p.UserID==userId);
     }
+
+    public async Task<bool> PatientExistsAsync(int patientId)
+    {
+        Patient patient = await _db.Patients.FindAsync(patientId);
+
+        if (patient == null)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    // Returns active patients whose Name, InsuranceID, or PatientID partially matches the term.
+    //it will take the name ,patient id or insurance id only for searching the patient.
+    public async Task<List<Patient>> SearchPatientsAsync(string term)
+    {
+        return await _db.Patients
+            .Where(p => p.Status == true &&
+                (
+                    p.Name.Contains(term) ||
+                    p.InsuranceID.ToString()!.Contains(term) ||
+                    p.PatientID.ToString().Contains(term)
+                )
+            )
+            .Include(p => p.UserIDNavigator)
+            .ToListAsync();
+    }
+
+    //for getting patient by patient id
+    public async Task<Patient?> GetPatientByIdAsync(int patientId)
+        => await _db.Patients.FirstOrDefaultAsync(p => p.PatientID == patientId);
+
+    //for soft deleting the patient updating status as false 
+    //not hard coded delete the patient record.
+    public async Task SoftDeleteAsync(Patient patient)
+    {
+        patient.Status = false;
+        await _db.SaveChangesAsync();
+    }
+
+    public async Task<RoleOption?> GetUserRoleAsync(int userId)
+        {
+            return await _db.Users
+                .Where(u => u.UserID == userId && u.Status)
+                .Select(u => (RoleOption?)u.RoleName)
+                .FirstOrDefaultAsync();
+        }
 
 }
