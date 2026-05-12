@@ -8,8 +8,7 @@ namespace MediCore.Domain.Entities;
 public class LabTest
 {
     [Key]
-    public int LabTestID {get; set;}
-    public string TestName { get; set; } 
+    public int LabTestID {get; set;} 
     public int PatientID {get; set;}
     public int DoctorID {get; set;}
     public int? TechnicianID {get; set;}
