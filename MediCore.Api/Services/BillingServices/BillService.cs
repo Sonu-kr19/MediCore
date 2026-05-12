@@ -9,7 +9,6 @@ namespace MediCore.Api.Services;
 
 public class BillService:IBillService
 {
-   
     private readonly IBillRepository _repository;
      private readonly IPatientRepository _patrepo;
 
@@ -61,7 +60,7 @@ public class BillService:IBillService
         Bill bill = new Bill();
         bill.PatientID = dto.PatientID;
         bill.Date = dto.Date;
-        bill.Status = dto.Status;
+        bill.Status=false;
         bill.Amount = totalAmount;
         bill.BillItems = billItemEntities;
 

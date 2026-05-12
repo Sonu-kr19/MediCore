@@ -10,6 +10,7 @@ namespace MediCore.Api.Controllers
     [Authorize(Roles = $"{nameof(RoleOption.Admin)},{nameof(RoleOption.Finance_Officer)}")]
     [Route("api/v1/[controller]")]
     [ApiController]
+    [Authorize(Roles = $"{nameof(RoleOption.Admin)},{nameof(RoleOption.Finance_Officer)}")]
     public class BillController : ControllerBase
     {
         

@@ -40,4 +40,6 @@ public class ErrorMessage
         public const string DuplicateClaim="Duplicate claim for Bill";
         public const string NotAuthenticated="User not authenticated";
         
+        //Record payments Api
+        public const string NoBillFound="Bill not found";
 }

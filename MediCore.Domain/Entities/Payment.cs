@@ -10,6 +10,9 @@ public class Payment
 {
     [Key]
     public int PaymentID {get; set;}
+    [Required]
+    [MaxLength(100)]
+    public string PaymentReference { get; set; }
     [ForeignKey("BillIDNavigator")]
     public int BillID {get; set;}
     [Column(TypeName = "decimal(18,2)")]
@@ -18,5 +21,5 @@ public class Payment
     public PaymentOption Method {get; set;}
     public bool Status {get; set;}
 
-    public virtual Bill? BillIDNaviagator{get; set;}
+    public virtual Bill? BillIDNavigator{get; set;}
 }
