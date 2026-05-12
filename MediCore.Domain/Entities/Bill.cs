@@ -13,6 +13,8 @@ public class Bill
     public int PatientID {get; set;}
     [Column(TypeName = "decimal(18,2)")]
     public decimal Amount {get; set;}
+    [Column(TypeName = "decimal(18,2)")]
+    public decimal PaidAmount { get; set; } = 0;
     public DateTime Date {get; set;}
     public bool Status {get; set;}
 
